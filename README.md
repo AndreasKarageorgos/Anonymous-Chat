@@ -20,23 +20,23 @@ The server runs on port 4488 by default
     pip3 install pysocks
 
 ## Tor For the server
-  You will need to edid the torrc file if you want to run the server.
+You will need to edid the torrc file if you want to run the server.
   
-  locate the torrc file under /etc/tor/
+locate the torrc file under /etc/tor/
   
-  and uncomment the HiddenService options.
+and uncomment the HiddenService options.
   
-  You should edid them like this:
+You should edid them like this:
   
     HiddenServiceDir /var/lib/tor/hidden_service/
     
     HiddenServicePort 4488 127.0.0.1:4488
   
-  After that restart the tor service
+After that restart the tor service
     
     sudo service tor restart
   
-  and locate your onion address under /var/lib/tor/hidden_service/
+and locate your onion address under /var/lib/tor/hidden_service/
     
     sudo su
     
@@ -46,13 +46,13 @@ The server runs on port 4488 by default
 
 ## Tor For the client
   
-  The client use tor as proxy to connect on a server, the only thing that you have you do is to make sure that the tor service is running
+The client use tor as proxy to connect on a server, the only thing that you have you do is to make sure that the tor service is running
    
-   -To check if the service is running
+-To check if the service is running
     
     sudo service tor status
    
-   -If the service is closed
+ -If the service is closed
     
     sudo service tor start
     
