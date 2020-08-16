@@ -103,7 +103,6 @@ def recv_message():
                     else:
                         message = ""
                 except:
-                    print("Error")
                     message = ""
         except:
             pass
