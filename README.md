@@ -8,7 +8,9 @@ The server runs on port 4488 by default
 ### Ubuntu
 
     sudo apt install python3-pip -y
-
+    
+    sudo apt install python3-tk
+    
     sudo apt install tor -y
 
     pip3 install pycryptodome
