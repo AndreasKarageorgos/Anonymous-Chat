@@ -76,6 +76,12 @@ This option can be left blank if you are in a private server.
 
 If you are on a public server you and the person that you want ro send the message must have the same keys and same key word !
 
+If you are on a private server and a you left the key word blank and the other person added a word then you will not be able to see the message.
+
+They client it is programmed to not showing messages with deferent key word but this does not mean that the other person can't read your data.
+
+The only way to keep your messages safe is by not sharing your keys with unknown people.
+
 ## Note !
 They key files can not be send through the server for extra safety !
 
