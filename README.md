@@ -88,3 +88,5 @@ They key files can not be send through the server for extra safety !
 You will need to send them to the person that you want to talk face to face or something.
 
 This way the server will never be able to store your keys and then decrypt and log your data.
+
+Also do not forget that this chat is in alpha version.
