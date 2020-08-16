@@ -67,7 +67,7 @@ The client use tor as proxy to connect on a server, the only thing that you have
         
         cd data/
         
-        python3 key_generator
+        python3 key_generator.py
         
  Your messages can be decrypted only with those keys , so keep them safe and share them only with the person that you want to talk.
 
