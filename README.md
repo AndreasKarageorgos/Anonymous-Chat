@@ -55,7 +55,20 @@ The client use tor as proxy to connect on a server, the only thing that you have
  -If the service is closed
     
     sudo service tor start
-    
+ 
+ ## Keys
+ There are 2 key files
+ * AES.key
+ * IV.key
+ These keys are for encrypting and decrypting messages. You can generate them using the key_generator.py
+ 
+ cd to the folder of the chat and type:
+        
+        cd data/
+        
+        python3 key_generator
+        
+ Your messages can be decrypted only with those keys , so keep them safe and share them only with the person that you want to talk.
 
 ## Note !
 They key files can not be send through the server for extra safety !
