@@ -6,6 +6,7 @@ The server runs on port 4488 by default
 ##Setup
 
 ###Ubuntu
+
 sudo apt install python3-pip -y
 
 sudo apt install tor -y
