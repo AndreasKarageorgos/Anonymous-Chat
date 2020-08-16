@@ -5,7 +5,7 @@ The server runs on port 4488 by default
 
 ## Setup
 
-* Ubuntu
+#### Ubuntu
     
     sudo apt update
 
