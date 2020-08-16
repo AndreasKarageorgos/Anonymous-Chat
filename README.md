@@ -71,6 +71,11 @@ The client use tor as proxy to connect on a server, the only thing that you have
         
  Your messages can be decrypted only with those keys , so keep them safe and share them only with the person that you want to talk.
 
+## Key word
+This option can be left blank if you are in a private server.
+
+If you are on a public server you and the person that you want ro send the message must have the same keys and same key word !
+
 ## Note !
 They key files can not be send through the server for extra safety !
 
