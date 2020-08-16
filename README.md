@@ -60,6 +60,7 @@ The client use tor as proxy to connect on a server, the only thing that you have
  There are 2 key files
  * AES.key
  * IV.key
+ 
  These keys are for encrypting and decrypting messages. You can generate them using the key_generator.py
  
  cd to the folder of the chat and type:
