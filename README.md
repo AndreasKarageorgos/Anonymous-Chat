@@ -20,14 +20,25 @@ The server runs on port 4488 by default
   
   locate the torrc file under /etc/tor/
   
-  and uncomment the HiddenService options
+  and uncomment the HiddenService options.
+  
   You should edid them like this:
   
     HiddenServiceDir /var/lib/tor/hidden_service/
     
     HiddenServicePort 4488 127.0.0.1:4488
   
+  After that restart the tor service
+    
+    sudo service tor restart
   
+  and locate your onion address under /var/lib/tor/hidden_service/
+    
+    sudo su
+    
+    cat /var/lib/tor/hidden_service/hostname
+    
+    exit
 
 ## Note !
 They key files are not sended through the server for extra safety !
