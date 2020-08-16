@@ -59,7 +59,7 @@ while True:
             exit()
     
 #Donate link
-print("You can help me to keep updating this project by donating to my paypal: https://paypal.me/AndreasKarageorgos/")
+print("\n\nYou can help me to keep updating this project by donating to my paypal:\nhttps://paypal.me/AndreasKarageorgos/\n\n")
 
 #functions
 def send_msg():
