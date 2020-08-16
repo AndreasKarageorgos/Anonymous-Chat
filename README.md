@@ -5,7 +5,7 @@ The server runs on port 4488 by default
 
 ## Setup
 
-### Ubuntu
+* Ubuntu
     
     sudo apt update
 
@@ -48,11 +48,11 @@ and locate your onion address under /var/lib/tor/hidden_service/
   
 The client use tor as proxy to connect on a server, the only thing that you have you do is to make sure that the tor service is running
    
--To check if the service is running
+* To check if the service is running
     
     sudo service tor status
    
- -If the service is closed
+ * If the service is closed
     
     sudo service tor start
  
