@@ -74,13 +74,13 @@ The client use tor as proxy to connect on a server, the only thing that you have
 ## Key word
 This option can be left blank if you are in a private server.
 
-If you are on a public server you and the person that you want ro send the message must have the same keys and same key word !
+If you are on a public server you and the person that you want to send a message, you must have the same AES,IV keys and same key word !
 
-If you are on a private server and a you left the key word blank and the other person added a word then you will not be able to see the message.
+If you are on a private server and a you left the key word blank and the other person adds a word then you will not be able to see the messages.
 
 They client it is programmed to not showing messages with deferent key word but this does not mean that the other person can't read your data.
 
-The only way to keep your messages safe is by not sharing your keys with unknown people.
+The only way to keep your messages safe is by not sharing your keys with people that you do not want to talk.
 
 ## Note !
 They key files can not be send through the server for extra safety !
@@ -90,3 +90,44 @@ You will need to send them to the person that you want to talk face to face or s
 This way the server will never be able to store your keys and then decrypt and log your data.
 
 Also do not forget that this chat is in alpha version.
+
+### Clinet Example
+
+In order 2 clients to talk to each other, they must connect to the same server with the same AES,IV keys and same key words.
+
+* Client1
+
+        >> python3 client.py
+        
+        Enter a key word: Test
+        
+        Onion link: example_link.onion
+
+* Client2
+        
+        >> python3 client.py
+        
+        Enter a key word: Test
+        
+        Onion link: example_link.onion
+    
+* Client3
+        
+        >> python3 client.py
+        
+        Enter a key word: test
+        
+        Onion link: example_link.onion
+ 
+ * Client4
+        
+        >> python3 client.py
+        
+        Enter a key word: Test
+        
+        Onion link: example_link.onion
+ 
+
+Client3 even with the same AES,IV keys it is not going to display any message. (It is going to be able to uncrypt the data because it has the same AES,IV keys)
+
+Client4 has the same key word with Client1 and Client2 but different AES,IV keys , that means Client4 will not be able to decrypt and see the data.
