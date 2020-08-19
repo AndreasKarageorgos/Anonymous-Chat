@@ -88,7 +88,6 @@ def send_msg():
     encrypt = AES_cryptography.encryptor(passwd,IV)
     message = (choice(chars)+input_box.get()+keyword+choice(chars)).encode("ascii")
     ciphertext = encrypt.encrypt(message)
-    print(ciphertext)
     leng = len(input_box.get())
     input_box.delete(0,leng)
     try:
