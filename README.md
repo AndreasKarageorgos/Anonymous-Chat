@@ -1,5 +1,5 @@
 # Anonymous-Chat
-A chat that can provide anonymity with end to end encryption and no need to trust the server !
+A chat that can provide privacy with end to end encryption and no need to trust the server !
 
 The server runs on port 4488 by default
 
