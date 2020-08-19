@@ -72,22 +72,20 @@ The client use tor as proxy to connect on a server, the only thing that you have
  Your messages can be decrypted only with those keys , so keep them safe and share them only with the person that you want to talk.
 
 ## Key word
-This option can be left blank if you are in a private server.
+This option can be left blank.
 
-If you are on a public server you and the person that you want to send a message, you must have the same AES,IV keys and same key word !
-
-If you are on a private server and a you left the key word blank and the other person adds a word then you will not be able to see the messages.
+If you left the key word blank and the other person adds a word then you will not be able to see the messages.
 
 They client it is programmed to not showing messages with deferent key word but this does not mean that the other person can't read your data.
 
-The only way to keep your messages safe is by not sharing your keys with people that you do not want to talk.
+The only way to keep your messages safe is by not sharing your AES,IV keys publicly.
 
 ## Note !
 They key files can not be send through the server for extra safety !
 
 You will need to send them to the person that you want to talk face to face or something.
 
-This way the server will never be able to store your keys and then decrypt and log your data.
+This way the server will never be able to store your keys and then decrypt and log your messages.
 
 Also do not forget that this chat is in alpha version.
 
@@ -95,7 +93,7 @@ Also do not forget that this chat is in alpha version.
 
 In order 2 clients to talk to each other, they must connect to the same server with the same AES,IV keys and same key words.
 
-* Client1
+* Client1 AES.key = "GtR29" , IV.key = "Uiqw"
 
         >> python3 client.py
         
@@ -103,7 +101,7 @@ In order 2 clients to talk to each other, they must connect to the same server w
         
         Onion link: example_link.onion
 
-* Client2
+* Client2 AES.key = "GtR29" , IV.key = "Uiqw"
         
         >> python3 client.py
         
@@ -111,7 +109,7 @@ In order 2 clients to talk to each other, they must connect to the same server w
         
         Onion link: example_link.onion
     
-* Client3
+* Client3 AES.key = "GtR29" , IV.key = "Uiqw"
         
         >> python3 client.py
         
@@ -119,7 +117,7 @@ In order 2 clients to talk to each other, they must connect to the same server w
         
         Onion link: example_link.onion
  
- * Client4
+ * Client4 AES.key = "Hgfw" , IV.key = "bhwg"
         
         >> python3 client.py
         
@@ -130,4 +128,4 @@ In order 2 clients to talk to each other, they must connect to the same server w
 
 Client3 even with the same AES,IV keys it is not going to display any message. (It is going to be able to uncrypt the data because it has the same AES,IV keys)
 
-Client4 has the same key word with Client1 and Client2 but different AES,IV keys , that means Client4 will not be able to decrypt and see the data.
+Client4 has the same key word with Client1 and Client2 but different AES,IV keys , that means Client4 will not be able to decrypt and see the messages of Client1,Client2 and Client3 (Also Client1,Client2 and Client3 will not be able to decrypt Client4 messages). 
