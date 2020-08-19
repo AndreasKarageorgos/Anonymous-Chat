@@ -9,7 +9,7 @@ def check():
 
     program = "https://github.com/AndreasKarageorgos/Anonymous-Chat"
 
-    server = "Alpha 1.0.1"
+    server = "Alpha 1.0.2"
     client = "Alpha 1.0.1"
     
     try:
