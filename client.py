@@ -5,11 +5,20 @@ from tkinter import Entry as tk_Entry , Text as tk_Text,Label as tk_Label, Butto
 from data import AES_cryptography
 from random import choice
 from string import ascii_letters,digits
+from data import checkForUpdates
 import webbrowser
 import socket
 import socks
 import threading
 import time
+
+#Checks for updates
+
+print("Checking for updates...\n")
+
+print(checkForUpdates.check()+"\n")
+
+
 
 #AES key load
 try:
@@ -31,7 +40,7 @@ dead = False
 #on send_msg() it adds randomly one character in the start and at the end of the message. This way if you send the same message
 #it wont have the same bytes when it is encrypted
 
-chars = ascii_letters+digits+"~`!@#$%^&*()_+-=\{\}[]\\:;'\"<>,./?"
+chars = ascii_letters+digits+"~`!@#$%^&*()_+-={}[]\\:;'\"<>,./?"
 
 #Key word is helping to decrypt the messages of the people that you want to talk
 
@@ -79,6 +88,7 @@ def send_msg():
     encrypt = AES_cryptography.encryptor(passwd,IV)
     message = (choice(chars)+input_box.get()+keyword+choice(chars)).encode("ascii")
     ciphertext = encrypt.encrypt(message)
+    print(ciphertext)
     leng = len(input_box.get())
     input_box.delete(0,leng)
     try:
@@ -194,7 +204,7 @@ msg_show = tk_Text(root, state = "disabled", width = 49, height = 20, cursor="ar
 text = tk_Label(root,text="Do not open links or send anything that\ncan trace back to you !")
 input_box = tk_Entry(root,width=40)
 send_button = tk_Button(root, text="Send", cursor="hand2", command=send_msg)
-donate_label = tk_Label(root,text="You can help me to keep updating this project\nby donating to me")
+donate_label = tk_Label(root,text="You can help me to keep updating this project\nby donating. <3")
 donate_button = tk_Button(root,text="Donate Options", command = donate)
 
 msg_show.grid(row=0,column=0)
