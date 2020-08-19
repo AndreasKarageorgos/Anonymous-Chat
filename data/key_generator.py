@@ -1,12 +1,12 @@
 #Coded by Andreas Karageorgos
 
 from random import randint
-from string import ascii_letters
+from string import ascii_letters,digits
 
 passwd = ""
 IV = ""
 
-chars = list(ascii_letters+"1234567890"+"~`!@#$%^&*()_+-=\{\}[]\\:;'\"<>,./?")
+chars = list(ascii_letters+digits+"~`!@#$%^&*()_+-={}[]\\:;'\"<>,./?")
 
 l = len(chars)-1
 
@@ -18,13 +18,11 @@ for _ in range(randint(50,100)):
 
 #creating passwd
 
-for _ in range(randint(100,256)):
-    passwd += chars[randint(0,l)]
+passwd = "".join([chars[randint(0,l)] for _ in range(randint(100,256))])
 
 #creating IV
 
-for _ in range(16):
-    IV+= chars[randint(0,l)]
+IV = "".join([chars[randint(0,l)] for _ in range(16)])
 
 print("Password and IV have ben generated !!!\n")
 ans = input("Do you want to replace the key files ? [y/n]: ")
