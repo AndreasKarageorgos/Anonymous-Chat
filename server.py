@@ -54,7 +54,7 @@ def accept_connections():
             try:
                 client.send(f"Server: {server_message}\nYour username is: {assigned_username}\n".encode("ascii"))
                 print(assigned_username,"logged in!")
-                #broadcast(f"Server: {assigned_username} joined the server !\n".encode("ascii")) #Do not use this on big public servers
+                broadcast(f"Server: {assigned_username} joined the server !\n".encode("ascii")) #Optional 
                 clients.update({assigned_username:client})
             except:
                 print("Error in lines 46-49")
@@ -86,7 +86,7 @@ def recv_message():
                         if(len(message)>0 and message!=b"\n"):
                             if (b"COMMAND:D" in message):
                                 print(key,"logged off")
-                                #broadcast(f"Server: {key} logged off\n".encode("ascii")) #Do not use this on big public servers
+                                broadcast(f"Server: {key} logged off\n".encode("ascii")) #optional
                                 broken_pipe_list.append(key)
                             else:
                                 broadcast(b"%s:%s" % (key.encode("ascii"),message))
