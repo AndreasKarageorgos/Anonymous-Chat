@@ -50,11 +50,11 @@ The client use tor as proxy to connect on a server, the only thing that you have
    
 * To check if the service is running
     
-    sudo service tor status
+        sudo service tor status
    
  * If the service is closed
     
-    sudo service tor start
+        sudo service tor start
  
  ## Keys
  There are 2 key files
