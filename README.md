@@ -71,15 +71,6 @@ The client use tor as proxy to connect on a server, the only thing that you have
         
  Your messages can be decrypted only with those keys , so keep them safe and share them only with the person that you want to talk.
 
-## Key word
-This option can be left blank.
-
-If you left the key word blank and the other person adds a word then you will not be able to see the messages.
-
-They client it is programmed to not showing messages with deferent key word but this does not mean that the other person can't read your data.
-
-The only way to keep your messages safe is by not sharing your AES,IV keys publicly.
-
 ## Note !
 They key files can not be send through the server for extra safety !
 
@@ -91,13 +82,11 @@ Also do not forget that this chat is in alpha version.
 
 ### Clinet Example
 
-In order 2 clients to talk to each other, they must connect to the same server with the same AES,IV keys and same key words.
+In order 2 clients to talk to each other, they must connect to the same server with the same AES,IV keys.
 
 * Client1 AES.key = "GtR29" , IV.key = "Uiqw"
 
         >> python3 client.py
-        
-        Enter a key word: Test
         
         Onion link: example_link.onion
 
@@ -105,30 +94,19 @@ In order 2 clients to talk to each other, they must connect to the same server w
         
         >> python3 client.py
         
-        Enter a key word: Test
-        
-        Onion link: example_link.onion
-    
-* Client3 AES.key = "GtR29" , IV.key = "Uiqw"
-        
-        >> python3 client.py
-        
-        Enter a key word: test
-        
         Onion link: example_link.onion
  
- * Client4 AES.key = "Hgfw" , IV.key = "bhwg"
+ * Client3 AES.key = "Hgfw" , IV.key = "bhwg"
         
         >> python3 client.py
-        
-        Enter a key word: Test
         
         Onion link: example_link.onion
  
 
-Client3 even with the same AES,IV keys it is not going to display any message. (It is going to be able to uncrypt the data because it has the same AES,IV keys)
+Client1 and Client2 have the same pair of keys, this way they are going to be able to see the messages of each other. Client4 has different keys so it wont
 
-Client4 has the same key word with Client1 and Client2 but different AES,IV keys , that means Client4 will not be able to decrypt and see the messages of Client1,Client2 and Client3 (Also Client1,Client2 and Client3 will not be able to decrypt Client4 messages). 
+be able to decrypt or send messages to Client1 and Client2. (The server broadcasts to every client all the messages)
+
 
 ## DISCLAIMER
 
