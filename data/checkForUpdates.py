@@ -9,8 +9,8 @@ def check():
 
     program = "https://github.com/AndreasKarageorgos/Anonymous-Chat"
 
-    server = "Alpha 1.0.2"
-    client = "Alpha 1.0.1"
+    server = "Alpha 1.1"
+    client = "Alpha 1.1"
     
     try:
         r = requests.get("https://raw.githubusercontent.com/AndreasKarageorgos/Anonymous-Chat/master/VERSIONS", proxies = prox).text.split()
