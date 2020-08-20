@@ -91,7 +91,7 @@ or by having a spyware on your computer ..etc
 
 You can be de-anonymized by just opening a link that they are going to send you.
 
-The author(s) of this programm are not responsible for any damage.
+The author(s) of this programm are not responsible for any damage(s).
 
 ## Note !
 They key files can not be send through the server for extra safety !
