@@ -80,6 +80,19 @@ They client it is programmed to not showing messages with deferent key word but 
 
 The only way to keep your messages safe is by not sharing your AES,IV keys publicly.
 
+## DISCLAIMER
+Do not forget that the programm can not provide you 100% anonymity and privacy and that may there is a way
+
+someone to de-anonymize you , read your messages or hack you by exploiting a vulnerability.
+
+One way of someone to read your messages is by having the keys,
+
+or by having a spyware on your computer ..etc
+
+You can be de-anonymized by just opening a link that they are going to send you.
+
+The author(s) of this programm are not responsible for any damage.
+
 ## Note !
 They key files can not be send through the server for extra safety !
 
