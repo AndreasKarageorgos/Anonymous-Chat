@@ -1,7 +1,9 @@
 #Coded by Andreas Karageorgos
 
+#V Alpha 1.1
+
 import tkinter as tk
-from tkinter import Entry as tk_Entry , Text as tk_Text,Label as tk_Label, Button as tk_Button
+from tkinter import Entry as tk_Entry , Text as tk_Text,Label as tk_Label, Button as tk_Button, messagebox as tk_messagebox
 from data import AES_cryptography
 from random import choice
 from string import ascii_letters,digits
@@ -42,10 +44,10 @@ dead = False
 
 chars = ascii_letters+digits+"~`!@#$%^&*()_+-={}[]\\:;'\"<>,./?"
 
-#Key word is helping to decrypt the messages of the people that you want to talk
+#Key word is helping the program to know that it decrypted the message.
 
 global keyword
-keyword = input("Enter a key word: ").strip() or "nokey" 
+keyword = "D$o(n"
 
 #Helper to run the start method of the threads once !
 run = False
@@ -76,26 +78,31 @@ while True:
             exit()
 
 #functions
-def send_msg():
+def send_msg(*event):
     global keyword
 
     if len(input_box.get()) == 0:return
     if len(input_box.get()+keyword)+2 > 80:
         msg_show.config(state="normal")
-        msg_show.insert(tk.INSERT,"\n***This message is too big***\n")
+        msg_show.insert(tk.INSERT,"***This message is too big***\n\n")
+        msg_show.yview_pickplace("end")
         msg_show.config(state="disable")
         return
     encrypt = AES_cryptography.encryptor(passwd,IV)
-    message = (choice(chars)+input_box.get()+keyword+choice(chars)).encode("ascii")
-    ciphertext = encrypt.encrypt(message)
-    leng = len(input_box.get())
-    input_box.delete(0,leng)
     try:
-        client_socket.send(ciphertext)
-    except:
-
+        message = (choice(chars)+input_box.get()+keyword+choice(chars)).encode("ascii")
+        ciphertext = encrypt.encrypt(message)
+        leng = len(input_box.get())
+        input_box.delete(0,leng)
+        try:
+            client_socket.send(ciphertext)
+        except:
+            msg_show.config(state="normal")
+            msg_show.insert(tk.INSERT,"***Message did not send***\n\n")
+            msg_show.config(state="disable")
+    except UnicodeEncodeError:
         msg_show.config(state="normal")
-        msg_show.insert(tk.INSERT,"\n***Message did not send***\n")
+        msg_show.insert(tk.INSERT,"\n***English Chars only***\n\n")
         msg_show.config(state="disable")
 
 def recv_message():
@@ -106,17 +113,23 @@ def recv_message():
         try:
             message = client_socket.recv(1024)
             if len(message)>1 and message.split(b":")[0] == b"Server":
-                message = message.decode("ascii") 
+                try:
+                    message = message.decode("ascii") + "\n\n"
+                except UnicodeDecodeError:
+                    message = "***Can not Display server message***\n\n"
             elif len(message)>1:
                 decrypt = AES_cryptography.decryptor(passwd,IV)
                 message = message.split(b":")
                 try:
-                    message = [message[0]+b":",decrypt.decrypt(b":".join(message[1:]))[1:-1]]
-                    message = b''.join(message).decode("ascii")
-                    if message.endswith(keyword) and (len(message)-len(keyword)) > 0:
-                        message = message[:len(message)-len(keyword)]+"\n"
-                    else:
-                        message = ""
+                    message = [message[0]+b": ",decrypt.decrypt(b":".join(message[1:]))[1:-1]]
+                    try:
+                        message = b''.join(message).decode("ascii")
+                        if message.endswith(keyword) and (len(message)-len(keyword)) > 0:
+                            message = message[:len(message)-len(keyword)]+"\n\n"
+                        else:
+                            message = ""
+                    except UnicodeDecodeError:
+                        message = "***Can not Display message***\n\n"
                 except:
                     message = ""
         except:
@@ -145,11 +158,13 @@ def donate():
     def paypal():webbrowser.open(f"https://paypal.me/AndreasKarageorgos/{paypal_amount.get()}")
     def BitCoin():webbrowser.open(f"https://www.blockchain.com/btc/payment_request?address=1DJqJtMGRzG12NZk1SJ5DnCfpeunTX1z1V&amount={bitcoin_ammount.get()}&message=Anonymous%20Chat%20donation%20!Thank%20you%20for%20your%20support%20!!!%20%3C3")
 
+    tk_messagebox.showwarning(title="Warning !",message="The buttons will promt you to the equivalent site.\n\nAfter you select your amount and click the the equivalent button it will\nStart your default browser.\n\nThat means that it can run outside of the Tor network.\n\nThe sites are from paypal and blockchain.com")
+    
     x = 0
 
     master = tk.Tk()
     width_of_window = 200
-    height_of_window = 100
+    height_of_window = 70
     screen_width = master.winfo_screenwidth()
     screen_height = master.winfo_screenheight()
     x_coordinate = (screen_width / 2) - (width_of_window / 2)
@@ -188,6 +203,7 @@ thread_recv_message = threading.Thread(target=recv_message)
 
 root = tk.Tk()
 
+#Tk window Geometry
 width_of_window = 400
 height_of_window = 510
 screen_width = root.winfo_screenwidth()
@@ -196,15 +212,23 @@ x_coordinate = (screen_width / 2) - (width_of_window / 2)
 y_coordinate = (screen_height / 2) - (height_of_window / 2)
 root.geometry("%dx%d+%d+%d" %(width_of_window,height_of_window,x_coordinate,y_coordinate))
 
+#configuring window
+
 root.title("Anonymous Chat !")
 root.protocol("WM_DELETE_WINDOW",on_closing)
+root.bind("<Return>",send_msg)
+root.resizable(0,0)
+
+#Objects in tk window
 
 msg_show = tk_Text(root, state = "disabled", width = 49, height = 20, cursor="arrow")
 text = tk_Label(root,text="Do not open links or send anything that\ncan trace back to you !")
 input_box = tk_Entry(root,width=40)
-send_button = tk_Button(root, text="Send", cursor="hand2", command=send_msg)
+send_button = tk_Button(root, text=b"Send", cursor="hand2", command=send_msg)
 donate_label = tk_Label(root,text="You can help me to keep updating this project\nby donating. <3")
 donate_button = tk_Button(root,text="Donate Options", command = donate)
+
+#Possitioning objects in window
 
 msg_show.grid(row=0,column=0)
 text.grid(row=1,column=0)
@@ -218,3 +242,4 @@ if(not run):
     run = True
 
 root.mainloop()
+

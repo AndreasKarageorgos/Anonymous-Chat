@@ -1,5 +1,7 @@
 #Coded by Andreas Karageorgos
 
+#V Alpha 1.1
+
 import socket
 import threading
 from random import randint
@@ -37,7 +39,7 @@ def accept_connections():
 
     def random_username():
         username = ""
-        for _ in range(randint(6,8)):
+        for _ in range(randint(4,5)):
             if randint(0,5) == 0:
                 username+=str(randint(0,9))
             username+=ascii_letters[randint(0,len(ascii_letters)-1)]
@@ -49,12 +51,12 @@ def accept_connections():
             client,_ = server_socket.accept()
             assigned_username = random_username()
             
-            while assigned_username in clients:
+            while assigned_username in clients or assigned_username.lower()=="server":
                 assigned_username = random_username()
             try:
-                client.send(f"Server: {server_message}\nYour username is: {assigned_username}\n".encode("ascii"))
+                client.send(f"Server: {server_message}\nYour username is: {assigned_username}".encode("ascii"))
                 print(assigned_username,"logged in!")
-                broadcast(f"Server: {assigned_username} joined the server !\n".encode("ascii")) #Optional 
+                broadcast(f"Server: {assigned_username} joined the server !".encode("ascii")) #Optional 
                 clients.update({assigned_username:client})
             except:
                 print("Error in lines 46-49")
@@ -87,13 +89,13 @@ def recv_message():
                             if(len(message)>0 and message!=b"\n"):
                                 if (b"COMMAND:D" in message):
                                     print(key,"logged off")
-                                    broadcast(f"Server: {key} logged off\n".encode("ascii")) #optional
+                                    broadcast(f"Server: {key} logged off".encode("ascii")) #optional
                                     broken_pipe_list.append(key)
                                 else:
                                     broadcast(b"%s:%s" % (key.encode("ascii"),message))
                                     print(key,f"Send a message of {len(message)} bytes")
                         else:
-                            broadcast(f"Server: {key} kicked for flooding the server.\n".encode("ascii"))
+                            broadcast(f"Server: {key} kicked for flooding the server.".encode("ascii"))
                             print(key,f"Kicked for sending message of {len(message)} bytes")
                     except BrokenPipeError:
                         if key not in broken_pipe_list:
