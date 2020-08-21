@@ -103,9 +103,8 @@ In order 2 clients to talk to each other, they must connect to the same server w
         Onion link: example_link.onion
  
 
-Client1 and Client2 have the same pair of keys, this way they are going to be able to see the messages of each other. Client4 has different keys so it wont
-
-be able to decrypt or send messages to Client1 and Client2. (The server broadcasts to every client all the messages)
+Client1 and Client2 have the same pair of keys, this way they are going to be able to see the messages of each other. 
+Client4 has different keys so it wont be able to decrypt or send messages to Client1 and Client2. (The server broadcasts to every client all the messages)
 
 
 ## DISCLAIMER
