@@ -6,8 +6,10 @@ The server runs on port 4488 by default
 ## Setup
 
 #### Ubuntu
-    
+
     sudo apt update
+
+    sudo apt install git -y
 
     sudo apt install python3-pip -y
     
@@ -18,6 +20,8 @@ The server runs on port 4488 by default
     pip3 install pycryptodome
 
     pip3 install pysocks
+
+    git clone https://github.com/AndreasKarageorgos/Anonymous-Chat.git
 
 ## Tor For the server
 You will need to edid the torrc file if you want to run the server.
@@ -46,7 +50,7 @@ and locate your onion address under /var/lib/tor/hidden_service/
 
 ## Tor For the client
   
-The client use tor as proxy to connect on a server, the only thing that you have you do is to make sure that the tor service is running
+The client use tor as proxy to connect to a server, the only thing that you have to do as client is to make sure that the tor service is running
    
 * To check if the service is running
     
@@ -63,10 +67,8 @@ The client use tor as proxy to connect on a server, the only thing that you have
  
  These keys are for encrypting and decrypting messages. You can generate them using the key_generator.py
  
- cd to the folder of the chat and type:
-        
-        cd data/
-        
+        cd Anonymous-Chat/client/data
+
         python3 key_generator.py
         
  Your messages can be decrypted only with those keys , so keep them safe and share them only with the person that you want to talk.
