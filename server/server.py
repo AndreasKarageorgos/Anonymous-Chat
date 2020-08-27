@@ -84,7 +84,7 @@ def accept_connections():
                         print(data[1],"Registered !")
                     else:
                         client.send("False".encode("ascii"))
-                elif data[0] == b"login" and data[1].lower() != b"server":
+                elif data[0] == b"login":
                     resp = auth_users.auth(data[1],data[2],members)
                     if resp:
                         client.send("True".encode("ascii"))
