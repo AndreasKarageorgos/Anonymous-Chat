@@ -11,7 +11,7 @@ import time
 
 #Checks for updates
 
-version = "Alpha 2.0"
+version = "Alpha 2.1"
 def update(version):
     prox = {
         "https": "socks5://127.0.0.1:9050"
@@ -77,14 +77,14 @@ def accept_connections():
             data = client.recv(1024)
             data = data.split(b":")
             if len(data) ==3:
-                if data[0] == b"register":
+                if data[0] == b"register" and data[1].lower() != b"server":
                     resp = register_users.reg_user(data[1],data[2],members)
                     if resp: 
                         client.send("True".encode("ascii"))
                         print(data[1],"Registered !")
                     else:
                         client.send("False".encode("ascii"))
-                elif data[0] == b"login":
+                elif data[0] == b"login" and data[1].lower() != b"server":
                     resp = auth_users.auth(data[1],data[2],members)
                     if resp:
                         client.send("True".encode("ascii"))

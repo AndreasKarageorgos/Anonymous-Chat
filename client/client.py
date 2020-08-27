@@ -17,7 +17,7 @@ import getpass
 #Checks for updates
 
 
-version = "Alpha 2.0"
+version = "Alpha 2.1"
 
 def update(version):
 
