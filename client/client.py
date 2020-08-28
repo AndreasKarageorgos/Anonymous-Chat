@@ -17,7 +17,7 @@ import getpass
 #Checks for updates
 
 
-version = "Alpha 2.1"
+version = "Alpha 2.2"
 
 def update(version):
 
@@ -43,15 +43,13 @@ print(update(version))
 
 #AES key load
 try:
-    with open("data/key/AES.key","r") as f:
-        passwd = f.read().strip().encode("ascii")  
+    with open("data/key/Key.key","r") as f:
+        passwd = f.read().strip().encode("ascii")
+        IV = passwd[:16]
         f.close()
 
-    with open("data/key/IV.key","r") as f:
-        IV = f.read().strip().encode("ascii")
-        f.close()
 except FileNotFoundError:
-    print("Did not find key files. Please use the key_generator.py")
+    print("Did not find Key.key file.\nPlease use the key_generator \nOr load it manually under data/key/")
     exit()
 
 #Helper to stop the threads
@@ -78,6 +76,23 @@ while not link.endswith(".onion"):
     link = input("Onion Link: ")
 
 port = 4488
+
+#Checks if the server is online.
+while True:
+    try:
+        socks.set_default_proxy(socks.PROXY_TYPE_SOCKS5,"127.0.0.1",9050,True)
+        testsock = socks.socksocket()
+        testsock.connect((link,port))
+        testsock.settimeout(1)
+        testsock.send("online".encode("ascii"))
+        if testsock.recv(5) == b"True":
+            testsock.close()
+            break
+        print("Failed to connect. Trying again in 3 seconds")
+    except:
+        print("Failed to connect. Trying again in 3 seconds")
+    time.sleep(3) 
+
 
 ask = input("Press Enter to login or type 'R' to register: ").lower().strip()
 
@@ -115,9 +130,9 @@ while True:
     except UnicodeDecodeError:
         print("This server is modified, you may not be able to send or recv any data. ")
     except:
-        print("Can not connect to server !\nTrying again in 5 seconds")
+        print("Server did not respond")
         try:
-            time.sleep(5)
+            time.sleep(1)
         except KeyboardInterrupt:
             print()
             exit()

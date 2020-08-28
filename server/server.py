@@ -11,7 +11,8 @@ import time
 
 #Checks for updates
 
-version = "Alpha 2.1"
+version = "Alpha 3.0"
+
 def update(version):
     prox = {
         "https": "socks5://127.0.0.1:9050"
@@ -51,7 +52,7 @@ except FileNotFoundError:
 
 server_ip = "127.0.0.1" #Do not change !!! (Unless you know what you are doing)
 server_port = 4488
-max_clients = 5     #Change this to make your server bigger or smaller
+max_clients = 10     #Change this to make your server bigger or smaller
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.bind((server_ip,server_port))
@@ -75,6 +76,9 @@ def accept_connections():
             client,_ = server_socket.accept()
             client.settimeout(1)
             data = client.recv(1024)
+            if data == b"online":
+                client.send("True".encode("ascii"))
+                client.close()
             data = data.split(b":")
             if len(data) ==3:
                 if data[0] == b"register" and data[1].lower() != b"server":

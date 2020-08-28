@@ -3,25 +3,30 @@ A chat that can provide privacy with end to end encryption and no need to trust 
 
 The server runs on port 4488 by default
 
-## Setup
+## Installetion
 
-#### Ubuntu
+* Ubuntu
 
-    sudo apt update
+    * sudo apt update
 
-    sudo apt install git -y
+    * sudo apt install git -y
 
-    sudo apt install python3-pip -y
+    * sudo apt install python3-pip -y
     
-    sudo apt install python3-tk -y
+    * sudo apt install python3-tk -y
     
-    sudo apt install tor -y
+    * sudo apt install tor -y
 
-    pip3 install pycryptodome
+    * pip3 install pycryptodome
 
-    pip3 install pysocks
+    * pip3 install pysocks
 
-    git clone https://github.com/AndreasKarageorgos/Anonymous-Chat.git
+    * git clone https://github.com/AndreasKarageorgos/Anonymous-Chat.git
+
+* All commands in one:
+    
+    * sudo apt update &&  sudo apt install git -y && sudo apt install python3-pip -y && sudo apt install python3-tk -y && sudo apt install tor -y && pip3 install pycryptodome && pip3 install pysocks && git clone https://github.com/AndreasKarageorgos/Anonymous-Chat.git
+
 
 ## Tor For the server
 You will need to edid the torrc file if you want to run the server.
@@ -60,55 +65,50 @@ The client use tor as proxy to connect to a server, the only thing that you have
     
         sudo service tor start
  
- ## Keys
- There are 2 key files
- * AES.key
- * IV.key
+ ## Key
+ There is 1 key file
  
- These keys are for encrypting and decrypting messages. You can generate them using the key_generator.py
+ * Key.key
+
+ under client/data/key/
  
-        cd Anonymous-Chat/client/data
+ The key is for encrypting and decrypting messages. You can generate it using the key_generator.py
 
         python3 key_generator.py
-        
- Your messages can be decrypted only with those keys , so keep them safe and share them only with the person that you want to talk.
+
+ Your messages can be decrypted only with this key , so keep it safe and share it only with the person that you want to send messages. Change your keys often for extra safety
+
+ If you create your own key , make sure that it is at least 20 characters long. Small keys can be cracked really fast.
 
 ## Note !
-They key files can not be send through the server for extra safety !
+They Key file can not be send through the server for extra safety !
 
-You will need to send them to the person that you want to talk face to face or something.
+You will need to send it to the person that you want to talk face to face using a usb ...etc.
 
-This way the server will never be able to store your keys and then decrypt and log your messages.
-
-Also do not forget that this chat is in alpha version.
+This way the server will never be able to store your key and then decrypt and log your messages.
 
 ### Clinet Example
 
-In order 2 clients to talk to each other, they must connect to the same server with the same AES,IV keys.
+In order 2 clients to talk to each other, they must connect to the same server with the same AES key (Key.key file).
 
-* Client1 AES.key = "GtR29" , IV.key = "Uiqw"
+* Client1 Key.key = "This is an AES key"
 
         >> python3 client.py
         
         Onion link: example_link.onion
 
-* Client2 AES.key = "GtR29" , IV.key = "Uiqw"
-        
-        >> python3 client.py
-        
-        Onion link: example_link.onion
- 
- * Client3 AES.key = "Hgfw" , IV.key = "bhwg"
+* Client2 Key.key = "This is an AES key"
         
         >> python3 client.py
         
         Onion link: example_link.onion
  
+ * Client3 Key.key = "Hello !"
+        
+        >> python3 client.py
+        
+        Onion link: example_link.onion
+ 
 
-Client1 and Client2 have the same pair of keys, this way they are going to be able to see the messages of each other. 
-Client4 has different keys so it wont be able to decrypt or send messages to Client1 and Client2. (The server broadcasts to every client all the messages)
-
-
-## DISCLAIMER
-
-The author(s) of this programm are not responsible for any damage(s).
+Client1 and Client2 have the same keys, this way they are going to be able to see the messages of each other. 
+Client4 has different key so it wont be able to decrypt or send messages to Client1 and Client2 and the opposite. (The server broadcasts to every client all the messages)
