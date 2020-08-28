@@ -11,7 +11,7 @@ import time
 
 #Checks for updates
 
-version = "Alpha 3.0"
+version = "Alpha 2.2"
 
 def update(version):
     prox = {
