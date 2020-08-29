@@ -1,4 +1,4 @@
-# Anonymous-Chat
+# Secure Private Connections -Chat
 A chat that can provide privacy with end to end encryption and no need to trust the server !
 
 This project is targeting people that trully need privacy.
