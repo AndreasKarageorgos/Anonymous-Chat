@@ -1,7 +1,19 @@
 # Anonymous-Chat
 A chat that can provide privacy with end to end encryption and no need to trust the server !
 
+This project is targeting people that trully need privacy.
+
+eg. Politicians , military , journalist , lawyers , companies ... etc
+
 The server runs on port 4488 by default
+
+### Donations
+ To keep updating this project I will need your support.
+
+ You can help me by donating.
+
+ paypal : 
+
 
 ## Installetion
 
