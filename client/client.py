@@ -17,7 +17,7 @@ import getpass
 #Checks for updates
 
 
-version = "Alpha 2.2"
+version = "Alpha 2.3"
 
 def update(version):
 
@@ -25,10 +25,10 @@ def update(version):
         "https": "socks5://127.0.0.1:9050"
     }  
 
-    program = "https://github.com/AndreasKarageorgos/Anonymous-Chat \n"
+    program = "https://github.com/AndreasKarageorgos/SPC-Chat/ \n"
     
     try:
-        r = requests.get("https://raw.githubusercontent.com/AndreasKarageorgos/Anonymous-Chat/master/VERSIONS", proxies = prox).text.split()
+        r = requests.get("https://raw.githubusercontent.com/AndreasKarageorgos/SPC-Chat/master/VERSIONS", proxies = prox).text.split()
     except:
         return "Connection to Tor network could not be established."
     
@@ -88,10 +88,10 @@ while True:
         if testsock.recv(5) == b"True":
             testsock.close()
             break
-        print("Failed to connect. Trying again in 3 seconds")
+        print("Failed to connect. Trying again.")
     except:
-        print("Failed to connect. Trying again in 3 seconds")
-    time.sleep(3) 
+        print("Failed to connect. Trying again.")
+    time.sleep(0.5) 
 
 
 ask = input("Press Enter to login or type 'R' to register: ").lower().strip()
@@ -144,25 +144,31 @@ def send_msg(*event):
     if len(input_box.get()) == 0:return
     if len(input_box.get()+keyword)+2 > 80:
         msg_show.config(state="normal")
-        msg_show.insert(tk.INSERT,"***This message is too big***\n\n")
         msg_show.yview_pickplace("end")
+        msg_show.insert(tk.INSERT,"***This message is too big***\n\n")
         msg_show.config(state="disable")
         return
     encrypt = AES_cryptography.encryptor(passwd,IV)
     try:
         message = (choice(chars)+input_box.get()+keyword+choice(chars)).encode("ascii")
         ciphertext = encrypt.encrypt(message)
+        if keyword.encode("ascii") in ciphertext:
+            msg_show.config(state="normal")
+            msg_show.insert(tk.INSERT,"***Can not send this message. It is not encrypted.***\n\n")
+            msg_show.config(state="disable")
+            return
         leng = len(input_box.get())
         input_box.delete(0,leng)
         try:
             client_socket.send(ciphertext)
         except:
             msg_show.config(state="normal")
+            msg_show.yview_pickplace("end")
             msg_show.insert(tk.INSERT,"***Message did not send***\n\n")
             msg_show.config(state="disable")
     except UnicodeEncodeError:
         msg_show.config(state="normal")
-        msg_show.insert(tk.INSERT,"\n***English Chars only***\n\n")
+        msg_show.insert(tk.INSERT,"\n***Ascii Chars only***\n\n")
         msg_show.config(state="disable")
 
 def recv_message():
@@ -197,8 +203,8 @@ def recv_message():
         
         if(len(message)>0):
             msg_show.config(state="normal")
-            msg_show.insert(tk.INSERT,message)
             msg_show.yview_pickplace("end")
+            msg_show.insert(tk.INSERT,message)
             msg_show.config(state="disable")
 
 def on_closing():
@@ -275,7 +281,7 @@ center_window(root,400,510)
 
 #configuring window
 
-root.title("Anonymous Chat !")
+root.title("SPC-Chat")
 root.protocol("WM_DELETE_WINDOW",on_closing)
 root.bind("<Return>",send_msg)
 root.resizable(0,0)
