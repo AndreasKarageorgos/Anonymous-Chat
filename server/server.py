@@ -11,17 +11,17 @@ import time
 
 #Checks for updates
 
-version = "Alpha 2.2"
+version = "Alpha 2.3"
 
 def update(version):
     prox = {
         "https": "socks5://127.0.0.1:9050"
     }  
 
-    program = "https://github.com/AndreasKarageorgos/Anonymous-Chat \n"
+    program = "https://github.com/AndreasKarageorgos/SPC-Chat/ \n"
     
     try:
-        r = requests.get("https://raw.githubusercontent.com/AndreasKarageorgos/Anonymous-Chat/master/VERSIONS", proxies = prox).text.split()
+        r = requests.get("https://raw.githubusercontent.com/AndreasKarageorgos/SPC-Chat/master/VERSIONS", proxies = prox).text.split()
     except:
         return "Connection to Tor network could not be established."
     
@@ -79,6 +79,7 @@ def accept_connections():
             if data == b"online":
                 client.send("True".encode("ascii"))
                 client.close()
+                data = ""
             data = data.split(b":")
             if len(data) ==3:
                 if data[0] == b"register" and data[1].lower() != b"server":
@@ -95,7 +96,9 @@ def accept_connections():
                         print(data[1],"Logged in")
                         try:
                             clients.update({data[1].decode("ascii"):client})
-                            client.send(f"Server:{server_message}".encode("ascii"))
+                            client.send(f"Server:{server_message}\n".encode("ascii"))
+                            t = data[1].decode("ascii")
+                            broadcast(f"Server:{t} logged in".encode("ascii"))
                         except UnicodeDecodeError:
                             pass
 
@@ -131,6 +134,10 @@ def recv_message():
                                 if (b"COMMAND:D" in message):
                                     print(key,"logged off")
                                     broadcast(f"Server: {key} logged off".encode("ascii")) #optional
+                                    broken_pipe_list.append(key)
+                                elif b"D$o(n" in message:
+                                    clients[key].send("Server:Your message is not encrypted.\nWe did not broadcast it to the other clients\nand you have been disconnected you for your safety.\nPlease use the original version.\nDownload it here:\nhttps://github.com/AndreasKarageorgos/SPC-Chat".encode("ascii"))
+                                    clients[key].close()
                                     broken_pipe_list.append(key)
                                 else:
                                     broadcast(b"%s:%s" % (key.encode("ascii"),message))
@@ -190,5 +197,6 @@ except KeyboardInterrupt:
 
 print("Server Stopped !")
 dead = True
+time.sleep(3)
 server_socket.close()
 
