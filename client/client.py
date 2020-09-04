@@ -2,9 +2,9 @@
 
 import tkinter as tk
 from tkinter import Entry as tk_Entry , Text as tk_Text,Label as tk_Label, Button as tk_Button, messagebox as tk_messagebox
-from data import AES_cryptography
-from data.login import login
-from data.register import register
+from data.libraries import AES_cryptography, servers, loadServers
+from data.libraries.register import register
+from data.libraries.torSocks import torSocks
 from random import choice
 from string import ascii_letters,digits
 import requests
@@ -17,7 +17,7 @@ import getpass
 #Checks for updates
 
 
-version = "Alpha 2.3"
+version = "Alpha 2.4"
 
 def update(version):
 
@@ -69,21 +69,32 @@ keyword = "D$o(n"
 #Helper to run the start method of the threads once !
 run = False
 
+server_manager = loadServers.serversManagment()
+server_manager.load("data/servers/servers.txt")
 
-link = input(".onion link: ")
-while not link.endswith(".onion"):
-    print("Please enter an onion link !\n")
-    link = input("Onion Link: ")
+available_servers = server_manager.digest()
+try:
+    available_servers.remove("")
+except:pass
 
+link = servers.serverManager(available_servers)
 port = 4488
+
+for i in available_servers:
+    if i not in server_manager.digest():
+        server_manager.add(i)
+
+for i in server_manager.digest():
+    if i not in available_servers:
+        server_manager.remove(i)
+
 
 #Checks if the server is online.
 while True:
     try:
-        socks.set_default_proxy(socks.PROXY_TYPE_SOCKS5,"127.0.0.1",9050,True)
-        testsock = socks.socksocket()
-        testsock.connect((link,port))
-        testsock.settimeout(1)
+        testsock = torSocks(link,port)
+        testsock.connect()
+        testsock.setTimeout(3)
         testsock.send("online".encode("ascii"))
         if testsock.recv(5) == b"True":
             testsock.close()
@@ -114,13 +125,12 @@ while True:
         while len(password)<12 or len(password)>100:
             print("Invalid password\n")
             password = getpass.getpass("Password: ")
-        socks.set_default_proxy(socks.PROXY_TYPE_SOCKS5,"127.0.0.1",9050,True)
-        client_socket = socks.socksocket()
-        client_socket.connect((link,port))
-        client_socket.settimeout(1)
+        client_socket = torSocks(link,port)
+        client_socket.connect()
+        client_socket.setTimeout(10)
         client_socket.send(f"login:{uname}:{password}".encode("ascii"))
         ans = client_socket.recv(1024).decode("ascii").strip()
-        if ans=="True":
+        if "True" in ans:
             break
         print("Wrong username or password.\n")
     except KeyboardInterrupt:
