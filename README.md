@@ -34,11 +34,11 @@ The server runs on port 4488 by default
 
     * pip3 install pysocks
 
-    * git clone https://github.com/AndreasKarageorgos/SPC-Chat.git
+    * git clone https://github.com/AndreasKarageorgos/Anonymous-Chat.git
 
 * All commands in one:
     
-    * sudo apt update &&  sudo apt install git -y && sudo apt install python3-pip -y && sudo apt install python3-tk -y && sudo apt install tor -y && pip3 install pycryptodome && pip3 install pysocks && git clone https://github.com/AndreasKarageorgos/SPC-Chat.git
+    * sudo apt update &&  sudo apt install git -y && sudo apt install python3-pip -y && sudo apt install python3-tk -y && sudo apt install tor -y && pip3 install pycryptodome && pip3 install pysocks && git clone https://github.com/AndreasKarageorgos/Anonymous-Chat.git
 
 
 ## Tor For the server

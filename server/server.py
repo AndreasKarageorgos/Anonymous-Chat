@@ -11,7 +11,7 @@ import time
 
 #Checks for updates
 
-version = "Alpha 2.3"
+version = "Alpha 2.4"
 
 def update(version):
     prox = {
@@ -82,7 +82,7 @@ def accept_connections():
                 data = ""
             data = data.split(b":")
             if len(data) ==3:
-                if data[0] == b"register" and data[1].lower() != b"server":
+                if data[0] == b"register" and b"server" not in data[1].lower():
                     resp = register_users.reg_user(data[1],data[2],members)
                     if resp: 
                         client.send("True".encode("ascii"))
@@ -199,4 +199,5 @@ print("Server Stopped !")
 dead = True
 time.sleep(3)
 server_socket.close()
+time.sleep(3)
 
