@@ -12,7 +12,7 @@ The server runs on port 4488 by default
 
  You can help me by donating.
 
- paypal : https://paypal.me/AndreasKarageorgos/
+ paypal : https://paypal.me/AndreasKarageorgos/20
 
 
 
