@@ -17,7 +17,7 @@ import getpass
 #Checks for updates
 
 
-version = "Alpha 2.4"
+version = "Alpha 2.5"
 
 def update(version):
 
@@ -31,7 +31,7 @@ def update(version):
         r = requests.get("https://raw.githubusercontent.com/AndreasKarageorgos/SPC-Chat/master/VERSIONS", proxies = prox).text.split()
     except:
         return "Connection to Tor network could not be established."
-    
+
     cv = r[1]+" "+r[5]
 
     if(cv!=version):
@@ -88,7 +88,9 @@ for i in server_manager.digest():
     if i not in available_servers:
         server_manager.remove(i)
 
+if link=="":exit()
 
+print(f"Trying to connect to {link}")
 #Checks if the server is online.
 while True:
     try:
@@ -118,12 +120,10 @@ if ask=="r":
 while True:
     try:
         uname = input("Username: ")
-        while len(uname)<2 or len(uname)>10:
-            print("Invalid username\n")
-            uname = input("Username: ")
         password = getpass.getpass("Password: ")
-        while len(password)<12 or len(password)>100:
-            print("Invalid password\n")
+        while not (2<=len(uname)<=10 and 12<=len(password)<=100):
+            print("Wrong username or password\n")
+            uname = input("Username: ")
             password = getpass.getpass("Password: ")
         client_socket = torSocks(link,port)
         client_socket.connect()
@@ -192,7 +192,7 @@ def recv_message():
                 try:
                     message = message.decode("ascii")+"\n"
                 except UnicodeDecodeError:
-                    message = "***Can not Display server message***\n"
+                    message = ""
             elif len(message)>1:
                 decrypt = AES_cryptography.decryptor(passwd,IV)
                 message = message.split(b":")
@@ -205,7 +205,7 @@ def recv_message():
                         else:
                             message = ""
                     except UnicodeDecodeError:
-                        message = "***Can not Display message***\n"
+                        message = ""
                 except:
                     message = ""
         except:
@@ -232,7 +232,7 @@ def on_closing():
 
 def donate():
     def paypal():webbrowser.open(f"https://paypal.me/AndreasKarageorgos/{paypal_amount.get()}")
-    def BitCoin():webbrowser.open(f"https://www.blockchain.com/btc/payment_request?address=1DJqJtMGRzG12NZk1SJ5DnCfpeunTX1z1V&amount={bitcoin_ammount.get()}&message=Anonymous%20Chat%20donation%20!Thank%20you%20for%20your%20support%20!!!%20%3C3")
+    def BitCoin():webbrowser.open(f"https://www.blockchain.com/btc/payment_request?address=1DJqJtMGRzG12NZk1SJ5DnCfpeunTX1z1V&amount={bitcoin_ammount.get()}&message=Thank%20you%20for%20your%20support%20!!!%20%3C3")
 
     tk_messagebox.showwarning(title="Warning !",message="The buttons will promt you to the equivalent site.\n\nAfter you select your amount and click the the equivalent button it will\nStart your default browser.\n\nThat means that it can run outside of the Tor network.\n\nThe sites are from paypal and blockchain.com")
     
@@ -258,7 +258,7 @@ def donate():
 
     if x==0:
         paypal_amount.insert(0,"20")
-        bitcoin_ammount.insert(0,"0.00198")
+        bitcoin_ammount.insert(0,"0.0023")
         x=1
 
     paypal_button.grid(row=0,column=0)
