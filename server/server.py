@@ -11,7 +11,7 @@ import time
 
 #Checks for updates
 
-version = "Alpha 2.4"
+version = "Alpha 2.5"
 
 def update(version):
     prox = {
@@ -96,7 +96,7 @@ def accept_connections():
                         print(data[1],"Logged in")
                         try:
                             clients.update({data[1].decode("ascii"):client})
-                            client.send(f"Server:{server_message}\n".encode("ascii"))
+                            client.sendall(f"Server:{server_message}\n".encode("ascii"))
                             t = data[1].decode("ascii")
                             broadcast(f"Server:{t} logged in".encode("ascii"))
                         except UnicodeDecodeError:
@@ -129,7 +129,7 @@ def recv_message():
                     try:
                         clients[key].settimeout(0.2)
                         message = clients[key].recv(160)
-                        if (len(message)<=80):
+                        if (1<=len(message)<=80):
                             if(len(message)>0 and message!=b"\n"):
                                 if (b"COMMAND:D" in message):
                                     print(key,"logged off")
@@ -157,6 +157,12 @@ def recv_message():
                 del clients[br]
             except:
                 pass
+
+def kill_all_connections():
+    for k in clients:
+        try:
+            clients[k].close()
+        except:pass
 
 
 threading.Thread(target=accept_connections).start()
@@ -195,9 +201,11 @@ except KeyboardInterrupt:
     pass
 
 
-print("Server Stopped !")
+print("Closing the server !")
 dead = True
 time.sleep(3)
+kill_all_connections()
 server_socket.close()
 time.sleep(3)
+print("Server closed.")
 
