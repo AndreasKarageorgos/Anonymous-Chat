@@ -33,11 +33,11 @@ def register(link):
                     tk_messagebox.showinfo(title="Success !", message="successfully registered to server !")
                     reg.destroy()
                 else:
-                    tk_messagebox.showerror(title="Error", message="Failed to register")
+                    tk_messagebox.showerror(title="Error", message="Username already exists")
             except:
-                tk_messagebox.showerror(title="Error", message="Failed to register")
+                tk_messagebox.showerror(title="Error", message="Server did not respond")
         except:
-            tk_messagebox.showerror(title="Error", message="Failed to register")
+            tk_messagebox.showerror(title="Error", message="Server did not respond")
 
 
     def reg_to_server():
