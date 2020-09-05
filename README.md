@@ -1,5 +1,5 @@
 # Secure Private Connections - Chat
-A chat that can provide privacy with end to end encryption, tor and without the need to trust the server !
+A chat that can provide privacy with end to end encryption and no need to trust the server !
 
 This project is targeting people that trully need privacy.
 
@@ -12,13 +12,13 @@ The server runs on port 4488 by default
 
  You can help me by donating.
 
- paypal : https://paypal.me/AndreasKarageorgos/20
- 
- blockchain : https://www.blockchain.com/btc/address/1DJqJtMGRzG12NZk1SJ5DnCfpeunTX1z1V
+ * paypal : https://paypal.me/AndreasKarageorgos/20
+
+ * BlockChain : https://www.blockchain.com/btc/address/1DJqJtMGRzG12NZk1SJ5DnCfpeunTX1z1V
 
 
 
-## Installetion
+# Installetion
 
 * Ubuntu
 
@@ -43,7 +43,7 @@ The server runs on port 4488 by default
     * sudo apt update &&  sudo apt install git -y && sudo apt install python3-pip -y && sudo apt install python3-tk -y && sudo apt install tor -y && pip3 install pycryptodome && pip3 install pysocks && git clone https://github.com/AndreasKarageorgos/SPC-Chat.git
 
 
-## Tor For the server
+# Server setup
 You will need to edid the torrc file if you want to run the server.
   
 locate the torrc file under /etc/tor/
@@ -68,7 +68,11 @@ and locate your onion address under /var/lib/tor/hidden_service/
     
     exit
 
-## Tor For the client
+after that you can run the server by cd in SPC-Chat/server/ and run
+
+    python3 server.py
+
+# Client setup
   
 The client use tor as proxy to connect to a server, the only thing that you have to do as client is to make sure that the tor service is running
    
@@ -79,50 +83,49 @@ The client use tor as proxy to connect to a server, the only thing that you have
  * If the service is closed
     
         sudo service tor start
+
+After that you can cd in SPC-Chat/client/ and run:
+
+    python3 client.py
  
- ## Key
+ # Key
  There is 1 key file
  
  * Key.key
 
- under client/data/key/
+ under SPC-Chat/client/data/key/
  
- The key is for encrypting and decrypting messages. You can generate it using the key_generator.py
+ The key is for encrypting and decrypting messages. You can generate it using the key_generator.py located in SPC-Chat/client/
 
-        python3 key_generator.py
+    python3 key_generator.py
 
  Your messages can be decrypted only with this key , so keep it safe and share it only with the person that you want to send messages. Change your keys often for extra safety
 
  If you create your own key , make sure that it is at least 20 characters long. Small keys can be cracked really fast.
 
-## Note !
+# Note !
 They Key file can not be send through the server for extra safety !
 
 You will need to send it to the person that you want to talk face to face using a usb ...etc.
 
 This way the server will never be able to store your key and then decrypt and log your messages.
 
-### Clinet Example
+# Clinet Example
 
 In order 2 clients to talk to each other, they must connect to the same server with the same AES key (Key.key file).
 
-* Client1 Key.key = "This is an AES key"
+* Client1 Key.key = "This is an AES key" Server: example_link.onion
 
         >> python3 client.py
         
-        Onion link: example_link.onion
 
-* Client2 Key.key = "This is an AES key"
+* Client2 Key.key = "This is an AES key" Server: example_link.onion
         
         >> python3 client.py
-        
-        Onion link: example_link.onion
  
- * Client3 Key.key = "Hello !"
-        
+ * Client3 Key.key = "Hello !" Server: example_link.onion
+    
         >> python3 client.py
-        
-        Onion link: example_link.onion
  
 
 Client1 and Client2 have the same keys, this way they are going to be able to see the messages of each other. 
