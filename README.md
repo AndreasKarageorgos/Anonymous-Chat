@@ -15,6 +15,12 @@ The server runs on port 4488 by default
  * paypal : https://paypal.me/AndreasKarageorgos/20
 
  * BlockChain : https://www.blockchain.com/btc/address/1DJqJtMGRzG12NZk1SJ5DnCfpeunTX1z1V
+ 
+ If you want me to asign you a new BTC address to donate you can send me email.
+ 
+ * andreas_karageorgos@protonmail.com
+ 
+ I will delete the email after I read it.
 
 
 
