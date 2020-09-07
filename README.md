@@ -20,7 +20,7 @@ The server runs on port 4488 by default
  
  * andreas_karageorgos@protonmail.com
  
- I will delete the email after I read it.
+ I do not keep the emails that I receive after I read them.
 
 
 
