@@ -19,10 +19,6 @@ The server runs on port 4488 by default
  If you want me to asign you a new BTC address for you to donate, you can send me an email and ask for it.
  
  * andreas_karageorgos@protonmail.com
- 
- I do not keep the emails that I receive after I read them.
-
-
 
 # Installetion
 
