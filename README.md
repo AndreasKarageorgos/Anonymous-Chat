@@ -1,5 +1,5 @@
 # Secure Private Connections - Chat
-A chat that can provide privacy with end to end encryption, tor and without the need to trust the server ! 
+A chat that can provide privacy with end to end encryption, tor and without the need to trust the server to keep your keys safe ! 
 
 This project is targeting people that trully need privacy.
 
@@ -15,6 +15,7 @@ The server runs on port 4488 by default
  * paypal : https://paypal.me/AndreasKarageorgos/20
 
  * BlockChain [BTC] : https://www.blockchain.com/btc/address/1DJqJtMGRzG12NZk1SJ5DnCfpeunTX1z1V
+
  
  If you want me to asign you a new BTC address for you to donate, you can send me an email and ask for it.
  
@@ -112,6 +113,11 @@ You will need to send it to the person that you want to talk face to face using 
 
 This way the server will never be able to store your key and then decrypt and log your messages.
 
+# Keyboard shortcuts
+
+* <Enter\> Sends the message.
+* <Tab\> shows you the connected people in the room that you are connected.
+
 # Clinet Example
 
 In order 2 clients to talk to each other, they must connect to the same server with the same AES key (Key.key file).
@@ -130,5 +136,7 @@ In order 2 clients to talk to each other, they must connect to the same server w
         >> python3 client.py
  
 
-Client1 and Client2 have the same keys, this way they are going to be able to see the messages of each other. 
-Client4 has different key so it wont be able to decrypt or send messages to Client1 and Client2 and the opposite. (The server broadcasts to every client all the messages)
+Client1 and Client2 have the same keys, this way they are going to be able to see and send messages to each other. 
+Client4 has different key so it wont be able to send messages to Client1 and Client2 and the opposite.
+
+Server creates private chat rooms based on your keys (Server never gets your keys). People with different keys are going to be in different chat rooms.
