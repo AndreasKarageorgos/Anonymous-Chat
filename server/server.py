@@ -11,7 +11,7 @@ import time
 
 #Checks for updates
 
-version = "Alpha 2.5"
+version = "Beta 1.0"
 
 def update(version):
     prox = {
@@ -59,14 +59,12 @@ server_socket.bind((server_ip,server_port))
 server_socket.settimeout(0.2)
 server_socket.listen(max_clients)
 
-server_message = "Wealcome !!!"
+rooms = {}
 
-clients = {}
 broken_pipe_list = []
 #This is to stop the threads when the server is closed
 global dead
 dead = False
-
 
 def accept_connections():
 
@@ -74,14 +72,14 @@ def accept_connections():
     while not dead:
         try:
             client,_ = server_socket.accept()
-            client.settimeout(1)
+            client.settimeout(3)
             data = client.recv(1024)
             if data == b"online":
                 client.send("True".encode("ascii"))
                 client.close()
                 data = ""
             data = data.split(b":")
-            if len(data) ==3:
+            if 3<=len(data)<=4 :
                 if data[0] == b"register" and b"server" not in data[1].lower():
                     resp = register_users.reg_user(data[1],data[2],members)
                     if resp: 
@@ -89,80 +87,111 @@ def accept_connections():
                         print(data[1],"Registered !")
                     else:
                         client.send("False".encode("ascii"))
-                elif data[0] == b"login":
+                elif data[0] == b"login" and len(data)==4:
                     resp = auth_users.auth(data[1],data[2],members)
                     if resp:
                         client.send("True".encode("ascii"))
                         print(data[1],"Logged in")
-                        try:
-                            clients.update({data[1].decode("ascii"):client})
-                            client.sendall(f"Server:{server_message}\n".encode("ascii"))
-                            t = data[1].decode("ascii")
-                            broadcast(f"Server:{t} logged in".encode("ascii"))
-                        except UnicodeDecodeError:
-                            pass
+                        keyword = data[-1]
+
+                        if keyword in rooms:
+                            rooms[keyword].update({data[1].decode("ascii"):client})
+                        else:
+                            rooms.update({ keyword:{data[1].decode("ascii"):client}})
+                        
+                        time.sleep(0.1)
+                        broadcast("Server",data[1].decode("ascii")+" Logged in",keyword)
 
                     else:
                         client.send("False".encode("ascii"))
+                    
+
         except:
             pass
 
-def broadcast(message):
-    for key in clients:
+def broadcast(name,message,key=None):
+
+    if name=="Server" and key==None:
+        for k in rooms:
+            for client in rooms[k]:
+                try:
+                    rooms[k][client].settimeout(0.2)
+                    rooms[k][client].send(f"Server:{message}".encode("ascii"))
+                except:
+                    if client not in [j[1] for j in remove_clients]:
+                        remove_clients.append((k,client,False))
+        return
+    
+    if name=="Server":
+        for client in rooms[key]:
+            try:
+                rooms[key][client].settimeout(0.2)
+                rooms[key][client].send(f"Server:{message}".encode("ascii"))
+            except:
+                if client not in [j[1] for j in remove_clients]:
+                        remove_clients.append((key,client,False))
+        return
+    
+    for client in rooms[key]:
         try:
-            clients[key].send(message)
-        except BrokenPipeError:
-            if key not in broken_pipe_list:
-                broken_pipe_list.append(key)
+            rooms[key][client].settimeout(0.2)
+            rooms[key][client].send(b"%s:%s" % (name.encode("ascii"), message) )
         except:
-            if key not in broken_pipe_list:
-                broken_pipe_list.append(key)
+            if client not in [j[1] for j in remove_clients]:
+                remove_clients.append((key,client,False))
+
+global remove_clients
+remove_clients = [] 
 
 def recv_message():
-    
+    global remove_clients
     global dead
     while not dead:
-        broken_pipe_list = []
-        if(len(clients)>0):
-            try:
-                for key in clients:
-                    try:
-                        clients[key].settimeout(0.2)
-                        message = clients[key].recv(160)
-                        if (1<=len(message)<=80):
-                            if(len(message)>0 and message!=b"\n"):
-                                if (b"COMMAND:D" in message):
-                                    print(key,"logged off")
-                                    broadcast(f"Server: {key} logged off".encode("ascii")) #optional
-                                    broken_pipe_list.append(key)
-                                elif b"D$o(n" in message:
-                                    clients[key].send("Server:Your message is not encrypted.\nWe did not broadcast it to the other clients\nand you have been disconnected you for your safety.\nPlease use the original version.\nDownload it here:\nhttps://github.com/AndreasKarageorgos/SPC-Chat".encode("ascii"))
-                                    clients[key].close()
-                                    broken_pipe_list.append(key)
-                                else:
-                                    broadcast(b"%s:%s" % (key.encode("ascii"),message))
-                                    print(key,f"Send a message of {len(message)} bytes")
-                        else:
-                            broadcast(f"Server: {key} kicked for flooding the server.".encode("ascii"))
-                            print(key,f"Kicked for sending message of {len(message)} bytes")
-                    except BrokenPipeError:
-                        if key not in broken_pipe_list:
-                            broken_pipe_list.append(key)
-                    except:
-                        pass
-            except RuntimeError:
-                pass
-        for br in broken_pipe_list:
-            try:
-                del clients[br]
-            except:
-                pass
+        try:
+            if(len(rooms)>0):
+                for key in rooms:
+                    for client in rooms[key]:
+                        try:
+                            rooms[key][client].settimeout(0.1)
+                            message = rooms[key][client].recv(160)
+                            if message == b"COMMAND:D":
+                                rooms[key][client].close()
+                                print(client, "logged off")
+                                remove_clients.append((key,client,True))
+                            elif message == b"COMMAND:S":
+                                particiapnts = ",".join([x for x in rooms[key]])
+                                try:rooms[key][client].send(f"Server:{particiapnts}".encode("ascii"))
+                                except:remove_clients.append((key,client,False))
+                            else:
+                                broadcast(name=client, message=message, key=key)
+                        except:
+                            pass
+            
+            for pair in remove_clients:
+                try:
+                    rooms[pair[0]].pop(pair[1])
+                    if len(rooms[pair[0]]) == 0:
+                        rooms.pop(pair[0])
+                    if pair[2]:
+                        broadcast(name="Server",message=f"{pair[1]}, logged off",key=pair[0])
+                    else:
+                        broadcast(name="Server",message=f"{pair[1]}, lost connection",key=pair[0])
+                        print(pair[1], "lost connection")
+                    print(pair[1],"logged off")
+                except:
+                    pass
+        except RuntimeError:
+            pass
+        
+        remove_clients = []
 
 def kill_all_connections():
-    for k in clients:
-        try:
-            clients[k].close()
-        except:pass
+    for key in rooms:
+        for client in rooms[key]:
+            try:
+                rooms[key][client].close()
+            except:
+                pass
 
 
 threading.Thread(target=accept_connections).start()
@@ -172,10 +201,11 @@ threading.Thread(target=recv_message).start()
 #Server Commands
 
 def kick(username):
-    if (username in clients):
-        clients[username].close()
-        return
-    print("Name did not found")
+    for k in rooms:
+        if username in rooms[k]:
+            if username not in [j[1] for j in remove_clients]:
+                remove_clients.append((k,username,True))
+            break
 
 def helpme(*_):
     print("""
@@ -203,9 +233,8 @@ except KeyboardInterrupt:
 
 print("Closing the server !")
 dead = True
-time.sleep(3)
+time.sleep(2)
 kill_all_connections()
 server_socket.close()
-time.sleep(3)
 print("Server closed.")
 
