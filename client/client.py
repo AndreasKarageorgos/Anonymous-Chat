@@ -7,6 +7,7 @@ from data.libraries.register import register
 from data.libraries.torSocks import torSocks
 from random import choice
 from string import ascii_letters,digits
+from hashlib import sha256
 import requests
 import webbrowser
 import socks
@@ -17,7 +18,7 @@ import getpass
 #Checks for updates
 
 
-version = "Alpha 2.5"
+version = "Beta 1.0"
 
 def update(version):
 
@@ -66,6 +67,14 @@ chars = ascii_letters+digits+"~`!@#$%^&*()_+-={}[]\\:;'\"<>,./?"
 global keyword
 keyword = "D$o(n"
 
+temp_pass = sha256(passwd[:16]).digest()
+temp_iv = temp_pass[:16]
+
+chat_room_key = AES_cryptography.encryptor(temp_pass,temp_iv).encrypt(keyword.encode("ascii"))
+
+del temp_pass
+del temp_iv
+
 #Helper to run the start method of the threads once !
 run = False
 
@@ -102,9 +111,14 @@ while True:
             testsock.close()
             break
         print("Failed to connect. Trying again.")
+    except KeyboardInterrupt:
+        exit()
     except:
         print("Failed to connect. Trying again.")
-    time.sleep(0.5) 
+    try:
+        time.sleep(1)
+    except KeyboardInterrupt:
+        exit()
 
 
 ask = input("Press Enter to login or type 'R' to register: ").lower().strip()
@@ -128,7 +142,7 @@ while True:
         client_socket = torSocks(link,port)
         client_socket.connect()
         client_socket.setTimeout(10)
-        client_socket.send(f"login:{uname}:{password}".encode("ascii"))
+        client_socket.send(b"login:%s:%s:%s" % (uname.encode("ascii"),password.encode("ascii"), chat_room_key) )
         ans = client_socket.recv(1024).decode("ascii").strip()
         if "True" in ans:
             break
@@ -153,33 +167,23 @@ def send_msg(*event):
     global keyword
     if len(input_box.get()) == 0:return
     if len(input_box.get()+keyword)+2 > 80:
-        msg_show.config(state="normal")
-        msg_show.yview_pickplace("end")
-        msg_show.insert(tk.INSERT,"***This message is too big***\n\n")
-        msg_show.config(state="disable")
+        show_message("***This message is too big***")
         return
     encrypt = AES_cryptography.encryptor(passwd,IV)
     try:
         message = (choice(chars)+input_box.get()+keyword+choice(chars)).encode("ascii")
         ciphertext = encrypt.encrypt(message)
         if keyword.encode("ascii") in ciphertext:
-            msg_show.config(state="normal")
-            msg_show.insert(tk.INSERT,"***Can not send this message. It is not encrypted.***\n\n")
-            msg_show.config(state="disable")
+            show_message("***This message is not encrypted***")
             return
         leng = len(input_box.get())
         input_box.delete(0,leng)
         try:
             client_socket.send(ciphertext)
         except:
-            msg_show.config(state="normal")
-            msg_show.yview_pickplace("end")
-            msg_show.insert(tk.INSERT,"***Message did not send***\n\n")
-            msg_show.config(state="disable")
+            show_message("***Failed to send the message***")
     except UnicodeEncodeError:
-        msg_show.config(state="normal")
-        msg_show.insert(tk.INSERT,"\n***Ascii Chars only***\n\n")
-        msg_show.config(state="disable")
+        show_message("***Ascii characters only***")
 
 def recv_message():
     global dead
@@ -187,10 +191,11 @@ def recv_message():
     while not dead:
         message = ""
         try:
+            client_socket.setTimeout(0.2)
             message = client_socket.recv(1024)
             if len(message)>1 and message.split(b":")[0] == b"Server":
                 try:
-                    message = message.decode("ascii")+"\n"
+                    message = message.decode("ascii")
                 except UnicodeDecodeError:
                     message = ""
             elif len(message)>1:
@@ -201,7 +206,7 @@ def recv_message():
                     try:
                         message = b''.join(message).decode("ascii")
                         if message.endswith(keyword) and (len(message)-len(keyword)) > 0:
-                            message = message[:len(message)-len(keyword)]+"\n"
+                            message = message[:len(message)-len(keyword)]
                         else:
                             message = ""
                     except UnicodeDecodeError:
@@ -212,10 +217,7 @@ def recv_message():
             pass
         
         if(len(message)>0):
-            msg_show.config(state="normal")
-            msg_show.yview_pickplace("end")
-            msg_show.insert(tk.INSERT,message)
-            msg_show.config(state="disable")
+            show_message(message)
 
 def on_closing():
     global dead
@@ -271,6 +273,15 @@ def donate():
     
     master.mainloop()
 
+def show_message(ms):
+    msg_show.config(state="normal")
+    msg_show.yview_pickplace("end")
+    msg_show.insert(tk.INSERT,ms+"\n")
+    msg_show.config(state="disable")
+
+def show_participants(event):
+    client_socket.send("COMMAND:S".encode("ascii"))
+
 def center_window(window,width_of_window,height_of_window):
     screen_width = window.winfo_screenwidth()
     screen_height = window.winfo_screenheight()
@@ -294,14 +305,15 @@ center_window(root,400,510)
 root.title("SPC-Chat")
 root.protocol("WM_DELETE_WINDOW",on_closing)
 root.bind("<Return>",send_msg)
-root.resizable(0,0)
+root.bind("<Tab>", show_participants)
+#root.resizable(0,0)
 
 #Objects in tk window
 
 msg_show = tk_Text(root, state = "disabled", width = 49, height = 20, cursor="arrow")
 text = tk_Label(root,text="Do not open links or send anything that\ncan trace back to you !")
 input_box = tk_Entry(root,width=40)
-send_button = tk_Button(root, text=b"Send", cursor="hand2", command=send_msg)
+send_button = tk_Button(root, text="Send", cursor="hand2", command=send_msg)
 donate_label = tk_Label(root,text="You can help me to keep updating this project\nby donating. <3")
 donate_button = tk_Button(root,text="Donate Options", command = donate)
 
@@ -320,3 +332,7 @@ if(not run):
 
 root.mainloop()
 
+
+passwd=password=IV=msg_show=client_socket = "A"*2048
+
+del passwd, password , IV , msg_show , client_socket
