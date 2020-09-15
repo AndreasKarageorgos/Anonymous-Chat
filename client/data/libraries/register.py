@@ -5,6 +5,7 @@ try:
     from data.libraries.torSocks import torSocks
 except:
     from torSocks import torSocks
+from hashlib import sha256
 
 def center_window(window,width_of_window,height_of_window):
     screen_width = window.winfo_screenwidth()
@@ -13,19 +14,14 @@ def center_window(window,width_of_window,height_of_window):
     y_coordinate = (screen_height / 2) - (height_of_window / 2)
     window.geometry("%dx%d+%d+%d" %(width_of_window,height_of_window,x_coordinate,y_coordinate))
 
-
-
-
-
-
-
 def register(link):
 
     def send(uname,passwd):
         try:
             socket = torSocks(link,4488)
             socket.connect()
-            socket.send(f"register:{uname}:{passwd}".encode("ascii"))
+            passwd =  sha256((link+passwd).encode("ascii")).digest()
+            socket.send(b"register:%s:%s" % (uname.encode("ascii"),passwd))
             try:
                 socket.setTimeout(10)
                 suc = socket.recv(5)
