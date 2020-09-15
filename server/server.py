@@ -11,7 +11,7 @@ import time
 
 #Checks for updates
 
-version = "Beta 1.0"
+version = "Beta 1.2"
 
 def update(version):
     prox = {
@@ -33,6 +33,25 @@ def update(version):
     return"No updates found !!!"
 print(update(version))
 
+
+#Load config file.
+
+while True:
+    try:
+        with open("server_config.config","r") as f:
+            config_file = f.read().strip()
+            f.close()
+        config_file = config_file.split("\n")
+        config = {}
+        for i in config_file:
+            config.update({i.split("=")[0]: i.split("=")[1]})
+        break
+    except FileNotFoundError:
+        with open("server_config.config","w") as f:
+            f.write("message=Wealcome To the server\nmax_clients=5")
+            f.close()
+
+
 #loads members
 
 members = {}
@@ -52,10 +71,20 @@ except FileNotFoundError:
 
 server_ip = "127.0.0.1" #Do not change !!! (Unless you know what you are doing)
 server_port = 4488
-max_clients = 10     #Change this to make your server bigger or smaller
+max_clients = int(config["max_clients"].strip())
+server_message = config["message"].strip()
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_socket.bind((server_ip,server_port))
+while True:
+    try:
+        server_socket.bind((server_ip,server_port))
+        break
+    except KeyboardInterrupt:
+        exit()
+    except OSError:
+        print("The port 4488 is already in use\nTry to close the programm that is using this port.")
+        exit()
+
 server_socket.settimeout(0.2)
 server_socket.listen(max_clients)
 
@@ -73,22 +102,26 @@ def accept_connections():
         try:
             client,_ = server_socket.accept()
             client.settimeout(3)
-            data = client.recv(1024)
+            data = client.recv(2048)
             if data == b"online":
                 client.send("True".encode("ascii"))
                 client.close()
                 data = ""
             data = data.split(b":")
-            if 3<=len(data)<=4 :
+            if len(data)>=3:
                 if data[0] == b"register" and b"server" not in data[1].lower():
+                    data[2] = b":".join(data[2:])
                     resp = register_users.reg_user(data[1],data[2],members)
                     if resp: 
                         client.send("True".encode("ascii"))
                         print(data[1],"Registered !")
                     else:
                         client.send("False".encode("ascii"))
-                elif data[0] == b"login" and len(data)==4:
-                    resp = auth_users.auth(data[1],data[2],members)
+                elif data[0] == b"login" and len(data)>=4:
+                    if len(data) == 4:
+                        resp = auth_users.auth(data[1],data[2],members)
+                    else:
+                        resp = auth_users.auth(data[1],b":".join(data[2:-1]),members)
                     if resp:
                         client.send("True".encode("ascii"))
                         print(data[1],"Logged in")
@@ -99,6 +132,8 @@ def accept_connections():
                         else:
                             rooms.update({ keyword:{data[1].decode("ascii"):client}})
                         
+                        time.sleep(0.1)
+                        client.send(b"Server:%s" % server_message.encode("ascii"))
                         time.sleep(0.1)
                         broadcast("Server",data[1].decode("ascii")+" Logged in",keyword)
 
