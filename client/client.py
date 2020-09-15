@@ -18,7 +18,7 @@ import getpass
 #Checks for updates
 
 
-version = "Beta 1.0"
+version = "Beta 1.2"
 
 def update(version):
 
@@ -42,6 +42,7 @@ def update(version):
 
 print(update(version))
 
+
 #AES key load
 try:
     with open("data/key/Key.key","r") as f:
@@ -52,6 +53,7 @@ try:
 except FileNotFoundError:
     print("Did not find Key.key file.\nPlease use the key_generator \nOr load it manually under data/key/")
     exit()
+
 
 #Helper to stop the threads
 global dead
@@ -70,7 +72,7 @@ keyword = "D$o(n"
 temp_pass = sha256(passwd[:16]).digest()
 temp_iv = temp_pass[:16]
 
-chat_room_key = AES_cryptography.encryptor(temp_pass,temp_iv).encrypt(keyword.encode("ascii"))
+chat_room_key = sha256(AES_cryptography.encryptor(temp_pass,temp_iv).encrypt(keyword.encode("ascii"))).hexdigest()
 
 del temp_pass
 del temp_iv
@@ -142,7 +144,8 @@ while True:
         client_socket = torSocks(link,port)
         client_socket.connect()
         client_socket.setTimeout(10)
-        client_socket.send(b"login:%s:%s:%s" % (uname.encode("ascii"),password.encode("ascii"), chat_room_key) )
+        password = sha256((link+password).encode("ascii")).digest()
+        client_socket.send(b"login:%s:%s:%s" % (uname.encode("ascii"),password, chat_room_key.encode("ascii")) )
         ans = client_socket.recv(1024).decode("ascii").strip()
         if "True" in ans:
             break
