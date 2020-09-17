@@ -15,19 +15,19 @@ The server runs on port 4488 by default
  
  I appreciate all donations , thank you !!!
 
- ** paypal : https://paypal.me/AndreasKarageorgos/
+ * paypal : https://paypal.me/AndreasKarageorgos/
 
- ** BlockChain (BTC) : https://www.blockchain.com/btc/address/1DJqJtMGRzG12NZk1SJ5DnCfpeunTX1z1V
+ * BlockChain (BTC) : https://www.blockchain.com/btc/address/1DJqJtMGRzG12NZk1SJ5DnCfpeunTX1z1V
  
- ** Bitcoin Cash (BCH) : qpfmk88awqcwulau4txu9pg8t8w70mn885m7xjrhh5
+ * Bitcoin Cash (BCH) : qpfmk88awqcwulau4txu9pg8t8w70mn885m7xjrhh5
     
- ** Ethereum (ETH) : 0xAca0dcE013616a83fe4CF8AE01Ae1D79974441B5
+ * Ethereum (ETH) : 0xAca0dcE013616a83fe4CF8AE01Ae1D79974441B5
     
- ** USD Digital coin (USD-D) : 0xAca0dcE013616a83fe4CF8AE01Ae1D79974441B5
+ * USD Digital coin (USD-D) : 0xAca0dcE013616a83fe4CF8AE01Ae1D79974441B5
     
- ** Tether coin (USDT) : 0xAca0dcE013616a83fe4CF8AE01Ae1D79974441B5
+ * Tether coin (USDT) : 0xAca0dcE013616a83fe4CF8AE01Ae1D79974441B5
  
- ** Stellar Lumen (XLM) : GCJX6O7NF2RXRL72FAKFDIXD4P6CE4OSYFQM43ECPUP564K2ZZUHQIML
+ * Stellar Lumen (XLM) : GCJX6O7NF2RXRL72FAKFDIXD4P6CE4OSYFQM43ECPUP564K2ZZUHQIML
  
  If you want me to asign you a new BTC address for you to donate, you can send me an email and ask for it.
  
