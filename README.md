@@ -122,7 +122,7 @@ They Key file can not be send through the server for extra safety !
 
 You will need to send it to the person that you want to talk face to face using a usb, written on paper ..etc
 
- If send it online you may want to use protonmail.
+ If you send it online you may want to use protonmail.
 
 This way the server will never be able to store your key and then decrypt and log your messages.
 
