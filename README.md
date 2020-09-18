@@ -12,8 +12,6 @@ The server runs on port 4488 by default
  This programm is free and it will continue to be free.
  
  This is why I need your support.
- 
- I appreciate all donations , thank you !!!
 
  * paypal : https://paypal.me/AndreasKarageorgos/
 
