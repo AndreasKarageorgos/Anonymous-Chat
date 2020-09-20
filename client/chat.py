@@ -7,7 +7,7 @@ from data.libraries.register import register
 from data.libraries.torSocks import torSocks
 from random import choice
 from string import ascii_letters,digits
-from hashlib import sha256
+from hashlib import sha256,sha512,sha1
 import requests
 import webbrowser
 import socks
@@ -18,7 +18,7 @@ import getpass
 #Checks for updates
 
 
-version = "Beta 1.2"
+version = "Beta 1.3"
 
 def update(version):
 
@@ -45,14 +45,28 @@ print(update(version))
 
 #AES key load
 try:
-    with open("data/key/Key.key","r") as f:
-        passwd = f.read().strip().encode("ascii")
+    with open("data/key/Key.key","rb") as f:
+        password = getpass.getpass("Enter password: ").encode("ascii")
+        key_ciphertext = f.read()
+        dec = AES_cryptography.decryptor(password,sha1(password).digest())
+        passwd = dec.decrypt(key_ciphertext)
+
+        while not passwd.endswith(b"unencrypted"):
+            print("Wrong password.\n")
+            password = getpass.getpass("Enter password: ").encode("ascii")
+            dec = AES_cryptography.decryptor(password,sha1(password).digest())
+            passwd = passwd = dec.decrypt(key_ciphertext)
+       
+        passwd = passwd[:len("unencrypted")*(-1)]
         IV = passwd[:16]
         f.close()
 
+    password = "A"*len(password)*2
+    del password
+    del dec
+    print("Key decrypted.")
 except FileNotFoundError:
-    print("Did not find Key.key file.\nPlease use the key_generator \nOr load it manually under data/key/")
-    exit()
+    print("Key file did not found.\nYou can load it using the key_loader or generate it using the key_generator.")
 
 
 #Helper to stop the threads
@@ -69,10 +83,12 @@ chars = ascii_letters+digits+"~`!@#$%^&*()_+-={}[]\\:;'\"<>,./?"
 global keyword
 keyword = "D$o(n"
 
+chat_plain_keyword = "K1Lvnr*3gNh)29bvs"
+
 temp_pass = sha256(passwd[:16]).digest()
 temp_iv = temp_pass[:16]
 
-chat_room_key = sha256(AES_cryptography.encryptor(temp_pass,temp_iv).encrypt(keyword.encode("ascii"))).hexdigest()
+chat_room_key = sha512(AES_cryptography.encryptor(temp_pass,temp_iv).encrypt(chat_plain_keyword.encode("ascii"))).hexdigest()
 
 del temp_pass
 del temp_iv
@@ -145,7 +161,7 @@ while True:
         client_socket.connect()
         client_socket.setTimeout(10)
         password = sha256((link+password).encode("ascii")).digest()
-        client_socket.send(b"login:%s:%s:%s" % (uname.encode("ascii"),password, chat_room_key.encode("ascii")) )
+        client_socket.send(b"login:%s:%s:%s" % (uname.encode("ascii"),password, chat_room_key.encode("ascii")))
         ans = client_socket.recv(1024).decode("ascii").strip()
         if "True" in ans:
             break
@@ -309,7 +325,7 @@ root.title("SPC-Chat")
 root.protocol("WM_DELETE_WINDOW",on_closing)
 root.bind("<Return>",send_msg)
 root.bind("<Tab>", show_participants)
-#root.resizable(0,0)
+root.resizable(0,0)
 
 #Objects in tk window
 
