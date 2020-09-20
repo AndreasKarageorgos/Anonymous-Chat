@@ -13,7 +13,7 @@ class torSocks():
         self.socket.connect((self.link,self.port))
     
     def send(self,text):
-        self.socket.send(text)
+        self.socket.sendall(text)
     
     def recv(self,size):
         return self.socket.recv(size)
