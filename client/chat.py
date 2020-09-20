@@ -67,7 +67,7 @@ try:
     print("Key decrypted.")
 except FileNotFoundError:
     print("Key file did not found.\nYou can load it using the key_loader or generate it using the key_generator.")
-
+    exit()
 
 #Helper to stop the threads
 global dead
