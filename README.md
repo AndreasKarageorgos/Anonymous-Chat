@@ -31,7 +31,7 @@ The server runs on port 4488 by default
  
  * andreas_karageorgos@protonmail.com
 
-# Installetion
+# Installation
 
 * Ubuntu
 
@@ -117,6 +117,7 @@ After that you can cd in SPC-Chat/client/ and run:
 
  If you create your own key , make sure that it is at least 20 characters long. Small keys can be cracked really fast.
 
+
 # Note !
 They Key file can not be send through the server for extra safety !
 
@@ -126,30 +127,58 @@ You will need to send it to the person that you want to talk face to face using 
 
 This way the server will never be able to store your key and then decrypt and log your messages.
 
-# Keyboard shortcuts
+# Chat
+
+when you run the chat it will ask you for a password. This password is they password that has been used to encrypt the Key.key file.
+
+(You can not start the chat withoud a key)
+
+# Chat - Keyboard shortcuts
 
 * <Enter\> Sends the message.
 * <Tab\> shows you the connected people in the room that you are connected.
 
-# Clinet Example
+# Client Example
 
-In order 2 clients to talk to each other, they must connect to the same server with the same AES key (Key.key file).
+In order 2 clients to talk to each other, they must connect to the same server with the same key (Key.key file).
 
-* Client1 Key.key = "This is an AES key" Server: example_link.onion
+* Client1 Key.key = "This is a key" Server: example_link.onion
 
-        >> python3 client.py
+        >> python3 chat.py
         
 
-* Client2 Key.key = "This is an AES key" Server: example_link.onion
+* Client2 Key.key = "This is a key" Server: example_link.onion
         
-        >> python3 client.py
+        >> python3 chat.py
  
- * Client3 Key.key = "Hello !" Server: example_link.onion
+ * Client3 Key.key = "this is a different key" Server: example_link.onion
     
-        >> python3 client.py
+        >> python3 chat.py
  
 
 Client1 and Client2 have the same keys, this way they are going to be able to see and send messages to each other. 
 Client4 has different key so it wont be able to send messages to Client1 and Client2 and the opposite.
 
 Server creates private chat rooms based on your keys (Server never gets your keys). People with different keys are going to be in different chat rooms.
+
+# key_generator
+
+This tool will help you to generate strong keys.
+
+The generator automatically replaces the old key. Make sure that you have back ups.
+
+It is also asking you to set up a password. This password it is used to encrypt the key for extra safety.
+
+# key_loader
+
+This tool will help you to load a key. If the key it is not encrypted it will ask you to set up a password otherwise it will load it as it is.
+
+(try to use keys that are generated with the key_generator)
+
+#### <text style="color:red"> they old key is going to be replaced </text>
+
+# key extractor
+
+This tool will extract your key, decrypt it and save it as Key.key.unsafe.
+
+This key can be loaded to key_loader.
