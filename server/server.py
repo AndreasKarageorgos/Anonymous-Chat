@@ -11,7 +11,7 @@ import time
 
 #Checks for updates
 
-version = "Beta 1.2"
+version = "Beta 1.3"
 
 def update(version):
     prox = {
@@ -132,7 +132,7 @@ def accept_connections():
                         else:
                             rooms.update({ keyword:{data[1].decode("ascii"):client}})
                         
-                        time.sleep(0.1)
+                        time.sleep(0.2)
                         client.send(b"Server:%s" % server_message.encode("ascii"))
                         time.sleep(0.1)
                         broadcast("Server",data[1].decode("ascii")+" Logged in",keyword)
@@ -246,12 +246,23 @@ def helpme(*_):
     print("""
     1.help --This help menu
     2.kick (name) --Kicks a member of the server
-    3.stop  --Stops the server
+    3.ban (name) --Bans a member from the server
+    4.stop  --Stops the server
     """)
+
+def ban(username):
+    if username in members:
+        with open("conf/banned","a") as f:
+            f.write(username+"\n")
+            f.close()
+        print(username,"Banned")
+        kick(username)
+    else:
+        print("This username does not exists")
 
 print("Server is running ! Type help for a list of help menu.")
 
-commands = {"kick":kick,"help":helpme}
+commands = {"kick":kick,"help":helpme,"ban":ban}
 try:
     command = input("")
     while command.lower() != "stop":
