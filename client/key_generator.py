@@ -1,7 +1,8 @@
-#Coded by Andreas Karageorgos
-
 from random import randint
 from string import ascii_letters,digits
+from getpass import getpass
+from hashlib import sha1
+from data.libraries.AES_cryptography import encryptor
 
 passwd = ""
 IV = ""
@@ -20,8 +21,21 @@ for _ in range(randint(50,100)):
 
 passwd = "".join([chars[randint(0,l)] for _ in range(randint(100,256))])
 
-print("Key has been created")
 
-with open("data/key/Key.key", "w") as f:
+password1 = getpass("Set up a password: ") or "nfjeiqodc"
+password2 = getpass("Repeat password: ") or "ldiqmvbr"
+
+while password1!=password2:
+    print("Passwords do not match.")
+    password1 = getpass("Set up a password: ") or ""
+    password2 = getpass("Repeat password: ")
+
+password1 = password1.encode("ascii")
+
+passwd = encryptor(password1,sha1(password1).digest()).encrypt((passwd+"unencrypted").encode("ascii"))
+
+print("Key has been generated and encrypted")
+
+with open("data/key/Key.key", "wb") as f:
     f.write(passwd)
     f.close()
