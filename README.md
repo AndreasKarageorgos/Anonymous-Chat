@@ -117,7 +117,7 @@ After that you can cd in SPC-Chat/client/ and run:
 # Note !
 They Key file can not be send through the server for extra safety !
 
-You will need to send it to the person that you want to talk face to face using a usb, written on paper ..etc
+exchange your keys by using pgp encryption.
 
  If you send it online you may want to use protonmail.
 
