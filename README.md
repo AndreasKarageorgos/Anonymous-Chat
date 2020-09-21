@@ -117,7 +117,7 @@ After that you can cd in SPC-Chat/client/ and run:
 # Note !
 They Key file can not be send through the server for extra safety !
 
-exchange your keys by using pgp encryption.
+exchange your key by using pgp encryption.
 
  If you send it online you may want to use protonmail.
 
