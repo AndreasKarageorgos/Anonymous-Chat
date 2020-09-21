@@ -55,7 +55,7 @@ The server runs on port 4488 by default
     
     * sudo apt update &&  sudo apt install git -y && sudo apt install python3-pip -y && sudo apt install python3-tk -y && sudo apt install tor -y && pip3 install pycryptodome && pip3 install pysocks && git clone https://github.com/AndreasKarageorgos/SPC-Chat.git
 
-* Instead of useing git clone you can go to https://github.com/AndreasKarageorgos/SPC-Chat/releases/ and download the latest release.
+* Instead of using git clone you can go to https://github.com/AndreasKarageorgos/SPC-Chat/releases/ and download the latest release.
 
 # Server setup
 You will need to edid the torrc file if you want to run the server.
