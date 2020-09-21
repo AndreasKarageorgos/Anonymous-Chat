@@ -24,8 +24,8 @@ The server runs on port 4488 by default
  If you want me to asign you a new BTC address for you to donate, you can send me an email and ask for it.
  
  * andreas_karageorgos@protonmail.com
- 
-  * You can use my public pgp key to encrypt your message when you send me an email.
+  
+   * You can use my public pgp key to encrypt your message when you send me an email.
 
 # Installation
 
