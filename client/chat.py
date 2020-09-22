@@ -18,7 +18,7 @@ import getpass
 #Checks for updates
 
 
-version = "Beta 1.3"
+version = "Beta 1.3.1"
 
 def update(version):
 
