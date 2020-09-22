@@ -4,6 +4,10 @@ from data.libraries.AES_cryptography import encryptor
 
 keypath = input("Drag and drop the key file here:")
 
+if keypath[0] == "'" or keypath[0] == '"':
+    keypath = keypath[1:-2]
+    print(keypath)
+
 while not keypath.endswith(".key") and not keypath.endswith(".unsafe"):
     keypath = input("Drag and drop the key file here:")
 
