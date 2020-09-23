@@ -16,4 +16,4 @@ The Subject must be: Vulnerability [Critical/medium/low] (Select one)
 In the body you must describe analytically the Vulnerability and demonstrate it.
 
 ### The body must be encrypted to a "readable" form with my public key.
-### Files are not going to be acceptable.
+### Files are not going to be accepted.
