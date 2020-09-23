@@ -1,4 +1,5 @@
-#Coded by Andreas Karageorgos
+#coded by Andreas Karageorgos
+#GitHub: https://github.com/AndreasKarageorgos/
 
 import tkinter as tk
 from tkinter import Entry as tk_Entry , Text as tk_Text,Label as tk_Label, Button as tk_Button, messagebox as tk_messagebox
@@ -18,7 +19,7 @@ import getpass
 #Checks for updates
 
 
-version = "Beta 1.3.1"
+version = "Beta 1.4"
 
 def update(version):
 
@@ -46,14 +47,14 @@ print(update(version))
 #AES key load
 try:
     with open("data/key/Key.key","rb") as f:
-        password = getpass.getpass("Enter password: ").encode("ascii")
+        password = getpass.getpass("Enter the key password:").encode("ascii")
         key_ciphertext = f.read()
         dec = AES_cryptography.decryptor(password,sha1(password).digest())
         passwd = dec.decrypt(key_ciphertext)
 
         while not passwd.endswith(b"unencrypted"):
             print("Wrong password.\n")
-            password = getpass.getpass("Enter password: ").encode("ascii")
+            password = getpass.getpass("Enter the key password:").encode("ascii")
             dec = AES_cryptography.decryptor(password,sha1(password).digest())
             passwd = passwd = dec.decrypt(key_ciphertext)
        
@@ -83,7 +84,7 @@ chars = ascii_letters+digits+"~`!@#$%^&*()_+-={}[]\\:;'\"<>,./?"
 global keyword
 keyword = "D$o(n"
 
-chat_plain_keyword = "K1Lvnr*3gNh)29bvs"
+chat_plain_keyword = "*fgnHePofnq3*dhvH1)(dkf^"
 
 temp_pass = sha256(passwd[:16]).digest()
 temp_iv = temp_pass[:16]
@@ -162,7 +163,7 @@ while True:
         client_socket.setTimeout(10)
         password = sha256((link+password).encode("ascii")).digest()
         client_socket.send(b"login:%s:%s:%s" % (uname.encode("ascii"),password, chat_room_key.encode("ascii")))
-        ans = client_socket.recv(1024).decode("ascii").strip()
+        ans = client_socket.recv(6).decode("ascii").strip()
         if "True" in ans:
             break
         print("Wrong username or password.\n")
@@ -211,7 +212,7 @@ def recv_message():
         message = ""
         try:
             client_socket.setTimeout(0.2)
-            message = client_socket.recv(1024)
+            message = client_socket.recv(100)
             if len(message)>1 and message.split(b":")[0] == b"Server":
                 try:
                     message = message.decode("ascii")
@@ -279,7 +280,7 @@ def donate():
 
     if x==0:
         paypal_amount.insert(0,"20")
-        bitcoin_ammount.insert(0,"0.0023")
+        bitcoin_ammount.insert(0,"0.00223")
         x=1
 
     paypal_button.grid(row=0,column=0)
@@ -295,7 +296,7 @@ def donate():
 def show_message(ms):
     msg_show.config(state="normal")
     msg_show.yview_pickplace("end")
-    msg_show.insert(tk.INSERT,ms+"\n")
+    msg_show.insert("end",ms+"\n")
     msg_show.config(state="disable")
 
 def show_participants(event):
