@@ -1,4 +1,5 @@
-#Coded by Andreas Karageorgos
+#coded by Andreas Karageorgos
+#GitHub: https://github.com/AndreasKarageorgos/
 
 import socket
 import threading
@@ -11,7 +12,7 @@ import time
 
 #Checks for updates
 
-version = "Beta 1.3"
+version = "Beta 1.4"
 
 def update(version):
     prox = {
@@ -72,7 +73,9 @@ except FileNotFoundError:
 server_ip = "127.0.0.1" #Do not change !!! (Unless you know what you are doing)
 server_port = 4488
 max_clients = int(config["max_clients"].strip())
-server_message = config["message"].strip()
+
+#Buff size of client is 100 
+server_message = config["message"].strip()[:93]
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 while True:
@@ -102,7 +105,7 @@ def accept_connections():
         try:
             client,_ = server_socket.accept()
             client.settimeout(3)
-            data = client.recv(2048)
+            data = client.recv(181)
             if data == b"online":
                 client.send("True".encode("ascii"))
                 client.close()
@@ -195,8 +198,12 @@ def recv_message():
                                 remove_clients.append((key,client,True))
                             elif message == b"COMMAND:S":
                                 particiapnts = ",".join([x for x in rooms[key]])
-                                try:rooms[key][client].send(f"Server:{particiapnts}".encode("ascii"))
-                                except:remove_clients.append((key,client,False))
+                                if len("Server:"+particiapnts)<=335:
+                                    try:rooms[key][client].send(f"Server:{particiapnts}".encode("ascii"))
+                                    except:remove_clients.append((key,client,False))
+                                else:
+                                    try:rooms[key][client].send("Server: There are too many people on this room to be displayed.")
+                                    except:remove_clients.append((key,client,False))
                             else:
                                 broadcast(name=client, message=message, key=key)
                         except:
@@ -277,7 +284,7 @@ except KeyboardInterrupt:
     pass
 
 
-print("Closing the server !")
+print("Closing open connections.")
 dead = True
 time.sleep(2)
 kill_all_connections()
