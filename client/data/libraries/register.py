@@ -58,14 +58,13 @@ def register(link):
 
     reg.title("Register")
     reg.resizable(0,0)
-    tk_messagebox.showwarning(title="warning", message="Make sure that you will not use your real credentials.\n")
     #objects in window
 
     username_label = tk_Label(reg,text = "username:")
     username_entry = tk_Entry(reg,width = 10)
 
     password_label = tk_Label(reg,text = "password:")
-    password_entry = tk_Entry(reg,width = 10)
+    password_entry = tk_Entry(reg,width = 10, show="*")
 
     submit_button = tk_Button(reg, text = "register", command = reg_to_server)
 
