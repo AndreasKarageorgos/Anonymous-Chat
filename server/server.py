@@ -12,7 +12,11 @@ import time
 
 #Checks for updates
 
-version = "Beta 1.4"
+global sl
+sl = "/"
+
+
+version = "v0.1"
 
 def update(version):
     prox = {
@@ -58,7 +62,7 @@ while True:
 members = {}
 
 try:
-    f=open("conf/users","r")
+    f=open(f"conf{sl}users","r")
     temp = f.read().split("\n")
     for i in temp:
         temp2 = i.split(":")
@@ -66,7 +70,7 @@ try:
         hash_ = ":".join(temp2[1:])
         members.update({name:hash_})
 except FileNotFoundError:
-    open("conf/users","w").close()
+    open(f"conf{sl}users","w").close()
 
 #Creating sockets
 
@@ -258,8 +262,9 @@ def helpme(*_):
     """)
 
 def ban(username):
+    global sl
     if username in members:
-        with open("conf/banned","a") as f:
+        with open(f"conf{sl}banned","a") as f:
             f.write(username+"\n")
             f.close()
         print(username,"Banned")
