@@ -2,11 +2,12 @@ from hashlib import sha1
 from getpass import getpass
 from data.libraries.AES_cryptography import decryptor
 
+sl = "/"
 
 password = getpass("Key Password: ").encode("ascii")
 
 try:
-    with open("data/key/Key.key", "rb") as f:
+    with open(f"data{sl}key{sl}Key.key", "rb") as f:
 
         plainkey = decryptor(password,sha1(password).digest()).decrypt(f.read())
         if not plainkey.endswith(b"unencrypted"):

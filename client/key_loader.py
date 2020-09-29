@@ -2,6 +2,8 @@ from getpass import getpass
 from hashlib import sha1
 from data.libraries.AES_cryptography import encryptor
 
+sl = "/"
+
 keypath = input("Drag and drop the key file here:")
 
 if keypath[0] == "'" or keypath[0] == '"':
@@ -17,7 +19,7 @@ with open(keypath,"rb") as f:
     f.close()
 
 if keypath.endswith(".key"):
-    with open("data/key/Key.key","wb") as f:
+    with open(f"data{sl}key{sl}Key.key","wb") as f:
         f.write(key)
         f.close()
 else:
@@ -31,7 +33,7 @@ else:
     
     password1 = password1.encode("ascii")
 
-    with open("data/key/Key.key", "wb") as f:
+    with open(f"data{sl}key{sl}Key.key", "wb") as f:
         cipherkey = encryptor(password1,sha1(password1).digest()).encrypt((key+b"unencrypted"))
         f.write(cipherkey)
         f.close()

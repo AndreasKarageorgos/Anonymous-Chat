@@ -2,7 +2,7 @@
 #GitHub: https://github.com/AndreasKarageorgos/
 
 import tkinter as tk
-from tkinter import Entry as tk_Entry , Text as tk_Text,Label as tk_Label, Button as tk_Button, messagebox as tk_messagebox
+from tkinter import Entry as tk_Entry , Text as tk_Text,Label as tk_Label, Button as tk_Button, messagebox as tk_messagebox, Frame as tk_Frame
 from data.libraries import AES_cryptography, servers, loadServers
 from data.libraries.register import register
 from data.libraries.torSocks import torSocks
@@ -16,10 +16,21 @@ import threading
 import time
 import getpass
 
+def center_window(window,width_of_window,height_of_window):
+    screen_width = window.winfo_screenwidth()
+    screen_height = window.winfo_screenheight()
+    x_coordinate = (screen_width / 2) - (width_of_window / 2)
+    y_coordinate = (screen_height / 2) - (height_of_window / 2)
+    window.geometry("%dx%d+%d+%d" %(width_of_window,height_of_window,x_coordinate,y_coordinate))
+
+
+global sl
+sl = "/"
+
 #Checks for updates
 
 
-version = "Beta 1.4"
+version = "v0.1"
 
 def update(version):
 
@@ -46,7 +57,7 @@ print(update(version))
 
 #AES key load
 try:
-    with open("data/key/Key.key","rb") as f:
+    with open(f"data{sl}key{sl}Key.key","rb") as f:
         password = getpass.getpass("Enter the key password:").encode("ascii")
         key_ciphertext = f.read()
         dec = AES_cryptography.decryptor(password,sha1(password).digest())
@@ -139,47 +150,58 @@ while True:
     except KeyboardInterrupt:
         exit()
 
+#login screen
 
-ask = input("Press Enter to login or type 'R' to register: ").lower().strip()
-
-while not(ask == "r" or ask==""):
-    ask = input("Press Enter to login or type 'R' to register: ").lower().strip()
-
-if ask=="r":
+def reg(*event):
     register(link)
-
-
-
-while True:
+def login(*event):
+    username = eusername.get()
+    password = sha256((link+epassword.get()).encode("ascii")).digest()
+    if not (2<=len(username)<=10 and 12<=len(password)<=100):
+        tk_messagebox.showerror(title="Error",message="Wrong username or password")
+        return
+    
     try:
-        uname = input("Username: ")
-        password = getpass.getpass("Password: ")
-        while not (2<=len(uname)<=10 and 12<=len(password)<=100):
-            print("Wrong username or password\n")
-            uname = input("Username: ")
-            password = getpass.getpass("Password: ")
+        global client_socket
         client_socket = torSocks(link,port)
         client_socket.connect()
-        client_socket.setTimeout(10)
-        password = sha256((link+password).encode("ascii")).digest()
-        client_socket.send(b"login:%s:%s:%s" % (uname.encode("ascii"),password, chat_room_key.encode("ascii")))
+        client_socket.send(b"login:%s:%s:%s" % (username.encode("ascii"),password, chat_room_key.encode("ascii")))
         ans = client_socket.recv(6).decode("ascii").strip()
         if "True" in ans:
-            break
-        print("Wrong username or password.\n")
-    except KeyboardInterrupt:
-        exit()
+            login_screen.destroy()
+            return
+        tk_messagebox.showerror(title="Error",message="Wrong username or password")
     except UnicodeEncodeError:
-        print("Only ascii chars")
+        tk_messagebox.showerror(title="Error",message="Only ascii chars")
     except UnicodeDecodeError:
-        print("This server is modified, you may not be able to send or recv any data. ")
+        tk_messagebox.showerror(title="Error",message="This server is modified")
     except:
-        print("Server did not respond")
-        try:
-            time.sleep(1)
-        except KeyboardInterrupt:
-            print()
-            exit()
+        tk_messagebox.showerror(title="Error",message="Server did not respond, try again.")
+
+login_screen = tk.Tk()
+
+login_screen.bind("<Return>",login)
+login_screen.protocol("WM_DELETE_WINDOW",exit)
+login_screen.title("login")
+
+center_window(login_screen,205,200)
+luname = tk_Label(login_screen, text="Username:") 
+eusername = tk_Entry(login_screen,width=15)
+lpass = tk_Label(login_screen,text="Password:")
+epassword = tk_Entry(login_screen,width=15, show="*")
+lbutton = tk_Button(login_screen, text="login", height=4,width=10, command=login)
+regl = tk_Label(login_screen, cursor="hand2", text="Click here to register")
+regl.bind("<Button-1>",reg)
+
+
+luname.grid(row=0,column=0)
+eusername.grid(row=0,column=1)
+lpass.grid(row=1,column=0)
+epassword.grid(row=1,column=1)
+lbutton.place(relx=0.25,rely=0.3)
+regl.place(rely=0.9)
+
+login_screen.mainloop()
 
 #functions
 
@@ -256,7 +278,7 @@ def donate():
     def paypal():webbrowser.open(f"https://paypal.me/AndreasKarageorgos/{paypal_amount.get()}")
     def BitCoin():webbrowser.open(f"https://www.blockchain.com/btc/payment_request?address=1DJqJtMGRzG12NZk1SJ5DnCfpeunTX1z1V&amount={bitcoin_ammount.get()}&message=Thank%20you%20for%20your%20support%20!!!%20%3C3")
 
-    tk_messagebox.showwarning(title="Warning !",message="The buttons will promt you to the equivalent site.\n\nAfter you select your amount and click the the equivalent button it will\nStart your default browser.\n\nThat means that it can run outside of the Tor network.\n\nThe sites are from paypal and blockchain.com")
+    tk_messagebox.showwarning(title="Warning !",message="The paypal button will open your browser to paypal\nand the BitCoin button will open your browser to Blockchain.")
     
     x = 0
 
@@ -302,13 +324,7 @@ def show_message(ms):
 def show_participants(event):
     client_socket.send("COMMAND:S".encode("ascii"))
 
-def center_window(window,width_of_window,height_of_window):
-    screen_width = window.winfo_screenwidth()
-    screen_height = window.winfo_screenheight()
-    x_coordinate = (screen_width / 2) - (width_of_window / 2)
-    y_coordinate = (screen_height / 2) - (height_of_window / 2)
-    window.geometry("%dx%d+%d+%d" %(width_of_window,height_of_window,x_coordinate,y_coordinate))
-
+global client_socket
 
 #threads
 thread_recv_message = threading.Thread(target=recv_message)
@@ -330,15 +346,19 @@ root.resizable(0,0)
 
 #Objects in tk window
 
-msg_show = tk_Text(root, state = "disabled", width = 49, height = 20, cursor="arrow")
-text = tk_Label(root,text="Do not open links or send anything that\ncan trace back to you !")
-input_box = tk_Entry(root,width=40)
-send_button = tk_Button(root, text="Send", cursor="hand2", command=send_msg)
-donate_label = tk_Label(root,text="You can help me to keep updating this project\nby donating. <3")
-donate_button = tk_Button(root,text="Donate Options", command = donate)
+chat_frame = tk_Frame(root, highlightbackground="black", highlightthickness=1)
 
-#Possitioning objects in window
+#chat_frame
 
+msg_show = tk_Text(chat_frame, state = "disabled", width = 49, height = 20, cursor="arrow")
+text = tk_Label(chat_frame,text="Your messages are encrypted with your key.\nOnly people who have this key can read\nyour messages")
+input_box = tk_Entry(chat_frame,width=40)
+send_button = tk_Button(chat_frame, text="Send", cursor="hand2", command=send_msg)
+donate_label = tk_Label(chat_frame,text="Small amounts can bring bigger impacts.")
+donate_button = tk_Button(chat_frame,text="Donate", command = donate)
+
+
+chat_frame.place(relx=0, relwidth=1, relheight=1)
 msg_show.grid(row=0,column=0)
 text.grid(row=1,column=0)
 input_box.grid(row=2,column=0)

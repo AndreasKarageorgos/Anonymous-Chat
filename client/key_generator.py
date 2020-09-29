@@ -4,6 +4,8 @@ from getpass import getpass
 from hashlib import sha1
 from data.libraries.AES_cryptography import encryptor
 
+sl = "/"
+
 passwd = ""
 IV = ""
 
@@ -36,6 +38,6 @@ passwd = encryptor(password1,sha1(password1).digest()).encrypt((passwd+"unencryp
 
 print("Key has been generated and encrypted")
 
-with open("data/key/Key.key", "wb") as f:
+with open(f"data{sl}key{sl}Key.key", "wb") as f:
     f.write(passwd)
     f.close()
