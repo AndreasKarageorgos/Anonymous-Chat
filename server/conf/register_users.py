@@ -1,9 +1,12 @@
 from hashlib import sha512
 
 def reg_user(uname,passwd,users):
+
+    sl = "/"
+
     if b" " in uname or b"\n" in uname:
         return False
-    with open("conf/users","a") as f:
+    with open(f"conf{sl}users","a") as f:
         try:
             comp = sha512(uname+passwd).hexdigest()
             uname = uname.decode("ascii")
