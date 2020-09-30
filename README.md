@@ -27,6 +27,11 @@ The server runs on port 4488 by default
   
    * You can use my public pgp key to encrypt your message when you send me an email.
 
+
+# Discord
+
+https://discord.gg/wSsr73z
+
 # Installation
 
 * Ubuntu
@@ -171,7 +176,7 @@ This tool will help you to load a key. If the key it is not encrypted it will as
 
 (try to use keys that are generated with the key_generator)
 
-#### <text style="color:red"> they old key is going to be replaced </text>
+#### they old key is going to be replaced
 
 # key extractor
 
