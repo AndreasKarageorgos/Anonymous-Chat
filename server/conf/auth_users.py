@@ -1,9 +1,9 @@
 from hashlib import sha512
 
 def auth(uname,passwd,members):
-
+    sl = "/"
     try:
-        with open("conf/banned","r") as f:
+        with open(f"conf{sl}banned","r") as f:
             banned = f.read().split("\n")
             f.close()
     except FileNotFoundError:
