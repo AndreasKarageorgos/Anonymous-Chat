@@ -176,7 +176,7 @@ This tool will help you to load a key. If the key it is not encrypted it will as
 
 (try to use keys that are generated with the key_generator)
 
-#### they old key is going to be replaced
+### the old key is going to be replaced
 
 # key extractor
 
