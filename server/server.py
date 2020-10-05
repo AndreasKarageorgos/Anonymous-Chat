@@ -16,7 +16,7 @@ global sl
 sl = "/"
 
 
-version = "version 0.1"
+version = "version 0.2"
 
 def update(version):
     prox = {
@@ -93,7 +93,7 @@ while True:
         exit()
 
 server_socket.settimeout(0.2)
-server_socket.listen(max_clients)
+server_socket.listen(10)
 
 rooms = {}
 
@@ -104,48 +104,58 @@ dead = False
 
 def accept_connections():
 
+    def maxed():
+        counter = 0
+        for room in rooms:
+            counter+=len(rooms[room])
+        if counter==max_clients:
+            return True
+        return False
+
+
     global dead
     while not dead:
         try:
-            client,_ = server_socket.accept()
-            client.settimeout(3)
-            data = client.recv(181)
-            if data == b"online":
-                client.send("True".encode("ascii"))
-                client.close()
-                data = ""
-            data = data.split(b":")
-            if len(data)>=3:
-                if data[0] == b"register" and b"server" not in data[1].lower():
-                    data[2] = b":".join(data[2:])
-                    resp = register_users.reg_user(data[1],data[2],members)
-                    if resp: 
-                        client.send("True".encode("ascii"))
-                        print(data[1],"Registered !")
-                    else:
-                        client.send("False".encode("ascii"))
-                elif data[0] == b"login" and len(data)>=4:
-                    if len(data) == 4:
-                        resp = auth_users.auth(data[1],data[2],members)
-                    else:
-                        resp = auth_users.auth(data[1],b":".join(data[2:-1]),members)
-                    if resp:
-                        client.send("True".encode("ascii"))
-                        print(data[1],"Logged in")
-                        keyword = data[-1]
-
-                        if keyword in rooms:
-                            rooms[keyword].update({data[1].decode("ascii"):client})
+            if not maxed():
+                client,_ = server_socket.accept()
+                client.settimeout(3)
+                data = client.recv(181)
+                if data == b"online":
+                    client.send("True".encode("ascii"))
+                    client.close()
+                    data = ""
+                data = data.split(b":")
+                if len(data)>=3:
+                    if data[0] == b"register" and b"server" not in data[1].lower():
+                        data[2] = b":".join(data[2:])
+                        resp = register_users.reg_user(data[1],data[2],members)
+                        if resp: 
+                            client.send("True".encode("ascii"))
+                            print(data[1],"Registered !")
                         else:
-                            rooms.update({ keyword:{data[1].decode("ascii"):client}})
-                        
-                        time.sleep(0.2)
-                        client.send(b"Server:%s" % server_message.encode("ascii"))
-                        time.sleep(0.1)
-                        broadcast("Server",data[1].decode("ascii")+" Logged in",keyword)
+                            client.send("False".encode("ascii"))
+                    elif data[0] == b"login" and len(data)>=4:
+                        if len(data) == 4:
+                            resp = auth_users.auth(data[1],data[2],members)
+                        else:
+                            resp = auth_users.auth(data[1],b":".join(data[2:-1]),members)
+                        if resp:
+                            client.send("True".encode("ascii"))
+                            print(data[1],"Logged in")
+                            keyword = data[-1]
 
-                    else:
-                        client.send("False".encode("ascii"))
+                            if keyword in rooms:
+                                rooms[keyword].update({data[1].decode("ascii"):client})
+                            else:
+                                rooms.update({ keyword:{data[1].decode("ascii"):client}})
+                            
+                            time.sleep(0.2)
+                            client.send(b"Server:%s" % server_message.encode("ascii"))
+                            time.sleep(0.1)
+                            broadcast("Server",data[1].decode("ascii")+" Logged in",keyword)
+
+                        else:
+                            client.send("False".encode("ascii"))
                     
 
         except:
@@ -186,6 +196,23 @@ global remove_clients
 remove_clients = [] 
 
 def recv_message():
+
+    def close(key,client):
+        rooms[key][client].close()
+        print(client, "logged off")
+        remove_clients.append((key,client,True))
+    
+    def partici(key,client):
+        particiapnts = ",".join([x for x in rooms[key]])
+        if len("Server:"+particiapnts)<=335:
+            try:rooms[key][client].send(f"Server:{particiapnts}".encode("ascii"))
+            except:remove_clients.append((key,client,False))
+        else:
+            try:rooms[key][client].send("Server: There are too many people on this room to be displayed.")
+            except:remove_clients.append((key,client,False))
+
+    commands = {b"COMMAND:D":close,b"COMMAND:S":partici}
+
     global remove_clients
     global dead
     while not dead:
@@ -196,19 +223,12 @@ def recv_message():
                         try:
                             rooms[key][client].settimeout(0.1)
                             message = rooms[key][client].recv(160)
-                            if message == b"COMMAND:D":
-                                rooms[key][client].close()
-                                print(client, "logged off")
-                                remove_clients.append((key,client,True))
-                            elif message == b"COMMAND:S":
-                                particiapnts = ",".join([x for x in rooms[key]])
-                                if len("Server:"+particiapnts)<=335:
-                                    try:rooms[key][client].send(f"Server:{particiapnts}".encode("ascii"))
-                                    except:remove_clients.append((key,client,False))
-                                else:
-                                    try:rooms[key][client].send("Server: There are too many people on this room to be displayed.")
-                                    except:remove_clients.append((key,client,False))
-                            else:
+                            if len(message)>80:
+                                print(client,"Send message over 80 bytes.")
+                                remove_clients.append((key,client,False))
+                            try:
+                                commands[message](key,client)
+                            except:
                                 broadcast(name=client, message=message, key=key)
                         except:
                             pass
