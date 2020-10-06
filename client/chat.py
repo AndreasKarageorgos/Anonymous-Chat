@@ -30,7 +30,7 @@ sl = "/"
 #Checks for updates
 
 
-version = "version 0.1"
+version = "version 0.2"
 
 def update(version):
 
@@ -95,7 +95,7 @@ chars = ascii_letters+digits+"~`!@#$%^&*()_+-={}[]\\:;'\"<>,./?"
 global keyword
 keyword = "D$o(n"
 
-chat_plain_keyword = "*fgnHePofnq3*dhvH1)(dkf^"
+chat_plain_keyword = "buNF2#jNlqvGev&q"
 
 temp_pass = sha256(passwd[:16]).digest()
 temp_iv = temp_pass[:16]
