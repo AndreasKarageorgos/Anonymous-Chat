@@ -17,7 +17,7 @@ try:
         f.close()
     
     with open("Key.key.unsafe", "wb") as f:
-        f.write(plainkey)
+        f.write(plainkey[:len("unencrypted")*-1])
         f.close()
 
     print("Key has been extracted. This key is not encrypted.")
