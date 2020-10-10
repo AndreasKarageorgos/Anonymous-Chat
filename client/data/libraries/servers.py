@@ -27,7 +27,7 @@ def serverManager(lista):
     def add():
 
         def confirm():
-            l = Entry.get()
+            l = Entry.get().strip()
             if l.endswith(".onion") and len(l)>len(".onion"):
                 lista.append(l)
                 listBox.insert("end",l)

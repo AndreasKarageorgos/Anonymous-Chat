@@ -16,7 +16,7 @@ global sl
 sl = "/"
 
 
-version = "version 0.2"
+version = "version 0.2.1"
 
 def update(version):
     prox = {
@@ -96,6 +96,7 @@ server_socket.settimeout(0.2)
 server_socket.listen(10)
 
 rooms = {}
+spamm = {}
 
 broken_pipe_list = []
 #This is to stop the threads when the server is closed
@@ -142,6 +143,7 @@ def accept_connections():
                         if resp:
                             client.send("True".encode("ascii"))
                             print(data[1],"Logged in")
+                            spamm.update({data[1]:time.time()})
                             keyword = data[-1]
 
                             if keyword in rooms:
@@ -226,6 +228,11 @@ def recv_message():
                             if len(message)>80:
                                 print(client,"Send message over 80 bytes.")
                                 remove_clients.append((key,client,False))
+                            elif round(time.time()-spamm[client.encode("ascii")], 2) < 2:
+                                remove_clients.append((key,client,False))
+                                print(client,"got kicked for spamming")
+                            else:
+                                spamm[client.encode("ascii")] = time.time()
                             try:
                                 commands[message](key,client)
                             except:
@@ -309,6 +316,7 @@ except KeyboardInterrupt:
     pass
 
 
+broadcast("Server","Server closed !")
 print("Closing open connections.")
 dead = True
 time.sleep(2)
