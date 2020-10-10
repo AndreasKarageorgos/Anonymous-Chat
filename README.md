@@ -104,7 +104,7 @@ After that you can cd in SPC-Chat/client/ and run:
 
         To run Tor on windows you will need to use "Windows Expert Bundle"
         
-        You can download it from [here](https://www.torproject.org/download/tor/)
+   * You can download it from [here](https://www.torproject.org/download/tor/)
  
 * Chat
         
