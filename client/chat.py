@@ -30,7 +30,7 @@ sl = "/"
 #Checks for updates
 
 
-version = "version 0.2"
+version = "version 0.2.1"
 
 def update(version):
 
@@ -94,6 +94,8 @@ chars = ascii_letters+digits+"~`!@#$%^&*()_+-={}[]\\:;'\"<>,./?"
 
 global keyword
 keyword = "D$o(n"
+global spamm
+spamm = time.time()
 
 chat_plain_keyword = "buNF2#jNlqvGev&q"
 
@@ -140,11 +142,11 @@ while True:
         if testsock.recv(5) == b"True":
             testsock.close()
             break
-        print("Failed to connect. Trying again.")
+        print("Failed to connect or server is full. Trying again.")
     except KeyboardInterrupt:
         exit()
     except:
-        print("Failed to connect. Trying again.")
+        print("Failed to connect or server is full. Trying again.")
     try:
         time.sleep(1)
     except KeyboardInterrupt:
@@ -207,25 +209,33 @@ login_screen.mainloop()
 
 def send_msg(*event):
     global keyword
+    global spamm
+
+    if round(time.time()-spamm, 2) < 2:
+        show_message("***\nWait 2 seconds before you send another message\n***")
+        return
+    else:
+        spamm=time.time()
+
     if len(input_box.get()) == 0:return
     if len(input_box.get()+keyword)+2 > 80:
-        show_message("***This message is too big***")
+        show_message("***\nThis message is too big\n***")
         return
     encrypt = AES_cryptography.encryptor(passwd,IV)
     try:
         message = (choice(chars)+input_box.get()+keyword+choice(chars)).encode("ascii")
         ciphertext = encrypt.encrypt(message)
         if keyword.encode("ascii") in ciphertext:
-            show_message("***This message is not encrypted***")
+            show_message("***\nThis message is not encrypted\n***")
             return
         leng = len(input_box.get())
         input_box.delete(0,leng)
         try:
             client_socket.send(ciphertext)
         except:
-            show_message("***Failed to send the message***")
+            show_message("***\nFailed to send the message\n***")
     except UnicodeEncodeError:
-        show_message("***Ascii characters only***")
+        show_message("***\nAscii characters only\n***")
 
 def recv_message():
     global dead

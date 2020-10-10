@@ -20,12 +20,6 @@ The server runs on port 4488 by default
  * Bitcoin Cash (BCH) : qpfmk88awqcwulau4txu9pg8t8w70mn885m7xjrhh5
  
  * Stellar Lumen (XLM) : GCJX6O7NF2RXRL72FAKFDIXD4P6CE4OSYFQM43ECPUP564K2ZZUHQIML
- 
- If you want me to asign you a new BTC address for you to donate, you can send me an email and ask for it.
- 
- * andreas_karageorgos@protonmail.com
-  
-   * You can use my public pgp key to encrypt your message when you send me an email.
 
 
 # Discord
@@ -56,7 +50,9 @@ https://discord.gg/wSsr73z
     
     * sudo apt update &&  sudo apt install git -y && sudo apt install python3-pip -y && sudo apt install python3-tk -y && sudo apt install tor -y && pip3 install pycryptodome && pip3 install pysocks && git clone https://github.com/AndreasKarageorgos/SPC-Chat.git
 
-* Instead of using git clone you can go to https://github.com/AndreasKarageorgos/SPC-Chat/releases/ and download the latest release.
+* Windows
+
+        Grab windows latest version from [here](https://github.com/AndreasKarageorgos/SPC-Chat/releases)
 
 # Server setup
 You will need to edid the torrc file if you want to run the server.
@@ -101,8 +97,21 @@ The client use tor as proxy to connect to a server, the only thing that you have
 
 After that you can cd in SPC-Chat/client/ and run:
 
-    python3 client.py
+    python3 chat.py
+
+### Windows
+* Tor
+
+        To run Tor on windows you will need to use "Windows Expert Bundle"
+        
+        You can download it from [here](https://www.torproject.org/download/tor/)
  
+* Chat
+        
+        Go to client folder and run the chat.py
+
+        (It will not run without your Key)
+
  # Key
  There is 1 key file
  
