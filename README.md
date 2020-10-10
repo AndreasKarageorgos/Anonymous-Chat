@@ -52,7 +52,7 @@ https://discord.gg/wSsr73z
 
 * Windows
 
-        Grab windows latest version from [here](https://github.com/AndreasKarageorgos/SPC-Chat/releases)
+   * Grab windows latest version from [here](https://github.com/AndreasKarageorgos/SPC-Chat/releases)
 
 # Server setup
 You will need to edid the torrc file if you want to run the server.
