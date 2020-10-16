@@ -9,7 +9,7 @@ def reg_user(uname,passwd,users):
     with open(f"conf{sl}users","a") as f:
         try:
             comp = sha512(uname+passwd).hexdigest()
-            uname = uname.decode("ascii")
+            uname = uname.decode()
             if uname.lower() not in [x.lower() for x in users]:
                 f.write(f"{uname}:{comp}\n")
                 users.update({uname:comp})

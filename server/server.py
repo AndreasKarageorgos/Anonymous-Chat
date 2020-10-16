@@ -16,7 +16,7 @@ global sl
 sl = "/"
 
 
-version = "version 0.2.1"
+version = "version 0.2.2"
 
 def update(version):
     prox = {
@@ -122,7 +122,7 @@ def accept_connections():
                 client.settimeout(3)
                 data = client.recv(181)
                 if data == b"online":
-                    client.send("True".encode("ascii"))
+                    client.send("True".encode())
                     client.close()
                     data = ""
                 data = data.split(b":")
@@ -131,33 +131,33 @@ def accept_connections():
                         data[2] = b":".join(data[2:])
                         resp = register_users.reg_user(data[1],data[2],members)
                         if resp: 
-                            client.send("True".encode("ascii"))
-                            print(data[1],"Registered !")
+                            client.send("True".encode())
+                            print(data[1].decode(),"Registered !")
                         else:
-                            client.send("False".encode("ascii"))
+                            client.send("False".encode())
                     elif data[0] == b"login" and len(data)>=4:
                         if len(data) == 4:
                             resp = auth_users.auth(data[1],data[2],members)
                         else:
                             resp = auth_users.auth(data[1],b":".join(data[2:-1]),members)
                         if resp:
-                            client.send("True".encode("ascii"))
-                            print(data[1],"Logged in")
+                            client.send("True".encode())
+                            print(data[1].decode(),"Logged in")
                             spamm.update({data[1]:time.time()})
                             keyword = data[-1]
 
                             if keyword in rooms:
-                                rooms[keyword].update({data[1].decode("ascii"):client})
+                                rooms[keyword].update({data[1].decode():client})
                             else:
-                                rooms.update({ keyword:{data[1].decode("ascii"):client}})
+                                rooms.update({ keyword:{data[1].decode():client}})
                             
                             time.sleep(0.2)
-                            client.send(b"Server:%s" % server_message.encode("ascii"))
+                            client.send(b"Server:%s" % server_message.encode())
                             time.sleep(0.1)
-                            broadcast("Server",data[1].decode("ascii")+" Logged in",keyword)
+                            broadcast("Server",data[1].decode()+" Logged in",keyword)
 
                         else:
-                            client.send("False".encode("ascii"))
+                            client.send("False".encode())
                     
 
         except:
@@ -170,7 +170,7 @@ def broadcast(name,message,key=None):
             for client in rooms[k]:
                 try:
                     rooms[k][client].settimeout(0.2)
-                    rooms[k][client].send(f"Server:{message}".encode("ascii"))
+                    rooms[k][client].send(f"Server:{message}".encode())
                 except:
                     if client not in [j[1] for j in remove_clients]:
                         remove_clients.append((k,client,False))
@@ -180,7 +180,7 @@ def broadcast(name,message,key=None):
         for client in rooms[key]:
             try:
                 rooms[key][client].settimeout(0.2)
-                rooms[key][client].send(f"Server:{message}".encode("ascii"))
+                rooms[key][client].send(f"Server:{message}".encode())
             except:
                 if client not in [j[1] for j in remove_clients]:
                         remove_clients.append((key,client,False))
@@ -189,7 +189,7 @@ def broadcast(name,message,key=None):
     for client in rooms[key]:
         try:
             rooms[key][client].settimeout(0.2)
-            rooms[key][client].send(b"%s:%s" % (name.encode("ascii"), message) )
+            rooms[key][client].send(b"%s:%s" % (name.encode(), message) )
         except:
             if client not in [j[1] for j in remove_clients]:
                 remove_clients.append((key,client,False))
@@ -207,7 +207,7 @@ def recv_message():
     def partici(key,client):
         particiapnts = ",".join([x for x in rooms[key]])
         if len("Server:"+particiapnts)<=335:
-            try:rooms[key][client].send(f"Server:{particiapnts}".encode("ascii"))
+            try:rooms[key][client].send(f"Server:{particiapnts}".encode())
             except:remove_clients.append((key,client,False))
         else:
             try:rooms[key][client].send("Server: There are too many people on this room to be displayed.")
@@ -228,11 +228,11 @@ def recv_message():
                             if len(message)>80:
                                 print(client,"Send message over 80 bytes.")
                                 remove_clients.append((key,client,False))
-                            elif round(time.time()-spamm[client.encode("ascii")], 2) < 2:
+                            elif round(time.time()-spamm[client.encode()], 2) < 2:
                                 remove_clients.append((key,client,False))
                                 print(client,"got kicked for spamming")
                             else:
-                                spamm[client.encode("ascii")] = time.time()
+                                spamm[client.encode()] = time.time()
                             try:
                                 commands[message](key,client)
                             except:

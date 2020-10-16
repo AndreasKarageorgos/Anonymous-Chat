@@ -11,7 +11,7 @@ def auth(uname,passwd,members):
 
     comp = sha512(uname+passwd).hexdigest()
     try:
-        uname = uname.decode("ascii")
+        uname = uname.decode()
     except UnicodeDecodeError:
         return False
     if (uname in members and members[uname] == comp) and (uname not in banned):
