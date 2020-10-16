@@ -159,7 +159,7 @@ def reg(*event):
 def login(*event):
     username = eusername.get()
     password = sha256((link+epassword.get()).encode()).digest()
-    if not (2<=len(username.encode())<=10 and 12<=len(password.encode())<=100):
+    if not (2<=len(username.encode())<=10):
         tk_messagebox.showerror(title="Error",message="Wrong username or password")
         return
     
