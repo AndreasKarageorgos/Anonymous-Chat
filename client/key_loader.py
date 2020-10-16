@@ -31,7 +31,7 @@ else:
         password2 = getpass("Repeat password: ") or "mgh82fl"
 
     
-    password1 = password1.encode("ascii")
+    password1 = password1.encode()
 
     with open(f"data{sl}key{sl}Key.key", "wb") as f:
         cipherkey = encryptor(password1,sha1(password1).digest()).encrypt((key+b"unencrypted"))

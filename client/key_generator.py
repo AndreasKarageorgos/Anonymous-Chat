@@ -32,9 +32,9 @@ while password1!=password2:
     password1 = getpass("Set up a password: ") or ""
     password2 = getpass("Repeat password: ")
 
-password1 = password1.encode("ascii")
+password1 = password1.encode()
 
-passwd = encryptor(password1,sha1(password1).digest()).encrypt((passwd+"unencrypted").encode("ascii"))
+passwd = encryptor(password1,sha1(password1).digest()).encrypt((passwd+"unencrypted").encode())
 
 print("Key has been generated and encrypted")
 

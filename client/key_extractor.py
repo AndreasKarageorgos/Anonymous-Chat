@@ -4,7 +4,7 @@ from data.libraries.AES_cryptography import decryptor
 
 sl = "/"
 
-password = getpass("Key Password: ").encode("ascii")
+password = getpass("Key Password: ").encode()
 
 try:
     with open(f"data{sl}key{sl}Key.key", "rb") as f:

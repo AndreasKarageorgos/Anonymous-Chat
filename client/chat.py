@@ -58,14 +58,14 @@ print(update(version))
 #AES key load
 try:
     with open(f"data{sl}key{sl}Key.key","rb") as f:
-        password = getpass.getpass("Enter the key password:").encode("ascii")
+        password = getpass.getpass("Enter the key password:").encode()
         key_ciphertext = f.read()
         dec = AES_cryptography.decryptor(password,sha1(password).digest())
         passwd = dec.decrypt(key_ciphertext)
 
         while not passwd.endswith(b"unencrypted"):
             print("Wrong password.\n")
-            password = getpass.getpass("Enter the key password:").encode("ascii")
+            password = getpass.getpass("Enter the key password:").encode()
             dec = AES_cryptography.decryptor(password,sha1(password).digest())
             passwd = passwd = dec.decrypt(key_ciphertext)
        
@@ -138,7 +138,7 @@ while True:
         testsock = torSocks(link,port)
         testsock.connect()
         testsock.setTimeout(3)
-        testsock.send("online".encode("ascii"))
+        testsock.send("online".encode())
         if testsock.recv(5) == b"True":
             testsock.close()
             break
@@ -158,8 +158,8 @@ def reg(*event):
     register(link)
 def login(*event):
     username = eusername.get()
-    password = sha256((link+epassword.get()).encode("ascii")).digest()
-    if not (2<=len(username)<=10 and 12<=len(password)<=100):
+    password = sha256((link+epassword.get()).encode()).digest()
+    if not (2<=len(username.encode())<=10 and 12<=len(password.encode())<=100):
         tk_messagebox.showerror(title="Error",message="Wrong username or password")
         return
     
@@ -167,14 +167,14 @@ def login(*event):
         global client_socket
         client_socket = torSocks(link,port)
         client_socket.connect()
-        client_socket.send(b"login:%s:%s:%s" % (username.encode("ascii"),password, chat_room_key.encode("ascii")))
-        ans = client_socket.recv(6).decode("ascii").strip()
+        client_socket.send(b"login:%s:%s:%s" % (username.encode(),password, chat_room_key.encode()))
+        ans = client_socket.recv(6).decode().strip()
         if "True" in ans:
             login_screen.destroy()
             return
         tk_messagebox.showerror(title="Error",message="Wrong username or password")
     except UnicodeEncodeError:
-        tk_messagebox.showerror(title="Error",message="Only ascii chars")
+        tk_messagebox.showerror(title="Error",message="Try ascii chars")
     except UnicodeDecodeError:
         tk_messagebox.showerror(title="Error",message="This server is modified")
     except:
@@ -223,9 +223,9 @@ def send_msg(*event):
         return
     encrypt = AES_cryptography.encryptor(passwd,IV)
     try:
-        message = (choice(chars)+input_box.get()+keyword+choice(chars)).encode("ascii")
+        message = (choice(chars)+input_box.get()+keyword+choice(chars)).encode()
         ciphertext = encrypt.encrypt(message)
-        if keyword.encode("ascii") in ciphertext:
+        if keyword.encode() in ciphertext:
             show_message("***\nThis message is not encrypted\n***")
             return
         leng = len(input_box.get())
@@ -235,7 +235,7 @@ def send_msg(*event):
         except:
             show_message("***\nFailed to send the message\n***")
     except UnicodeEncodeError:
-        show_message("***\nAscii characters only\n***")
+        show_message("***\nTry ascii characters\n***")
 
 def recv_message():
     global dead
@@ -247,7 +247,7 @@ def recv_message():
             message = client_socket.recv(100)
             if len(message)>1 and message.split(b":")[0] == b"Server":
                 try:
-                    message = message.decode("ascii")
+                    message = message.decode()
                 except UnicodeDecodeError:
                     message = ""
             elif len(message)>1:
@@ -256,7 +256,7 @@ def recv_message():
                 try:
                     message = [message[0]+b": ",decrypt.decrypt(b":".join(message[1:]))[1:-1]]
                     try:
-                        message = b''.join(message).decode("ascii")
+                        message = b''.join(message).decode()
                         if message.endswith(keyword) and (len(message)-len(keyword)) > 0:
                             message = message[:len(message)-len(keyword)]
                         else:
@@ -275,7 +275,7 @@ def on_closing():
     global dead
     dead = True
     try:
-        client_socket.send("COMMAND:D".encode("ascii"))
+        client_socket.send("COMMAND:D".encode())
         client_socket.close()
     except BrokenPipeError:
         print("Server closed or kicked you !")
