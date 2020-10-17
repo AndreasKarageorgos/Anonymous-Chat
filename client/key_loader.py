@@ -38,7 +38,9 @@ else:
         f.write(cipherkey)
         f.close()
 
-keypath=key=password1=password2=cipherkey = "A"*2048
+password2 = password1
+keypath = keypath.encode()
+keypath=key=password1=password2=cipherkey = (len(max(keypath,key,password1,cipherkey)*2)) * "A"
 
 del keypath,key,password1,password2,cipherkey
 

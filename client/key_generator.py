@@ -7,7 +7,6 @@ from data.libraries.AES_cryptography import encryptor
 sl = "/"
 
 passwd = ""
-IV = ""
 
 chars = list(ascii_letters+digits+"~`!@#$%^&*()_+-={}[]\\:;'\"<>,./?")
 
@@ -36,8 +35,10 @@ password1 = password1.encode()
 
 passwd = encryptor(password1,sha1(password1).digest()).encrypt((passwd+"unencrypted").encode())
 
-print("Key has been generated and encrypted")
-
 with open(f"data{sl}key{sl}Key.key", "wb") as f:
     f.write(passwd)
     f.close()
+
+passwd = password1 = password2 = (len(max(passwd,password1))*2) * "A"
+
+print("Key has been generated and encrypted")

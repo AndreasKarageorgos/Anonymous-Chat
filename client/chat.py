@@ -30,7 +30,7 @@ sl = "/"
 #Checks for updates
 
 
-version = "version 0.2.2"
+version = "version 0.3"
 
 def update(version):
 
@@ -97,7 +97,7 @@ keyword = "D$o(n"
 global spamm
 spamm = time.time()
 
-chat_plain_keyword = "buNF2#jNlqvGev&q"
+chat_plain_keyword = "Bj&ab#4"
 
 temp_pass = sha256(passwd[:16]).digest()
 temp_iv = temp_pass[:16]
@@ -142,13 +142,13 @@ while True:
         if testsock.recv(5) == b"True":
             testsock.close()
             break
-        print("Failed to connect or server is full. Trying again.")
+        print("Failed to connect or the server is full. Trying again.")
     except KeyboardInterrupt:
         exit()
     except:
-        print("Failed to connect or server is full. Trying again.")
+        print("Failed to connect or the server is full. Trying again.")
     try:
-        time.sleep(1)
+        time.sleep(3)
     except KeyboardInterrupt:
         exit()
 
@@ -218,7 +218,7 @@ def send_msg(*event):
         spamm=time.time()
 
     if len(input_box.get()) == 0:return
-    if len(input_box.get()+keyword)+2 > 80:
+    if len(input_box.get().encode()+keyword.encode())+2 > 80:
         show_message("***\nThis message is too big\n***")
         return
     encrypt = AES_cryptography.encryptor(passwd,IV)
@@ -332,6 +332,12 @@ def show_message(ms):
     msg_show.config(state="disable")
 
 def show_participants(event):
+    global spamm
+    if round(time.time()-spamm, 2) < 2:
+        show_message("***\nWait 2 seconds before you send another message\n***")
+        return
+    else:
+        spamm=time.time()
     client_socket.send("COMMAND:S".encode("ascii"))
 
 global client_socket
