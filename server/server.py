@@ -16,7 +16,7 @@ global sl
 sl = "/"
 
 
-version = "version 0.2.2"
+version = "version 0.3"
 
 def update(version):
     prox = {
@@ -43,7 +43,7 @@ print(update(version))
 
 while True:
     try:
-        with open("server_config.config","r") as f:
+        with open("config.config","r") as f:
             config_file = f.read().strip()
             f.close()
         config_file = config_file.split("\n")
@@ -52,8 +52,8 @@ while True:
             config.update({i.split("=")[0]: i.split("=")[1]})
         break
     except FileNotFoundError:
-        with open("server_config.config","w") as f:
-            f.write("message=Wealcome To the server\nmax_clients=5")
+        with open("config.config","w") as f:
+            f.write("message=Wealcome To the server\nmax_clients=-1")
             f.close()
 
 
@@ -117,7 +117,7 @@ def accept_connections():
     global dead
     while not dead:
         try:
-            if not maxed():
+            if maxed==-1 or not maxed():
                 client,_ = server_socket.accept()
                 client.settimeout(3)
                 data = client.recv(181)
