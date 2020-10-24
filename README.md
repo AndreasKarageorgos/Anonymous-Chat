@@ -58,12 +58,10 @@ https://discord.gg/wSsr73z
 You will need to edid the torrc file if you want to run the server.
   
 locate the torrc file under /etc/tor/
-  
-and uncomment the HiddenService options.
-  
-You should edid them like this:
-  
-    HiddenServiceDir /var/lib/tor/hidden_service/
+ 
+In the torrc file you must add these 2 lines:
+
+    HiddenServiceDir /var/lib/tor/spc-chat/
     
     HiddenServicePort 4488 127.0.0.1:4488
   
@@ -73,11 +71,7 @@ After that restart the tor service
   
 and locate your onion address under /var/lib/tor/hidden_service/
     
-    sudo su
-    
-    cat /var/lib/tor/hidden_service/hostname
-    
-    exit
+    sudo cat /var/lib/tor/spc-chat/hostname
 
 after that you can run the server by cd in SPC-Chat/server/ and run
 
