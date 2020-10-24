@@ -69,7 +69,7 @@ After that restart the tor service
     
     sudo service tor restart
   
-and locate your onion address under /var/lib/tor/hidden_service/
+and locate your onion address under /var/lib/tor/spc-chat/
     
     sudo cat /var/lib/tor/spc-chat/hostname
 
