@@ -16,7 +16,7 @@ global sl
 sl = "/"
 
 
-version = "version 0.3"
+version = "version 0.3.1"
 
 def update(version):
     prox = {
