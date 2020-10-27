@@ -93,7 +93,7 @@ while True:
         exit()
 
 server_socket.settimeout(0.2)
-server_socket.listen(10)
+server_socket.listen()
 
 rooms = {}
 spamm = {}
@@ -228,7 +228,7 @@ def recv_message():
                             if len(message)>80:
                                 print(client,"Send message over 80 bytes.")
                                 remove_clients.append((key,client,False))
-                            elif round(time.time()-spamm[client.encode()], 2) < 2:
+                            elif round(time.time()-spamm[client.encode()], 2) < 1.5:
                                 remove_clients.append((key,client,False))
                                 print(client,"got kicked for spamming")
                             else:

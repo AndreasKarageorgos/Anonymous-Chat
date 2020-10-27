@@ -30,7 +30,7 @@ sl = "/"
 #Checks for updates
 
 
-version = "version 0.3"
+version = "version 0.3.1"
 
 def update(version):
 
@@ -90,17 +90,14 @@ dead = False
 
 chars = ascii_letters+digits+"~`!@#$%^&*()_+-={}[]\\:;'\"<>,./?"
 
-#Key word is helping the program to know that it decrypted the message.
 
-global keyword
-keyword = "D$o(n"
 global spamm
 spamm = time.time()
 
-chat_plain_keyword = "Bj&ab#4"
+chat_plain_keyword = "1bn&jbsdo(F"
 
-temp_pass = sha256(passwd[:16]).digest()
-temp_iv = temp_pass[:16]
+temp_pass = sha256(sha256(passwd[:16]).digest()).digest()
+temp_iv = sha256(temp_pass[:16]).digest()[:16]
 
 chat_room_key = sha512(AES_cryptography.encryptor(temp_pass,temp_iv).encrypt(chat_plain_keyword.encode("ascii"))).hexdigest()
 
@@ -185,6 +182,7 @@ login_screen = tk.Tk()
 login_screen.bind("<Return>",login)
 login_screen.protocol("WM_DELETE_WINDOW",exit)
 login_screen.title("login")
+login_screen.resizable(0,0)
 
 center_window(login_screen,205,200)
 luname = tk_Label(login_screen, text="Username:") 
@@ -208,38 +206,36 @@ login_screen.mainloop()
 #functions
 
 def send_msg(*event):
-    global keyword
     global spamm
 
     if round(time.time()-spamm, 2) < 2:
-        show_message("***\nWait 2 seconds before you send another message\n***")
+        show_message("#Wait 2 seconds before you send another message")
         return
     else:
         spamm=time.time()
 
     if len(input_box.get()) == 0:return
-    if len(input_box.get().encode()+keyword.encode())+2 > 80:
-        show_message("***\nThis message is too big\n***")
+    if len(input_box.get().encode())+2 > 80:
+        show_message("#This message is too big")
         return
     encrypt = AES_cryptography.encryptor(passwd,IV)
     try:
-        message = (choice(chars)+input_box.get()+keyword+choice(chars)).encode()
+        message = (choice(chars)+input_box.get()+choice(chars)).encode()
         ciphertext = encrypt.encrypt(message)
-        if keyword.encode() in ciphertext:
-            show_message("***\nThis message is not encrypted\n***")
+        if input_box.get().encode() in ciphertext:
+            show_message("#This message is not encrypted")
             return
         leng = len(input_box.get())
         input_box.delete(0,leng)
         try:
             client_socket.send(ciphertext)
         except:
-            show_message("***\nFailed to send the message\n***")
+            show_message("#Failed to send the message")
     except UnicodeEncodeError:
-        show_message("***\nTry ascii characters\n***")
+        show_message("#Try ascii characters")
 
 def recv_message():
     global dead
-    global keyword
     while not dead:
         message = ""
         try:
@@ -249,7 +245,7 @@ def recv_message():
                 try:
                     message = message.decode()
                 except UnicodeDecodeError:
-                    message = ""
+                    message = "#Could not recv message from server"
             elif len(message)>1:
                 decrypt = AES_cryptography.decryptor(passwd,IV)
                 message = message.split(b":")
@@ -257,10 +253,6 @@ def recv_message():
                     message = [message[0]+b": ",decrypt.decrypt(b":".join(message[1:]))[1:-1]]
                     try:
                         message = b''.join(message).decode()
-                        if message.endswith(keyword) and (len(message)-len(keyword)) > 0:
-                            message = message[:len(message)-len(keyword)]
-                        else:
-                            message = ""
                     except UnicodeDecodeError:
                         message = ""
                 except:
@@ -312,7 +304,7 @@ def donate():
 
     if x==0:
         paypal_amount.insert(0,"20")
-        bitcoin_ammount.insert(0,"0.00223")
+        bitcoin_ammount.insert(0,"0.00197")
         x=1
 
     paypal_button.grid(row=0,column=0)
@@ -334,7 +326,7 @@ def show_message(ms):
 def show_participants(event):
     global spamm
     if round(time.time()-spamm, 2) < 2:
-        show_message("***\nWait 2 seconds before you send another message\n***")
+        show_message("#Wait 2 seconds before you send another message\n")
         return
     else:
         spamm=time.time()
