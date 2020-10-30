@@ -30,7 +30,7 @@ sl = "/"
 #Checks for updates
 
 
-version = "version 0.3.1"
+version = "version 0.3.2"
 
 def update(version):
 
