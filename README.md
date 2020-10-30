@@ -1,13 +1,7 @@
 # Secure Private Connections - Chat
 A chat that can provide privacy with end to end encryption, tor and without the need to trust the server to keep your keys safe ! 
 
-This project is targeting people that trully need privacy.
-
-eg. Politicians , military , journalist , lawyers , companies ... etc
-
-The server runs on port 4488 by default
-
-### Donations
+# Donations
  
  This programm is free and it will continue to be free.
  
@@ -24,74 +18,126 @@ The server runs on port 4488 by default
 
 # Discord
 
-https://discord.gg/wSsr73z
+ * Discord server: https://discord.gg/wSsr73z
 
 # Installation
 
-* Ubuntu
+* Linux
 
-    * sudo apt update
+    * First make sure that you have git installed on your system 
+        
+        Ubuntu:
+            
+            $ sudo apt update
 
-    * sudo apt install git -y
+            $ sudo apt install git
 
-    * sudo apt install python3-pip -y
+        Fedora:
+
+            $ sudo dnf -y update
+
+            $ sudo dnf -y install git
+
+        Manjaro:
+
+            $ sudo pacman -Sy
+
+            $ sudo pacman -S git
+
+    * Then clone the Chat to your Home folder
+
+            $ git clone https://github.com/AndreasKarageorgos/SPC-Chat.git
+
+    * locate the "install" folder inside the SPC-Chat
+    and run the installer for your os.
+
+    For example in Ubuntu:
+            
+            $ cd SPC-Chat/install/          
+            
+            $ chmod +x Ubuntu.sh
+            
+            $ ./Ubuntu.sh
     
-    * sudo apt install python3-tk -y
-    
-    * sudo apt install tor -y
 
-    * pip3 install pycryptodome
-
-    * pip3 install pysocks
-
-    * git clone https://github.com/AndreasKarageorgos/SPC-Chat.git
-
-* All commands in one:
-    
-    * sudo apt update &&  sudo apt install git -y && sudo apt install python3-pip -y && sudo apt install python3-tk -y && sudo apt install tor -y && pip3 install pycryptodome && pip3 install pysocks && git clone https://github.com/AndreasKarageorgos/SPC-Chat.git
 
 * Windows
 
-   * Grab windows latest version from [here](https://github.com/AndreasKarageorgos/SPC-Chat/releases)
+  * Download python3 from [here](https://www.python.org/) and select the box "add python to path".
+
+  * Download Tor Windows Expert Bundle from [here](https://www.torproject.org/download/tor/)
+
+  * Download SPC-Chat for windows from [here](https://github.com/AndreasKarageorgos/SPC-Chat/releases).
+
+  * Inside the install folder run the windows.bat . In case of error download [visual studio](https://visualstudio.microsoft.com/vs/features/cplusplus/) with C++ and after that run the Windows.bat again.
+        
+
+   
 
 # Server setup
-You will need to edid the torrc file if you want to run the server.
+The server is running on port 4488.
+ You will need to edid the torrc file if you want to run the server.
+
+* Linux
   
-locate the torrc file under /etc/tor/
+        $ sudo nano /etc/tor/torrc
  
 In the torrc file you must add these 2 lines:
 
     HiddenServiceDir /var/lib/tor/spc-chat/
     
     HiddenServicePort 4488 127.0.0.1:4488
+
   
 After that restart the tor service
+
+* Ubuntu:
     
-    sudo service tor restart
+        $ sudo service tor restart
+
+* Fedoea
+
+        $ sudo service tor restart
+
+* Manjaro
+
+        $ sudo systemctl restart tor
+
   
 and locate your onion address under /var/lib/tor/spc-chat/
     
-    sudo cat /var/lib/tor/spc-chat/hostname
+    $ sudo cat /var/lib/tor/spc-chat/hostname
 
 after that you can run the server by cd in SPC-Chat/server/ and run
 
-    python3 server.py
+    $ python3 server.py
+
+* windows
+
+        Just ask for help in the Discord server.
 
 # Client setup
   
 The client use tor as proxy to connect to a server, the only thing that you have to do as client is to make sure that the tor service is running
    
 * To check if the service is running
-    
-        sudo service tor status
-   
- * If the service is closed
-    
-        sudo service tor start
+
+  * Ubuntu
+
+        $ sudo service tor restart
+  
+  * Fedora
+        
+        $ sudo service tor restart
+
+  * manjaro
+        
+        $ sudo systemctl restart tor
+
 
 After that you can cd in SPC-Chat/client/ and run:
 
-    python3 chat.py
+    $ python3 chat.py
 
 ### Windows
 * Tor
@@ -115,7 +161,7 @@ After that you can cd in SPC-Chat/client/ and run:
  
  The key is for encrypting and decrypting messages. You can generate it using the key_generator.py located in SPC-Chat/client/
 
-    python3 key_generator.py
+    $ python3 key_generator.py
 
  Your messages can be decrypted only with this key , so keep it safe and share it only with the person that you want to send messages. Change your keys often for extra safety
 
