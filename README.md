@@ -69,7 +69,7 @@ A chat that can provide privacy with end to end encryption, tor and without the 
 
   * Download SPC-Chat for windows from [here](https://github.com/AndreasKarageorgos/SPC-Chat/releases).
 
-  * Inside the install folder run the windows.bat . In case of error download [visual studio](https://visualstudio.microsoft.com/vs/features/cplusplus/) with C++ and after that run the Windows.bat again.
+  * Inside the install folder run the install.bat . In case of error download [visual studio](https://visualstudio.microsoft.com/vs/features/cplusplus/) with C++ and after that run the Windows.bat again.
         
 
    
