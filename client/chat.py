@@ -9,6 +9,7 @@ from data.libraries.torSocks import torSocks
 from random import choice
 from string import ascii_letters,digits
 from hashlib import sha256,sha512,sha1
+from os import getcwd
 import requests
 import webbrowser
 import socks
@@ -269,53 +270,14 @@ def on_closing():
     try:
         client_socket.send("COMMAND:D".encode())
         client_socket.close()
-    except BrokenPipeError:
-        print("Server closed or kicked you !")
     except:
-        pass
+        print("Server closed or kicked you !")
     root.destroy()
     print("You have disconnected. Please wait !")
 
 def donate():
-    def paypal():webbrowser.open(f"https://paypal.me/AndreasKarageorgos/{paypal_amount.get()}")
-    def BitCoin():webbrowser.open(f"https://www.blockchain.com/btc/payment_request?address=1DJqJtMGRzG12NZk1SJ5DnCfpeunTX1z1V&amount={bitcoin_ammount.get()}&message=Thank%20you%20for%20your%20support%20!!!%20%3C3")
-
-    tk_messagebox.showwarning(title="Warning !",message="The paypal button will open your browser to paypal\nand the BitCoin button will open your browser to Blockchain.")
-    
-    x = 0
-
-    master = tk.Tk()
-    width_of_window = 200
-    height_of_window = 70
-    screen_width = master.winfo_screenwidth()
-    screen_height = master.winfo_screenheight()
-    x_coordinate = (screen_width / 2) - (width_of_window / 2)
-    y_coordinate = (screen_height / 2) - (height_of_window / 2)
-    master.geometry("%dx%d+%d+%d" %(width_of_window,height_of_window,x_coordinate,y_coordinate))
-    master.title("Donates")
-
-    paypal_button = tk_Button(master,text = "paypal", command=paypal)
-    paypal_amount = tk_Entry(master, width = 10)
-    pypal_payS = tk.Label(master, text="‎€")
-    
-    bitcoin_button = tk_Button(master, text = "BitCoin", command=BitCoin)
-    bitcoin_ammount = tk_Entry(master, width = 10)
-    bitcoin_payS = tk_Label(master, text="₿")
-
-    if x==0:
-        paypal_amount.insert(0,"20")
-        bitcoin_ammount.insert(0,"0.00197")
-        x=1
-
-    paypal_button.grid(row=0,column=0)
-    paypal_amount.grid(row=0,column=1)
-    pypal_payS.grid(row=0,column=2)
-    
-    bitcoin_button.grid(row=1,column=0)
-    bitcoin_ammount.grid(row=1,column=1)
-    bitcoin_payS.grid(row=1,column=2)
-    
-    master.mainloop()
+    path = getcwd()+"/data/html/index.html"
+    webbrowser.open(path)
 
 def show_message(ms):
     msg_show.config(state="normal")
@@ -330,7 +292,7 @@ def show_participants(event):
         return
     else:
         spamm=time.time()
-    client_socket.send("COMMAND:S".encode("ascii"))
+    client_socket.send("COMMAND:S".encode())
 
 global client_socket
 
