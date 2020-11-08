@@ -20,6 +20,10 @@ for _ in range(randint(50,100)):
 
 #creating passwd
 
+name = input("Name: ").strip()
+while name=="":
+    name = input("Name: ").strip()
+
 passwd = "".join([chars[randint(0,l)] for _ in range(randint(100,256))])
 
 
@@ -35,10 +39,10 @@ password1 = password1.encode()
 
 passwd = encryptor(password1,sha1(password1).digest()).encrypt((passwd+"unencrypted").encode())
 
-with open(f"data{sl}key{sl}Key.key", "wb") as f:
+with open(f"data{sl}key{sl}{name}.key", "wb") as f:
     f.write(passwd)
     f.close()
 
 passwd = password1 = password2 = (len(max(passwd,password1))*2) * "A"
 
-print("Key has been generated and encrypted")
+print(f"{name} room has been generated and encrypted")

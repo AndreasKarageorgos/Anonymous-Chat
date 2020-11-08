@@ -6,6 +6,7 @@ from tkinter import Entry as tk_Entry , Text as tk_Text,Label as tk_Label, Butto
 from data.libraries import AES_cryptography, servers, loadServers
 from data.libraries.register import register
 from data.libraries.torSocks import torSocks
+from data.libraries.rooms import Rooms 
 from random import choice
 from string import ascii_letters,digits
 from hashlib import sha256,sha512,sha1
@@ -31,7 +32,7 @@ sl = "/"
 #Checks for updates
 
 
-version = "version 0.3.2"
+version = "version 1.0"
 
 def update(version):
 
@@ -55,10 +56,14 @@ def update(version):
 
 print(update(version))
 
+path = Rooms()
+if not path:
+    path=""
+
 
 #AES key load
 try:
-    with open(f"data{sl}key{sl}Key.key","rb") as f:
+    with open(path,"rb") as f:
         password = getpass.getpass("Enter the key password:").encode()
         key_ciphertext = f.read()
         dec = AES_cryptography.decryptor(password,sha1(password).digest())

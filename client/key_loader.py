@@ -8,7 +8,6 @@ keypath = input("Drag and drop the key file here:")
 
 if keypath[0] == "'" or keypath[0] == '"':
     keypath = keypath[1:-2]
-    print(keypath)
 
 while not keypath.endswith(".key") and not keypath.endswith(".unsafe"):
     keypath = input("Drag and drop the key file here:")
@@ -18,8 +17,10 @@ with open(keypath,"rb") as f:
     key = f.read()
     f.close()
 
+name = keypath.split(sl)[-1].split(".")[0]    
+
 if keypath.endswith(".key"):
-    with open(f"data{sl}key{sl}Key.key","wb") as f:
+    with open(f"data{sl}key{sl}{name}.key","wb") as f:
         f.write(key)
         f.close()
 else:
@@ -33,7 +34,7 @@ else:
     
     password1 = password1.encode()
 
-    with open(f"data{sl}key{sl}Key.key", "wb") as f:
+    with open(f"data{sl}key{sl}{name}.key", "wb") as f:
         cipherkey = encryptor(password1,sha1(password1).digest()).encrypt((key+b"unencrypted"))
         f.write(cipherkey)
         f.close()

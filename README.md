@@ -7,9 +7,9 @@ A chat that can provide privacy with end to end encryption, tor and without the 
  
  This is why I need your support.
 
- * paypal : https://paypal.me/AndreasKarageorgos/
+ * paypal : [https://paypal.me/AndreasKarageorgos/](https://www.paypal.com/donate?hosted_button_id=Z6BN3ZUE7FWZY&source=url)
 
- * BlockChain (BTC) : https://www.blockchain.com/btc/address/1DJqJtMGRzG12NZk1SJ5DnCfpeunTX1z1V
+ * BlockChain (BTC) : [1DJqJtMGRzG12NZk1SJ5DnCfpeunTX1z1V](https://www.blockchain.com/btc/address/1DJqJtMGRzG12NZk1SJ5DnCfpeunTX1z1V)
  
  * Bitcoin Cash (BCH) : qpfmk88awqcwulau4txu9pg8t8w70mn885m7xjrhh5
  
@@ -69,7 +69,7 @@ A chat that can provide privacy with end to end encryption, tor and without the 
 
   * Download SPC-Chat for windows from [here](https://github.com/AndreasKarageorgos/SPC-Chat/releases).
 
-  * Inside the install folder run the install.bat . In case of error download [visual studio](https://visualstudio.microsoft.com/vs/features/cplusplus/) with C++ and after that run the Windows.bat again.
+  * Inside the install folder run the windows.bat . In case of error download [visual studio](https://visualstudio.microsoft.com/vs/features/cplusplus/) with C++ and after that run the Windows.bat again.
         
 
    
@@ -153,19 +153,14 @@ After that you can cd in SPC-Chat/client/ and run:
         (It will not run without your Key)
 
  # Key
- There is 1 key file
- 
- * Key.key
 
- under SPC-Chat/client/data/key/
+Your keys are your rooms. You can have multiple keys. Locate them under SPC-Chat/client/data/key/
  
- The key is for encrypting and decrypting messages. You can generate it using the key_generator.py located in SPC-Chat/client/
+ The keys are for encrypting and decrypting messages. You can generate them using the key_generator.py located in SPC-Chat/client/
 
     $ python3 key_generator.py
 
- Your messages can be decrypted only with this key , so keep it safe and share it only with the person that you want to send messages. Change your keys often for extra safety
-
- If you create your own key , make sure that it is at least 20 characters long. Small keys can be cracked really fast.
+ Your messages can be decrypted only with the key that you use , so keep it safe and share it only with the person that you want to send messages. Change your keys often for extra safety.
 
 
 # Note !
@@ -179,7 +174,7 @@ This way the server will never be able to store your key and then decrypt and lo
 
 # Chat
 
-when you run the chat it will ask you for a password. This password is they password that has been used to encrypt the Key.key file.
+when you run the chat it will ask you for a password. This password is they password that has been used to encrypt your key (room)
 
 (You can not start the chat withoud a key)
 
@@ -206,8 +201,8 @@ In order 2 clients to talk to each other, they must connect to the same server w
         >> python3 chat.py
  
 
-Client1 and Client2 have the same keys, this way they are going to be able to see and send messages to each other. 
-Client4 has different key so it wont be able to send messages to Client1 and Client2 and the opposite.
+Client1 and Client2 have the same keys, this way they are going to be on the same room and be able to see and send messages to each other. 
+Client4 has different key so it is going to be on different room an it wont be able to send messages to Client1 and Client2 and the opposite.
 
 Server creates private chat rooms based on your keys (Server never gets your keys). People with different keys are going to be in different chat rooms.
 
@@ -215,20 +210,15 @@ Server creates private chat rooms based on your keys (Server never gets your key
 
 This tool will help you to generate strong keys.
 
-The generator automatically replaces the old key. Make sure that you have back ups.
+The generator will ask you to input a name. If you have already a key with this name it is going to be replaced.
 
 It is also asking you to set up a password. This password it is used to encrypt the key for extra safety.
 
-# key_loader
+# key loader
 
-This tool will help you to load a key. If the key it is not encrypted it will ask you to set up a password otherwise it will load it as it is.
+Use this tool to load a key. If the key ends with .unsafe it is going to ask you to set up a password. If it ens with .key it is going to load it as it is. If there is already a key with the same name that you are trying to load it is going to be replaced.
 
-(try to use keys that are generated with the key_generator)
-
-### the old key is going to be replaced
 
 # key extractor
 
-This tool will extract your key, decrypt it and save it as Key.key.unsafe.
-
-This key can be loaded to key_loader.
+Use this tool to extract a key so you can send it. When you extract a key the key gets unencrypted and saved with the ending ".unsafe" . If you want to send it online use pgp encyption.
