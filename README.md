@@ -48,6 +48,8 @@ A chat that can provide privacy with end to end encryption, tor and without the 
 
             $ git clone https://github.com/AndreasKarageorgos/SPC-Chat.git
 
+    * Manjaro: Here is the fixed window for manjaro => [Download](https://github.com/AndreasKarageorgos/SPC-Chat/releases/)
+
     * locate the "install" folder inside the SPC-Chat
     and run the installer for your os.
 
