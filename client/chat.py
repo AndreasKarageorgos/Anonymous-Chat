@@ -32,7 +32,7 @@ sl = "/"
 #Checks for updates
 
 
-version = "version 1.0"
+version = "version 1.1"
 
 def update(version):
 

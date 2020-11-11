@@ -23,6 +23,7 @@ if keypath.endswith(".key"):
     with open(f"data{sl}key{sl}{name}.key","wb") as f:
         f.write(key)
         f.close()
+    del keypath,key
 else:
     password1 = getpass("Setup a password: ") or "sodqkwi2"
     password2 = getpass("Repeat password: ") or "mgh82fl"
@@ -39,11 +40,11 @@ else:
         f.write(cipherkey)
         f.close()
 
-password2 = password1
-keypath = keypath.encode()
-keypath=key=password1=password2=cipherkey = (len(max(keypath,key,password1,cipherkey)*2)) * "A"
+    password2 = password1
+    keypath = keypath.encode()
+    keypath=key=password1=password2=cipherkey = (len(max(keypath,key,password1,cipherkey)*2)) * "A"
 
-del keypath,key,password1,password2,cipherkey
+    del keypath,key,password1,password2,cipherkey
 
 print("Key loaded. You can now use the chat.")
 
