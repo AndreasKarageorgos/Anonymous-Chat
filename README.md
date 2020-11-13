@@ -1,21 +1,6 @@
 # Secure Private Connections - Chat
 A chat that can provide privacy with end to end encryption, tor and without the need to trust the server to keep your keys safe ! 
 
-# Donations
- 
- This programm is free and it will continue to be free.
- 
- This is why I need your support.
-
- * paypal : [https://paypal.me/AndreasKarageorgos/](https://www.paypal.com/donate?hosted_button_id=Z6BN3ZUE7FWZY&source=url)
-
- * BitCoin (BTC) : [1DJqJtMGRzG12NZk1SJ5DnCfpeunTX1z1V](https://github.com/AndreasKarageorgos/SPC-Chat/blob/master/client/data/html/btc-address.png)
- 
- * Bitcoin Cash (BCH) : qpfmk88awqcwulau4txu9pg8t8w70mn885m7xjrhh5
- 
- * Stellar Lumen (XLM) : GCJX6O7NF2RXRL72FAKFDIXD4P6CE4OSYFQM43ECPUP564K2ZZUHQIML
-
-
 # Discord
 
  * Discord server: https://discord.gg/wSsr73z
