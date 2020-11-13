@@ -1,5 +1,5 @@
 # Secure Private Connections - Chat
-* A chat that can provide privacy with end to end encryption, tor and without the need to trust the server to keep your keys safe ! The Keys that you will use to encrypt your messages are created and encypted localy to your computer, this way the server never has your keys and there for it is not possible to store them. You are risponsible for your self ! To talk with someone you must share the same key, to do that you [extract](https://github.com/AndreasKarageorgos/SPC-Chat#key-extractor) your key and after that it is highly recommended to encrypt it with a public key and then send it.
+* A chat that can provide privacy with end to end encryption, tor and without the need to trust the server to keep your keys safe ! The Keys that you will use to encrypt your messages are created and encypted localy to your computer, this way the server never has your keys and therefor it is not possible to store them. You are risponsible for your self ! To talk with someone you must share the same key, to do that you [extract](https://github.com/AndreasKarageorgos/SPC-Chat#key-extractor) your key and after that it is highly recommended to encrypt it with a public key and then send it.
 
 * The chat runs fully on tor, this way the connections are encrypted and anonymous
 
