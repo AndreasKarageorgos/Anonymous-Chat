@@ -1,20 +1,7 @@
 # Secure Private Connections - Chat
-A chat that can provide privacy with end to end encryption, tor and without the need to trust the server to keep your keys safe ! 
+* A chat that can provide privacy with end to end encryption, tor and without the need to trust the server to keep your keys safe ! The Keys that you will use to encrypt your messages are created and encypted localy to your computer, this way the server never has your keys and therefor it is not possible to store them. You are risponsible for your self ! To talk with someone you must share the same key, to do that you [extract](https://github.com/AndreasKarageorgos/SPC-Chat#key-extractor) your key and after that it is highly recommended to encrypt it with a public key and then send it.
 
-# Donations
- 
- This programm is free and it will continue to be free.
- 
- This is why I need your support.
-
- * paypal : [https://paypal.me/AndreasKarageorgos/](https://www.paypal.com/donate?hosted_button_id=Z6BN3ZUE7FWZY&source=url)
-
- * BlockChain (BTC) : [1DJqJtMGRzG12NZk1SJ5DnCfpeunTX1z1V](https://www.blockchain.com/btc/address/1DJqJtMGRzG12NZk1SJ5DnCfpeunTX1z1V)
- 
- * Bitcoin Cash (BCH) : qpfmk88awqcwulau4txu9pg8t8w70mn885m7xjrhh5
- 
- * Stellar Lumen (XLM) : GCJX6O7NF2RXRL72FAKFDIXD4P6CE4OSYFQM43ECPUP564K2ZZUHQIML
-
+* The chat runs fully on tor, this way the connections are encrypted and anonymous
 
 # Discord
 
@@ -87,7 +74,6 @@ The server is running on port 4488.
 In the torrc file you must add these 2 lines:
 
     HiddenServiceDir /var/lib/tor/spc-chat/
-    
     HiddenServicePort 4488 127.0.0.1:4488
 
   
@@ -116,7 +102,23 @@ after that you can run the server by cd in SPC-Chat/server/ and run
 
 * windows
 
-        Just ask for help in the Discord server.
+  * First run [tor](https://www.torproject.org/download/tor/) for the first time and close it.
+
+  * Go to C:\Users\\%username%\AppData\Roaming\tor\ and create a file with the name torrc (Make sure that the file does not have an ending like .txt ...etc).
+
+  * In the torrc file paste [this](https://gitweb.torproject.org/tor.git/plain/src/config/torrc.sample.in)
+
+  * then add to the end of the file:
+
+        HiddenServiceDir C:\SPC-Chat\
+        HiddenServicePort 4488 127.0.0.1:4488
+
+  * Run tor
+
+  * locate yout address in C:\SPC-Chat\hostname
+
+  * Now you can run the server.
+        
 
 # Client setup
   
