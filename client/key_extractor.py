@@ -23,7 +23,6 @@ try:
         f.close()
 
     name = key.split(sl)[-1][:len(".key")*-1]
-    print(name)
 
     with open(f"{name}.key.unsafe", "wb") as f:
         f.write(plainkey[:len("unencrypted")*-1])

@@ -13,7 +13,10 @@ def pad_message(message):
 class encryptor():
 
     def __init__(self,key,IV):
-        self.key = sha256(key).digest()
+        if len(key)==32:
+            self.key = key
+        else:
+            self.key = sha256(key).digest()
         self.mode = AES.MODE_CBC
         self.IV = sha256(IV).digest()[:16]
         self.cipher = AES.new(self.key,self.mode,self.IV)
@@ -28,7 +31,10 @@ class encryptor():
 class decryptor():
     
     def __init__(self,key,IV):
-        self.key = sha256(key).digest()
+        if len(key)==32:
+            self.key = key
+        else:
+            self.key = sha256(key).digest()
         self.mode = AES.MODE_CBC
         self.IV = sha256(IV).digest()[:16]
         self.cipher = AES.new(self.key,self.mode,self.IV)

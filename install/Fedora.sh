@@ -3,3 +3,4 @@ sudo dnf install -y python3-tkinter
 sudo dnf install -y python3-pip
 sudo dnf install -y tor
 pip3 install pycryptodome
+pip3 install pysocks

@@ -32,7 +32,7 @@ sl = "/"
 #Checks for updates
 
 
-version = "version 1.1"
+version = "version 1.2"
 
 def update(version):
 
@@ -76,7 +76,7 @@ try:
             passwd = passwd = dec.decrypt(key_ciphertext)
        
         passwd = passwd[:len("unencrypted")*(-1)]
-        IV = passwd[:16]
+        IV = sha256(sha256(passwd).digest()).digest()
         f.close()
 
     password = "A"*len(password)*2
@@ -235,6 +235,7 @@ def send_msg(*event):
         input_box.delete(0,leng)
         try:
             client_socket.send(ciphertext)
+            ciphertext = "A"*(len(ciphertext)*2)
         except:
             show_message("#Failed to send the message")
     except UnicodeEncodeError:

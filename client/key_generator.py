@@ -1,14 +1,23 @@
 from random import randint
-from string import ascii_letters,digits
 from getpass import getpass
 from hashlib import sha1
+from sys import maxunicode
 from data.libraries.AES_cryptography import encryptor
 
 sl = "/"
 
 passwd = ""
 
-chars = list(ascii_letters+digits+"~`!@#$%^&*()_+-={}[]\\:;'\"<>,./?")
+chars = []
+
+
+while len(chars)<8:
+    try:
+        temp = chr(randint(0,maxunicode))
+        if len(temp.encode())==4:
+            chars.append(temp)
+    except:
+        pass
 
 l = len(chars)-1
 
@@ -18,21 +27,28 @@ for _ in range(randint(50,100)):
     n2 = randint(0,l)
     chars[n1], chars[n2] = chars[n2], chars[n1]
 
+
 #creating passwd
 
 name = input("Name: ").strip()
 while name=="":
     name = input("Name: ").strip()
 
-passwd = "".join([chars[randint(0,l)] for _ in range(randint(100,256))])
+
+passwd = "".join(chars)
 
 
-password1 = getpass("Set up a password: ") or "nfjeiqodc"
-password2 = getpass("Repeat password: ") or "ldiqmvbr"
+
+password1 = getpass("Set up a password: ")
+while password1=="":
+    password1 = getpass("Set up a password: ")
+password2 = getpass("Repeat password: ")
 
 while password1!=password2:
     print("Passwords do not match.")
-    password1 = getpass("Set up a password: ") or ""
+    password1 = getpass("Set up a password: ")
+    while password1=="":
+        password1 = getpass("Set up a password: ")
     password2 = getpass("Repeat password: ")
 
 password1 = password1.encode()
