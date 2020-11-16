@@ -50,7 +50,7 @@ def serverManager(lista):
     link = ""
 
     root = tk.Tk()
-    center_window(root,200,360)
+    center_window(root,500,360)
     root.title("Servers list")
     root.resizable(0,0)
 
@@ -62,7 +62,7 @@ def serverManager(lista):
 
 
 
-    listBox.pack(pady=10)
+    listBox.pack(fill="both",expand="yes")
     select_button.pack(pady=5)
     delete_button.pack(pady=5)
     add_button.pack(pady=5)
