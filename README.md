@@ -111,6 +111,7 @@ after that you can run the server by cd in SPC-Chat/server/ and run
   * then add to the end of the file:
 
         HiddenServiceDir C:\SPC-Chat\
+        
         HiddenServicePort 4488 127.0.0.1:4488
 
   * Run tor
