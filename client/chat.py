@@ -32,7 +32,7 @@ sl = "/"
 #Checks for updates
 
 
-version = "version 1.2"
+version = "version 1.3"
 
 def update(version):
 
@@ -60,29 +60,29 @@ path = Rooms()
 if not path:
     path=""
 
-
 #AES key load
 try:
-    with open(path,"rb") as f:
-        password = getpass.getpass("Enter the key password:").encode()
-        key_ciphertext = f.read()
-        dec = AES_cryptography.decryptor(password,sha1(password).digest())
-        passwd = dec.decrypt(key_ciphertext)
-
-        while not passwd.endswith(b"unencrypted"):
-            print("Wrong password.\n")
+    if path!="private":
+        with open(path,"rb") as f:
             password = getpass.getpass("Enter the key password:").encode()
+            key_ciphertext = f.read()
             dec = AES_cryptography.decryptor(password,sha1(password).digest())
-            passwd = passwd = dec.decrypt(key_ciphertext)
-       
-        passwd = passwd[:len("unencrypted")*(-1)]
-        IV = sha256(sha256(passwd).digest()).digest()
-        f.close()
+            passwd = dec.decrypt(key_ciphertext)
 
-    password = "A"*len(password)*2
-    del password
-    del dec
-    print("Key decrypted.")
+            while not passwd.endswith(b"unencrypted"):
+                print("Wrong password.\n")
+                password = getpass.getpass("Enter the key password:").encode()
+                dec = AES_cryptography.decryptor(password,sha1(password).digest())
+                passwd = passwd = dec.decrypt(key_ciphertext)
+        
+            passwd = passwd[:len("unencrypted")*(-1)]
+            IV = sha256(sha256(passwd).digest()).digest()
+            f.close()
+
+        password = "A"*len(password)*2
+        del password
+        del dec
+        print("Key decrypted.")
 except FileNotFoundError:
     print("Key file did not found.\nYou can load it using the key_loader or generate it using the key_generator.")
     exit()
@@ -102,13 +102,14 @@ spamm = time.time()
 
 chat_plain_keyword = "1bn&jbsdo(F"
 
-temp_pass = sha256(sha256(passwd[:16]).digest()).digest()
-temp_iv = sha256(temp_pass[:16]).digest()[:16]
+if path!="private":
+    temp_pass = sha256(sha256(passwd[:16]).digest()).digest()
+    temp_iv = sha256(temp_pass[:16]).digest()[:16]
 
-chat_room_key = sha512(AES_cryptography.encryptor(temp_pass,temp_iv).encrypt(chat_plain_keyword.encode("ascii"))).hexdigest()
+    chat_room_key = sha512(AES_cryptography.encryptor(temp_pass,temp_iv).encrypt(chat_plain_keyword.encode("ascii"))).hexdigest()
 
-del temp_pass
-del temp_iv
+    del temp_pass
+    del temp_iv
 
 #Helper to run the start method of the threads once !
 run = False
@@ -154,6 +155,33 @@ while True:
         time.sleep(3)
     except KeyboardInterrupt:
         exit()
+
+if path=="private":
+    print("receiving key")
+    try:
+        keysock = torSocks(link,port)
+        keysock.connect()
+        keysock.setTimeout(3)
+        keysock.send("private".encode())
+        passwd = keysock.recv(32)
+        keysock.close()
+        if passwd==b"0":
+            print("This server is not private.")
+            exit()
+        print("Key received !")
+    except:
+        print("Failed to receiv key")
+        exit()
+    IV = sha256(sha256(passwd).digest()).digest()
+    temp_pass = sha256(sha256(passwd[:16]).digest()).digest()
+    temp_iv = sha256(temp_pass[:16]).digest()[:16]
+
+    chat_room_key = sha512(AES_cryptography.encryptor(temp_pass,temp_iv).encrypt(chat_plain_keyword.encode("ascii"))).hexdigest()
+
+    del temp_pass
+    del temp_iv
+
+
 
 #login screen
 
@@ -217,8 +245,6 @@ def send_msg(*event):
     if round(time.time()-spamm, 2) < 2:
         show_message("#Wait 2 seconds before you send another message")
         return
-    else:
-        spamm=time.time()
 
     if len(input_box.get()) == 0:return
     if len(input_box.get().encode())+2 > 80:
@@ -228,16 +254,24 @@ def send_msg(*event):
     try:
         message = (choice(chars)+input_box.get()+choice(chars)).encode()
         ciphertext = encrypt.encrypt(message)
+        tries = 0
+        while tries < 100 and input_box.get().encode() in ciphertext:
+            message = (choice(chars)+input_box.get()+choice(chars)).encode()
+            encrypt = AES_cryptography.encryptor(passwd,IV)
+            ciphertext = encrypt.encrypt(message)
+            tries+=1
+        
         if input_box.get().encode() in ciphertext:
-            show_message("#This message is not encrypted")
+            show_message("#There was a problem on sending this message.")
             return
         leng = len(input_box.get())
         input_box.delete(0,leng)
         try:
             client_socket.send(ciphertext)
+            spamm = time.time()
             ciphertext = "A"*(len(ciphertext)*2)
         except:
-            show_message("#Failed to send the message")
+            show_message("#Failed to send.")
     except UnicodeEncodeError:
         show_message("#Try ascii characters")
 

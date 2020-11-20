@@ -4,10 +4,10 @@
 import socket
 import threading
 import requests
-from random import randint
-from string import ascii_letters
+from random import randint, choice
+from string import ascii_letters, digits
 from conf import register_users,auth_users
-from hashlib import sha512
+from hashlib import sha512, sha256
 import time
 
 #Checks for updates
@@ -16,7 +16,7 @@ global sl
 sl = "/"
 
 
-version = "version 0.3.2"
+version = "version 1.0"
 
 def update(version):
     prox = {
@@ -43,7 +43,7 @@ print(update(version))
 
 while True:
     try:
-        with open("config.config","r") as f:
+        with open("server.config","r") as f:
             config_file = f.read().strip()
             f.close()
         config_file = config_file.split("\n")
@@ -52,8 +52,8 @@ while True:
             config.update({i.split("=")[0]: i.split("=")[1]})
         break
     except FileNotFoundError:
-        with open("config.config","w") as f:
-            f.write("message=Wealcome To the server\nmax_clients=-1")
+        with open("server.config","w") as f:
+            f.write("message=Wealcome To the server\nmax_clients=-1\nprivate=false")
             f.close()
 
 
@@ -77,7 +77,16 @@ except FileNotFoundError:
 server_ip = "127.0.0.1" #Do not change !!! (Unless you know what you are doing)
 server_port = 4488
 max_clients = int(config["max_clients"].strip())
+private_server = config["private"].strip().lower().capitalize()
 
+# for some reason this => private_server = bool(config["private"].strip().lower().capitalize()) does not works
+if private_server == "False":
+    private_server = False
+else:
+    private_server = True
+
+if private_server:
+    private_key = sha256("".join([choice(ascii_letters+digits) for _ in range(50,100)]).encode()).digest()
 #Buff size of client is 100 
 server_message = config["message"].strip()[:93]
 
@@ -125,7 +134,18 @@ def accept_connections():
                     client.send("True".encode())
                     client.close()
                     data = ""
+                    
+                if private_server and data == b"private":
+                    time.sleep(0.2)
+                    client.send(private_key)
+                    client.close()
+                    data = ""
+                elif data == b"private":
+                    client.send("0".encode())
+                    client.close()
+
                 data = data.split(b":")
+
                 if len(data)>=3:
                     if data[0] == b"register" and b"server" not in data[1].lower():
                         data[2] = b":".join(data[2:])
@@ -150,6 +170,7 @@ def accept_connections():
                                 rooms[keyword].update({data[1].decode():client})
                             else:
                                 rooms.update({ keyword:{data[1].decode():client}})
+
                             
                             time.sleep(0.2)
                             client.send(b"Server:%s" % server_message.encode())
