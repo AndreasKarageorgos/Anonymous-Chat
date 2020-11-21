@@ -32,7 +32,7 @@ sl = "/"
 #Checks for updates
 
 
-version = "version 1.3"
+version = "version 1.4"
 
 def update(version):
 
@@ -56,7 +56,7 @@ def update(version):
 
 print(update(version))
 
-path = Rooms()
+path = Rooms(True)
 if not path:
     path=""
 
@@ -103,13 +103,9 @@ spamm = time.time()
 chat_plain_keyword = "1bn&jbsdo(F"
 
 if path!="private":
-    temp_pass = sha256(sha256(passwd[:16]).digest()).digest()
-    temp_iv = sha256(temp_pass[:16]).digest()[:16]
 
-    chat_room_key = sha512(AES_cryptography.encryptor(temp_pass,temp_iv).encrypt(chat_plain_keyword.encode("ascii"))).hexdigest()
+    chat_room_key = sha512(sha512(passwd).digest()).hexdigest()
 
-    del temp_pass
-    del temp_iv
 
 #Helper to run the start method of the threads once !
 run = False
@@ -172,14 +168,10 @@ if path=="private":
     except:
         print("Failed to receiv key")
         exit()
+    
     IV = sha256(sha256(passwd).digest()).digest()
-    temp_pass = sha256(sha256(passwd[:16]).digest()).digest()
-    temp_iv = sha256(temp_pass[:16]).digest()[:16]
+    chat_room_key = sha512(sha512(passwd).digest()).hexdigest()
 
-    chat_room_key = sha512(AES_cryptography.encryptor(temp_pass,temp_iv).encrypt(chat_plain_keyword.encode("ascii"))).hexdigest()
-
-    del temp_pass
-    del temp_iv
 
 
 

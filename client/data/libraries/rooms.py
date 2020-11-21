@@ -8,7 +8,7 @@ from os import walk
 
 
 
-def Rooms():
+def Rooms(pr):
 
     def center_window(window,width_of_window,height_of_window):
         screen_width = window.winfo_screenwidth()
@@ -86,7 +86,8 @@ def Rooms():
     private_checkbox = tk_Checkbutton(buttonsframe, text="I will connect to a private server.", variable=checkbox_var, command=private_server)
 
     selectbutton.place(relx=0.333,rely=0.1)
-    private_checkbox.place(relx=0.01,rely=0.8)
+    if pr:
+        private_checkbox.place(relx=0.01,rely=0.8)
 
     for k in keys:
         rooms.insert("end", k)

@@ -5,7 +5,7 @@ from data.libraries.rooms import Rooms
 
 sl = "/"
 
-key = Rooms()
+key = Rooms(False)
 
 if not key:
     exit()
