@@ -16,7 +16,7 @@ global sl
 sl = "/"
 
 
-version = "version 1.0"
+version = "version 1.1"
 
 def update(version):
     prox = {
@@ -129,7 +129,7 @@ def accept_connections():
             if maxed==-1 or not maxed():
                 client,_ = server_socket.accept()
                 client.settimeout(3)
-                data = client.recv(181)
+                data = client.recv(108)
                 if data == b"online":
                     client.send("True".encode())
                     client.close()
@@ -143,23 +143,37 @@ def accept_connections():
                 elif data == b"private":
                     client.send("0".encode())
                     client.close()
+            
 
-                data = data.split(b":")
+                if 36<=len(data)<=44:
+                    temp = data
+                    data = []
+                    data.append(temp[:2])
+                    t1 = (10-(44-len(temp)))+2
+                    data.append(temp[2:t1])
+                    data.append(temp[t1:])
+                elif 100<=len(data)<=108:
+                    temp = data
+                    data = []
+                    data.append(temp[:2])
+                    t1 = (10-(108-len(temp)))+2
+                    data.append(temp[2:t1])
+                    data.append(temp[t1:t1+32])
+                    data.append(temp[t1+32:])
+                else:
+                    data=""
+
 
                 if len(data)>=3:
-                    if data[0] == b"register" and b"server" not in data[1].lower():
-                        data[2] = b":".join(data[2:])
+                    if data[0] == b"rg" and b"server" not in data[1].lower():
                         resp = register_users.reg_user(data[1],data[2],members)
                         if resp: 
                             client.send("True".encode())
                             print(data[1].decode(),"Registered !")
                         else:
                             client.send("False".encode())
-                    elif data[0] == b"login" and len(data)>=4:
-                        if len(data) == 4:
-                            resp = auth_users.auth(data[1],data[2],members)
-                        else:
-                            resp = auth_users.auth(data[1],b":".join(data[2:-1]),members)
+                    elif data[0] == b"lg":
+                        resp = auth_users.auth(data[1],data[2],members)
                         if resp:
                             client.send("True".encode())
                             print(data[1].decode(),"Logged in")

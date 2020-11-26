@@ -4,7 +4,7 @@ def reg_user(uname,passwd,users):
 
     sl = "/"
 
-    if b" " in uname or b"\n" in uname:
+    if b" " in uname or b"\n" in uname or b":" in uname:
         return False
     with open(f"conf{sl}users","a") as f:
         try:

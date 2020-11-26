@@ -32,7 +32,7 @@ sl = "/"
 #Checks for updates
 
 
-version = "version 1.4"
+version = "version 1.5"
 
 def update(version):
 
@@ -104,7 +104,7 @@ chat_plain_keyword = "1bn&jbsdo(F"
 
 if path!="private":
 
-    chat_room_key = sha512(sha512(passwd).digest()).hexdigest()
+    chat_room_key = sha512(sha512(passwd).digest()).digest()
 
 
 #Helper to run the start method of the threads once !
@@ -170,7 +170,7 @@ if path=="private":
         exit()
     
     IV = sha256(sha256(passwd).digest()).digest()
-    chat_room_key = sha512(sha512(passwd).digest()).hexdigest()
+    chat_room_key = sha512(sha512(passwd).digest()).digest()
 
 
 
@@ -190,7 +190,7 @@ def login(*event):
         global client_socket
         client_socket = torSocks(link,port)
         client_socket.connect()
-        client_socket.send(b"login:%s:%s:%s" % (username.encode(),password, chat_room_key.encode()))
+        client_socket.send(b"lg%s%s%s" % (username.encode(),password, chat_room_key))
         ans = client_socket.recv(6).decode().strip()
         if "True" in ans:
             login_screen.destroy()

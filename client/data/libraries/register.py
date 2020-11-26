@@ -21,7 +21,7 @@ def register(link):
             socket = torSocks(link,4488)
             socket.connect()
             passwd =  sha256((link+passwd).encode()).digest()
-            socket.send(b"register:%s:%s" % (uname.encode(),passwd))
+            socket.send(b"rg%s%s" % (uname.encode(),passwd))
             try:
                 socket.setTimeout(10)
                 suc = socket.recv(5)
@@ -43,8 +43,8 @@ def register(link):
         if len(uname.encode()) < 2 or len(uname.encode()) > 10 or len(password.encode())>100 or len(password.encode())<12:
             tk_messagebox.showerror(title="Error", message="Username 2 to 10 characters\nPassword 12 to 100 chars\n(Non ascii characters can count more than just 1 character)")
             return
-        elif ":" in uname or ":" in password:
-            tk_messagebox.showerror(title="Error", message="The character ':' is not allowed.")
+        elif ":" in uname:
+            tk_messagebox.showerror(title="Error", message="the character \":\" is not allowed")
             return
         send(uname,password)
     

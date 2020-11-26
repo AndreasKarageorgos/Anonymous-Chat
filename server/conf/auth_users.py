@@ -14,6 +14,6 @@ def auth(uname,passwd,members):
         uname = uname.decode()
     except UnicodeDecodeError:
         return False
-    if (uname in members and members[uname] == comp) and (uname not in banned):
+    if (uname in members and members[uname] == comp) and (uname not in banned or uname==b":"):
         return True
     return False

@@ -26,7 +26,7 @@ def Rooms(pr):
     def private_server():
         if checkbox_var.get():
             rooms.config(state="disable")
-            tk_messagebox.showwarning(title="Low security", message="This option it's not secure !\n\nIf you connect to a server with this option enabled the owner of the server or anyone that has access to the machine that hosts the server will be able to decrypt your messages.\n\nAlso other people with this option enabled they are going to be able to see your messages and send messages to you.\n\nIf you understand the risk and you want to continue press the select button with the option enabled.")
+            tk_messagebox.showwarning(title="Low security", message="This option it's not secure !\n\nIf you connect to a server with this option enabled the owner of the server or anyone that has access to the machine that hosts the server will be able to decrypt your messages.\n\nAlso other people with this option enabled they are going to be able to see your messages and send messages to you.\n\nUse this option only if the server is hosted in a personal computer\n\nIf you understand the risk and you want to continue press the select button with the option enabled.")
         else:
             rooms.config(state="normal")
 
