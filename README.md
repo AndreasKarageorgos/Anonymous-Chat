@@ -167,6 +167,8 @@ Your keys are your rooms. You can have multiple keys. Locate them under SPC-Chat
 
  Your messages can be decrypted only with the key that you use , so keep it safe and share it only with the person that you want to send messages. Change your keys often for extra safety.
 
+* You can find instructions on how to exchange your keys without risking your messages on the [discord server](https://github.com/AndreasKarageorgos/SPC-Chat#discord)
+
 
 # Note !
 They Key file can not be send through the server for extra safety !
