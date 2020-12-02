@@ -1,7 +1,20 @@
 from hashlib import sha512
 
-def auth(uname,passwd,members):
+def auth(uname,passwd,members,whitelist):
     sl = "/"
+
+    try:
+        if whitelist:
+            with open(f"conf{sl}whitelist","r") as f:
+                alist = f.read().split("\n")
+                f.close()
+            if uname.decode() not in alist:
+                return False
+    except FileNotFoundError:
+        alist = []
+    except UnicodeDecodeError:
+        return False
+
     try:
         with open(f"conf{sl}banned","r") as f:
             banned = f.read().split("\n")

@@ -32,7 +32,7 @@ sl = "/"
 #Checks for updates
 
 
-version = "version 1.5"
+version = "version 1.6"
 
 def update(version):
 
@@ -183,7 +183,7 @@ def login(*event):
     username = eusername.get()
     password = sha256((link+epassword.get()).encode()).digest()
     if not (2<=len(username.encode())<=10):
-        tk_messagebox.showerror(title="Error",message="Wrong username or password")
+        tk_messagebox.showerror(title="Error",message="Wrong username, password or whitelist on")
         return
     
     try:
@@ -195,11 +195,11 @@ def login(*event):
         if "True" in ans:
             login_screen.destroy()
             return
-        tk_messagebox.showerror(title="Error",message="Wrong username or password")
+        tk_messagebox.showerror(title="Error",message="Wrong username, password or whitelist on")
     except UnicodeEncodeError:
         tk_messagebox.showerror(title="Error",message="Try ascii chars")
     except UnicodeDecodeError:
-        tk_messagebox.showerror(title="Error",message="This server is modified")
+        tk_messagebox.showerror(title="Error",message="received suspicious bytes. Failed to decode.")
     except:
         tk_messagebox.showerror(title="Error",message="Server did not respond, try again.")
 

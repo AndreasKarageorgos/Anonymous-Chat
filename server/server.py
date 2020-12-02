@@ -16,7 +16,7 @@ global sl
 sl = "/"
 
 
-version = "version 1.1"
+version = "version 1.2"
 
 def update(version):
     prox = {
@@ -53,7 +53,7 @@ while True:
         break
     except FileNotFoundError:
         with open("server.config","w") as f:
-            f.write("message=Wealcome To the server\nmax_clients=-1\nprivate=false")
+            f.write("message=Wealcome To the server\nmax_clients=-1\nprivate=false\nwhite_list=false\n")
             f.close()
 
 
@@ -77,13 +77,23 @@ except FileNotFoundError:
 server_ip = "127.0.0.1" #Do not change !!! (Unless you know what you are doing)
 server_port = 4488
 max_clients = int(config["max_clients"].strip())
-private_server = config["private"].strip().lower().capitalize()
+private_server = config["private"].strip().lower()
+try:
+    whitelist = config["white_list"].strip().lower()
+except KeyError:
+    whitelist = "false"
+    print("Please delete the config file and restart the server to load the new option.")
 
-# for some reason this => private_server = bool(config["private"].strip().lower().capitalize()) does not works
-if private_server == "False":
-    private_server = False
-else:
+
+if private_server == "true":
     private_server = True
+else:
+    private_server = False
+
+if whitelist == "true":
+    whitelist = True
+else:
+    whitelist = False
 
 if private_server:
     private_key = sha256("".join([choice(ascii_letters+digits) for _ in range(50,100)]).encode()).digest()
@@ -166,14 +176,14 @@ def accept_connections():
 
                 if len(data)>=3:
                     if data[0] == b"rg" and b"server" not in data[1].lower():
-                        resp = register_users.reg_user(data[1],data[2],members)
+                        resp = register_users.reg_user(data[1],data[2],members,whitelist)
                         if resp: 
                             client.send("True".encode())
                             print(data[1].decode(),"Registered !")
                         else:
                             client.send("False".encode())
                     elif data[0] == b"lg":
-                        resp = auth_users.auth(data[1],data[2],members)
+                        resp = auth_users.auth(data[1],data[2],members,whitelist)
                         if resp:
                             client.send("True".encode())
                             print(data[1].decode(),"Logged in")
@@ -263,7 +273,7 @@ def recv_message():
                             if len(message)>80:
                                 print(client,"Send message over 80 bytes.")
                                 remove_clients.append((key,client,False))
-                            elif round(time.time()-spamm[client.encode()], 2) < 1.5:
+                            elif round(time.time()-spamm[client.encode()], 2) < 1.8:
                                 remove_clients.append((key,client,False))
                                 print(client,"got kicked for spamming")
                             else:
@@ -317,10 +327,12 @@ def kick(username):
 
 def helpme(*_):
     print("""
-    1.help --This help menu
-    2.kick (name) --Kicks a member of the server
-    3.ban (name) --Bans a member from the server
-    4.stop  --Stops the server
+    1.help              -- This help menu
+    2.kick (name)       -- Kicks a member of the server
+    3.ban (name)        -- Bans a member from the server
+    4.stop              -- Stops the server
+    5.whiteadd (name)   -- adds a client to the whitelist
+    6.whiterm (name)    -- removes a client from the whitelist
     """)
 
 def ban(username):
@@ -334,9 +346,51 @@ def ban(username):
     else:
         print("This username does not exists")
 
+
+def whiteadd(name):
+    if name!="_":
+        try:
+            with open(f"conf{sl}whitelist","r+") as f:
+                tlist = f.read().split("\n")
+                if name not in tlist:
+                    f.write(name+"\n")
+                    print(f"added {name} to the whitelist")
+                else:
+                    print(f"{name} already in whitelist")
+                f.close()
+        except FileNotFoundError:
+            with open(f"conf{sl}whitelist", "w") as f:
+                f.write(name+"\n")
+                f.close()
+            print(f"added {name} to the whitelist")
+    else:
+        print("type help for the help menu")
+
+def whiterm(name):
+    if name!="_":
+        try:
+            with open(f"conf{sl}whitelist","r+") as f:
+                tlist = f.read().split("\n")
+                if name in tlist:
+                    tlist.remove(name)
+                    f.close()
+                    with open(f"conf{sl}whitelist","w") as f:
+                        for i in tlist:
+                            if len(i.strip())>0:
+                                f.write(i.strip()+"\n")
+                                f.flush()
+                        f.close()
+                    print(f"{name} removed from whitelist")
+                else:
+                    print(f"{name} not in whitelist")
+        except FileNotFoundError:
+            print(f"{name} not in whitelist.")
+
+
+
 print("Server is running ! Type help for a list of help menu.")
 
-commands = {"kick":kick,"help":helpme,"ban":ban}
+commands = {"kick":kick,"help":helpme,"ban":ban,"whiteadd":whiteadd,"whiterm":whiterm}
 try:
     command = input("")
     while command.lower() != "stop":

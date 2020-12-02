@@ -1,9 +1,26 @@
 from hashlib import sha512
 
-def reg_user(uname,passwd,users):
+def reg_user(uname,passwd,users,whitelist):
 
     sl = "/"
 
+    alist = []
+
+    if whitelist:
+        try:
+            with open(f"conf{sl}whitelist","r") as f:
+                alist = f.read().split("\n")
+                f.close()
+        except FileNotFoundError:
+            open(f"conf{sl}whitelist","w").close()
+
+
+    try:
+        if whitelist and (uname.decode() not in alist):
+            return False
+    except UnicodeDecodeError:
+        return False      
+    
     if b" " in uname or b"\n" in uname or b":" in uname:
         return False
     with open(f"conf{sl}users","a") as f:
