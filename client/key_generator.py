@@ -3,9 +3,13 @@ from getpass import getpass
 from hashlib import sha1
 from sys import maxunicode
 from data.libraries.AES_cryptography import encryptor
+from platform import uname
 
-sl = "/"
-
+if uname()[0].lower().startswith("win"):
+    sl = "\\"
+else:
+    sl = "/"
+    
 passwd = ""
 
 chars = []

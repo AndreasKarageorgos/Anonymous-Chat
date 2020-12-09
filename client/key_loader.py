@@ -1,8 +1,14 @@
 from getpass import getpass
 from hashlib import sha1
 from data.libraries.AES_cryptography import encryptor
+from platform import uname
 
-sl = "/"
+
+if uname()[0].lower().startswith("win"):
+    sl = "\\"
+else:
+    sl = "/"
+
 
 keypath = input("Drag and drop the key file here:")
 

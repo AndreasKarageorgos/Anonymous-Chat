@@ -2,11 +2,12 @@
 #GitHub: https://github.com/AndreasKarageorgos/
 
 import tkinter as tk
-from tkinter import Entry as tk_Entry , Text as tk_Text,Label as tk_Label, Button as tk_Button, messagebox as tk_messagebox, Frame as tk_Frame
+from tkinter import Entry as tk_Entry , Text as tk_Text,Label as tk_Label
+from tkinter import Button as tk_Button, messagebox as tk_messagebox, Frame as tk_Frame, PhotoImage
 from data.libraries import AES_cryptography, servers, loadServers
 from data.libraries.register import register
 from data.libraries.torSocks import torSocks
-from data.libraries.rooms import Rooms 
+from data.libraries.rooms import Rooms
 from random import choice
 from string import ascii_letters,digits
 from hashlib import sha256,sha512,sha1
@@ -17,6 +18,9 @@ import socks
 import threading
 import time
 import getpass
+from platform import uname
+
+
 
 def center_window(window,width_of_window,height_of_window):
     screen_width = window.winfo_screenwidth()
@@ -27,12 +31,15 @@ def center_window(window,width_of_window,height_of_window):
 
 
 global sl
-sl = "/"
+if uname()[0].lower().startswith("win"):
+    sl = "\\"
+else:
+    sl = "/"
 
 #Checks for updates
 
 
-version = "version 1.6"
+version = "version 1.7"
 
 def update(version):
 
@@ -68,12 +75,15 @@ try:
             key_ciphertext = f.read()
             dec = AES_cryptography.decryptor(password,sha1(password).digest())
             passwd = dec.decrypt(key_ciphertext)
-
-            while not passwd.endswith(b"unencrypted"):
-                print("Wrong password.\n")
-                password = getpass.getpass("Enter the key password:").encode()
-                dec = AES_cryptography.decryptor(password,sha1(password).digest())
-                passwd = passwd = dec.decrypt(key_ciphertext)
+            try:
+                while not passwd.endswith(b"unencrypted"):
+                    print("Wrong password.\n")
+                    password = getpass.getpass("Enter the key password:").encode()
+                    dec = AES_cryptography.decryptor(password,sha1(password).digest())
+                    passwd = passwd = dec.decrypt(key_ciphertext)
+            except KeyboardInterrupt:
+                print()
+                exit()
         
             passwd = passwd[:len("unencrypted")*(-1)]
             IV = sha256(sha256(passwd).digest()).digest()
@@ -111,7 +121,7 @@ if path!="private":
 run = False
 
 server_manager = loadServers.serversManagment()
-server_manager.load("data/servers/servers.txt")
+server_manager.load(f"data{sl}servers{sl}servers.txt")
 
 available_servers = server_manager.digest()
 try:
@@ -204,12 +214,12 @@ def login(*event):
         tk_messagebox.showerror(title="Error",message="Server did not respond, try again.")
 
 login_screen = tk.Tk()
-
 login_screen.bind("<Return>",login)
 login_screen.protocol("WM_DELETE_WINDOW",exit)
 login_screen.title("login")
 login_screen.resizable(0,0)
-
+img = PhotoImage(file=f"data{sl}logo{sl}logo.png")
+login_screen.tk.call('wm', 'iconphoto', login_screen._w, img)
 center_window(login_screen,205,200)
 luname = tk_Label(login_screen, text="Username:") 
 eusername = tk_Entry(login_screen,width=15)
@@ -345,6 +355,8 @@ root.protocol("WM_DELETE_WINDOW",on_closing)
 root.bind("<Return>",send_msg)
 root.bind("<Tab>", show_participants)
 root.resizable(0,0)
+img = PhotoImage(file=f"data{sl}logo{sl}logo.png")
+root.tk.call('wm', 'iconphoto', root._w, img)
 
 #Objects in tk window
 

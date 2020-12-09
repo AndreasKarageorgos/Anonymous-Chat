@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import Label as tk_Label , Entry as tk_Entry , Button as tk_Button , messagebox as tk_messagebox
+from tkinter import Label as tk_Label , Entry as tk_Entry , Button as tk_Button , messagebox as tk_messagebox, PhotoImage
 import socks
 try:
     from data.libraries.torSocks import torSocks
@@ -58,6 +58,7 @@ def register(link):
 
     reg.title("Register")
     reg.resizable(0,0)
+    
     #objects in window
 
     username_label = tk_Label(reg,text = "username:")

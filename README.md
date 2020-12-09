@@ -54,9 +54,11 @@
 
   * Download python3 from [here](https://www.python.org/) and select the box "add python to path".
 
-  * Download Tor Windows Expert Bundle from [here](https://www.torproject.org/download/tor/)
+  * Download github Desktop from [here](https://desktop.github.com/)
 
-  * Download SPC-Chat for windows from [here](https://github.com/AndreasKarageorgos/SPC-Chat/releases).
+  * Download SPC-Chat from [here](https://github.com/AndreasKarageorgos/SPC-Chat/archive/master.zip) or clone it to your computer.
+
+  * Download Tor Windows Expert Bundle from [here](https://www.torproject.org/download/tor/)
 
   * Inside the install folder run the windows.bat . In case of error download [visual studio](https://visualstudio.microsoft.com/vs/features/cplusplus/) with C++ and after that run the Windows.bat again.
         

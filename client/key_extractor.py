@@ -2,8 +2,12 @@ from hashlib import sha1
 from getpass import getpass
 from data.libraries.AES_cryptography import decryptor
 from data.libraries.rooms import Rooms
+from platform import uname
 
-sl = "/"
+if uname()[0].lower().startswith("win"):
+    sl = "\\"
+else:
+    sl = "/"
 
 key = Rooms(False)
 

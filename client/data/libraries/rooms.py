@@ -3,7 +3,7 @@ from tkinter import Entry as tk_Entry
 from tkinter import Button as tk_Button
 from tkinter import Frame as tk_Frame, Listbox as tk_Listbox
 from tkinter import Checkbutton as tk_Checkbutton, IntVar as tk_IntVar
-from tkinter import messagebox as tk_messagebox
+from tkinter import messagebox as tk_messagebox , PhotoImage
 from os import walk
 
 
@@ -64,6 +64,8 @@ def Rooms(pr):
     root.protocol("WM_DELETE_WINDOW",on_closing)
     root.title("rooms")
     root.resizable(0,0)
+    img = PhotoImage(file="data/logo/logo.png")
+    root.tk.call('wm', 'iconphoto', root._w, img)
 
     #Objects in tk window
 

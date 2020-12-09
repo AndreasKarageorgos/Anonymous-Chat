@@ -24,7 +24,7 @@ class encryptor():
     def encrypt(self,text):
         self.text = pad_message(text)
         self.ciphertext = self.cipher.encrypt(self.text)
-        self.text = "A"*(len(self.text)+1)*100 #Ovverite text
+        self.text = "A"*(len(self.text)+1)*100 #overwrite text
         del self.text #Deletes text from memory
         return self.ciphertext
 

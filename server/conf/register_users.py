@@ -1,8 +1,12 @@
 from hashlib import sha512
+from platform import uname as sysname
 
 def reg_user(uname,passwd,users,whitelist):
 
-    sl = "/"
+    if sysname()[0].lower().startswith("win"):
+        sl = "\\"
+    else:
+        sl = "/"
 
     alist = []
 

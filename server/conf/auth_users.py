@@ -1,7 +1,14 @@
 from hashlib import sha512
+from platform import uname as sysname
+
+
 
 def auth(uname,passwd,members,whitelist):
-    sl = "/"
+    
+    if sysname()[0].lower().startswith("win"):
+        sl = "\\"
+    else:
+        sl = "/"
 
     try:
         if whitelist:

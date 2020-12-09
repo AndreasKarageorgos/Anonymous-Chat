@@ -9,14 +9,20 @@ from string import ascii_letters, digits
 from conf import register_users,auth_users
 from hashlib import sha512, sha256
 import time
+from platform import uname as sysname
+
+global sl
+if sysname()[0].lower().startswith("win"):
+    sl = "\\"
+else:
+    sl = "/"
+
+
 
 #Checks for updates
 
-global sl
-sl = "/"
 
-
-version = "version 1.2"
+version = "version 1.3"
 
 def update(version):
     prox = {

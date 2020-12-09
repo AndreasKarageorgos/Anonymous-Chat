@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import Listbox as tk_Listbox, Button as tk_Button , messagebox as tk_messagebox, Entry as tk_Entry
+from tkinter import Listbox as tk_Listbox, Button as tk_Button , messagebox as tk_messagebox, Entry as tk_Entry, PhotoImage
 
 
 
@@ -53,6 +53,8 @@ def serverManager(lista):
     center_window(root,500,360)
     root.title("Servers list")
     root.resizable(0,0)
+    img = PhotoImage(file="data/logo/logo.png")
+    root.tk.call('wm', 'iconphoto', root._w, img)
 
 
     listBox = tk_Listbox(root)
