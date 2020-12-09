@@ -21,7 +21,7 @@ In the body you must describe analytically the Vulnerability.
 
 * If you are using GnuPG to encrypt your message I recomend this command:
 
-        $ gpg -a -o spc-mail -e [your file]
+        $ gpg -a -o spc-mail -e [your message]
 
 * Then copy the message and send it to my email. The email must be in this form:
 
