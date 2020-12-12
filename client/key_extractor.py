@@ -4,35 +4,35 @@ from data.libraries.AES_cryptography import decryptor
 from data.libraries.rooms import Rooms
 from platform import uname
 
-if uname()[0].lower().startswith("win"):
-    sl = "\\"
-else:
-    sl = "/"
 
-key = Rooms(False)
+def main():
 
-if not key:
-    exit()
+    key = Rooms(False)
 
-password = getpass("Key Password: ").encode()
+    if not key:
+        return
 
-try:
-    with open(key, "rb") as f:
+    password = getpass("Key Password: ").encode()
 
-        plainkey = decryptor(password,sha1(password).digest()).decrypt(f.read())
-        if not plainkey.endswith(b"unencrypted"):
+    try:
+        with open(key, "rb") as f:
+
+            plainkey = decryptor(password,sha1(password).digest()).decrypt(f.read())
+            if not plainkey.endswith(b"unencrypted"):
+                f.close()
+                print("Wrong password.")
+                return
             f.close()
-            print("Wrong password.")
-            exit()
-        f.close()
 
-    name = key.split(sl)[-1][:len(".key")*-1]
+        name = key.split("/")[-1][:len(".key")*-1]
 
-    with open(f"{name}.key.unsafe", "wb") as f:
-        f.write(plainkey[:len("unencrypted")*-1])
-        f.close()
+        with open(f"{name}.key.unsafe", "wb") as f:
+            f.write(plainkey[:len("unencrypted")*-1])
+            f.close()
 
-    print("Key has been extracted. This key is not encrypted.")
+        print("Key has been extracted. This key is not encrypted.")
 
-except FileNotFoundError:
-    print("Key.key file did not found")
+    except FileNotFoundError:
+        print("Key.key file did not found")
+
+main()

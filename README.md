@@ -31,6 +31,11 @@
 
             $ sudo pacman -S git
 
+        Tails:
+
+            You do not have yo download git
+            Download the version for Tails from => https://github.com/AndreasKarageorgos/SPC-Chat/releases/
+
     * Then clone the Chat to your Home folder
 
             $ git clone https://github.com/AndreasKarageorgos/SPC-Chat.git
@@ -50,7 +55,7 @@
     
 
 
-* Windows
+* Windows (Python-code)
 
   * Download python3 from [here](https://www.python.org/) and select the box "add python to path".
 
@@ -62,7 +67,9 @@
 
   * Inside the install folder run the windows.bat . In case of error download [visual studio](https://visualstudio.microsoft.com/vs/features/cplusplus/) with C++ and after that run the Windows.bat again.
         
+* Windows (Binary)
 
+   * Download SPC-Chat for windows from [here](https://github.com/AndreasKarageorgos/SPC-Chat/releases)
    
 
 # Server setup
@@ -141,10 +148,18 @@ The client use tor as proxy to connect to a server, the only thing that you have
         
         $ sudo systemctl restart tor
 
+  * Tails
+
+        on Tails tor service is on by default
+
 
 After that you can cd in SPC-Chat/client/ and run:
 
     $ python3 chat.py
+
+or if you are on tails you run:
+
+    $ ./chat 
 
 ### Windows
 * Tor
@@ -155,9 +170,8 @@ After that you can cd in SPC-Chat/client/ and run:
  
 * Chat
         
-        Go to client folder and run the chat.py
+        Go to client folder and run the chat.py or chat.exe
 
-        (It will not run without your Key)
 
  # Key
 
