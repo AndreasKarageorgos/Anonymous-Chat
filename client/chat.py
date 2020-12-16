@@ -39,7 +39,7 @@ def main():
     #Checks for updates
 
 
-    version = "version 1.8"
+    version = "version 1.9"
 
     def update(version):
 
@@ -88,13 +88,18 @@ def main():
                         print("Wrong password.\n")
                         password = getpass.getpass("Enter the key password:").encode()
                         dec = AES_cryptography.decryptor(password,sha1(password).digest())
-                        passwd = passwd = dec.decrypt(key_ciphertext)
+                        passwd = dec.decrypt(key_ciphertext)
                 except KeyboardInterrupt:
-                    print()
                     return
-            
-                passwd = passwd[:len("unencrypted")*(-1)]
-                IV = sha256(sha256(passwd).digest()).digest()
+
+                passwd = passwd[:len(b"unencrypted")*(-1)]
+                
+                if len(passwd)!=48:
+                    print("This key is no longer supported.\nPlease generate a new one.")
+                    return
+
+                IV = passwd[32:48]
+                passwd = passwd[:32]
                 f.close()
 
             password = "A"*len(password)*2

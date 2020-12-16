@@ -11,7 +11,6 @@ from hashlib import sha512, sha256
 import time
 from platform import uname as sysname
 
-
 def main():
     global sl
     if sysname()[0].lower().startswith("win"):
@@ -24,7 +23,7 @@ def main():
     #Checks for updates
 
 
-    version = "version 1.4"
+    version = "version 1.5"
 
     def update(version):
         prox = {
@@ -112,7 +111,7 @@ def main():
         whitelist = False
 
     if private_server:
-        private_key = sha256("".join([choice(ascii_letters+digits) for _ in range(50,100)]).encode()).digest()
+        private_key = sha256("".join([choice(ascii_letters+digits) for _ in range(randint(50,100))]).encode()).digest()
     #Buff size of client is 100 
     server_message = config["message"].strip()[:93]
 

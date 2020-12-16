@@ -18,7 +18,10 @@ class encryptor():
         else:
             self.key = sha256(key).digest()
         self.mode = AES.MODE_CBC
-        self.IV = sha256(IV).digest()[:16]
+        if len(IV)==16:
+            self.IV = IV
+        else:    
+            self.IV = sha256(IV).digest()[:16]
         self.cipher = AES.new(self.key,self.mode,self.IV)
 
     def encrypt(self,text):
@@ -36,7 +39,10 @@ class decryptor():
         else:
             self.key = sha256(key).digest()
         self.mode = AES.MODE_CBC
-        self.IV = sha256(IV).digest()[:16]
+        if len(IV)==16:
+            self.IV = IV
+        else:
+            self.IV = sha256(IV).digest()[:16]
         self.cipher = AES.new(self.key,self.mode,self.IV)
 
     

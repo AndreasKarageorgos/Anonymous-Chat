@@ -1,9 +1,11 @@
-from random import randint
+from random import randint, choice
 from getpass import getpass
 from hashlib import sha1
 from sys import maxunicode
 from data.libraries.AES_cryptography import encryptor
 from platform import uname
+from string import ascii_letters, digits, whitespace
+
 
 if uname()[0].lower().startswith("win"):
     sl = "\\"
@@ -12,16 +14,25 @@ else:
     
 passwd = ""
 
+
+counter = 0
 chars = []
 
 
-while len(chars)<8:
+while counter<=44:
     try:
         temp = chr(randint(0,maxunicode))
-        if len(temp.encode())==4:
+        le = len(temp.encode())
+        if le<=4 and not(temp in whitespace):
             chars.append(temp)
-    except:
+            counter+=le
+    except UnicodeEncodeError:
         pass
+
+if counter<48:
+    seats = 48-counter
+    for _ in range(seats):
+        chars.append(choice(ascii_letters+digits))
 
 l = len(chars)-1
 
@@ -40,7 +51,6 @@ while name=="":
 
 
 passwd = "".join(chars)
-
 
 
 password1 = getpass("Set up a password: ")
