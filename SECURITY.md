@@ -9,7 +9,7 @@ Send a report which you explain it, or even suggest a solution.
 
 # Reporting a Vulnerability
 
-You can report a Vulnerability [here](https://github.com/AndreasKarageorgos/SPC-Chat/security/advisories) or follow the instractions above.
+You can report a Vulnerability [here](https://github.com/AndreasKarageorgos/SPC-Chat/security/advisories) or follow the instractions below.
 
 Report a Vulnerability to my email: andreas_karageorgos@protonmail.com
 
