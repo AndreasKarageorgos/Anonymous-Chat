@@ -23,7 +23,7 @@ def main():
     #Checks for updates
 
 
-    version = "version 1.5"
+    version = "version 1.6"
 
     def update(version):
         prox = {
@@ -154,7 +154,12 @@ def main():
                 if maxed==-1 or not maxed():
                     client,_ = server_socket.accept()
                     client.settimeout(3)
-                    data = client.recv(108)
+                    data = client.recv(200)
+                    
+                    if len(data)>108:
+                        client.close()
+                        data = ""
+                    
                     if data == b"online":
                         client.send("True".encode())
                         client.close()
