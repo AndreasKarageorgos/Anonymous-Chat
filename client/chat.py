@@ -39,7 +39,7 @@ def main():
     #Checks for updates
 
 
-    version = "version 1.9"
+    version = "version 1.10"
 
     def update(version):
 
@@ -306,7 +306,12 @@ def main():
             message = ""
             try:
                 client_socket.setTimeout(0.2)
-                message = client_socket.recv(100)
+                message = client_socket.recv(150)
+                if len(message)>100:
+                    message = ""
+                    client_socket.close()
+                    tk_messagebox.showwarning(title="Warning", message="Server tried to flood your connection.\nYou have been disconnected !")
+                    return
                 if len(message)>1 and message.split(b":")[0] == b"Server":
                     try:
                         message = message.decode()
@@ -322,7 +327,8 @@ def main():
                         except UnicodeDecodeError:
                             message = ""
                     except:
-                        message = ""
+                        message = "Can not decrypt the message"
+
             except:
                 pass
             
@@ -336,13 +342,14 @@ def main():
             client_socket.send("COMMAND:D".encode())
             client_socket.close()
         except:
-            print("Server closed or kicked you !")
+            print("Connection lost")
         root.destroy()
         print("You have disconnected. Please wait !")
 
     def donate():
-        path = getcwd()+"/data/html/index.html"
-        webbrowser.open(path)
+        ans = tk_messagebox.askquestion(title="donates.spcchat.com", message="Your default browser is going to open on https://donates.spcchat.com/ \nThat means that it can run outsite of the tor network.\nClick 'Yes' to continue or 'No' to exit")
+        if ans == "yes":
+            webbrowser.open("https://donates.spcchat.com")
 
     def show_message(ms):
         msg_show.config(state="normal")
