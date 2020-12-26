@@ -5,6 +5,9 @@
 
 * The chat runs fully on tor, this way the connections are encrypted and anonymous
 
+* Video tutorial: https://www.youtube.com/watch?v=6o1UnxU8dgo
+
+
 # Installation
 
 * Linux
