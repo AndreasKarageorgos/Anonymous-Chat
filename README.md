@@ -7,6 +7,8 @@
 
 * Video tutorial: https://www.youtube.com/watch?v=6o1UnxU8dgo
 
+* website: https://spcchat.com/
+
 
 # Installation
 
