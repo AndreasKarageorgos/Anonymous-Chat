@@ -2,6 +2,7 @@ from hashlib import sha1
 from getpass import getpass
 from data.libraries.AES_cryptography import decryptor
 from data.libraries.rooms import Rooms
+from data.libraries.askpass import askpass
 from platform import uname
 
 
@@ -12,7 +13,7 @@ def main():
     if not key:
         return
 
-    password = getpass("Key Password: ").encode()
+    password = askpass().encode()
 
     try:
         with open(key, "rb") as f:

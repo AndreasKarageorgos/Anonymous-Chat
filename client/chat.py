@@ -8,6 +8,7 @@ from data.libraries import AES_cryptography, servers, loadServers
 from data.libraries.register import register
 from data.libraries.torSocks import torSocks
 from data.libraries.rooms import Rooms
+from data.libraries.askpass import askpass 
 from random import choice
 from string import ascii_letters,digits
 from hashlib import sha256,sha512,sha1
@@ -39,7 +40,7 @@ def main():
     #Checks for updates
 
 
-    version = "version 1.10"
+    version = "version 1.11"
 
     def update(version):
 
@@ -77,37 +78,43 @@ def main():
 
     #AES key load
     try:
-        if path!="private":
-            with open(path,"rb") as f:
-                password = getpass.getpass("Enter the key password:").encode()
-                key_ciphertext = f.read()
-                dec = AES_cryptography.decryptor(password,sha1(password).digest())
-                passwd = dec.decrypt(key_ciphertext)
-                try:
-                    while not passwd.endswith(b"unencrypted"):
+        with open(path,"rb") as f:
+            try:
+                password = askpass().encode()
+            except AttributeError:
+                return
+            key_ciphertext = f.read()
+            dec = AES_cryptography.decryptor(password,sha1(password).digest())
+            passwd = dec.decrypt(key_ciphertext)
+            try:
+                while not passwd.endswith(b"unencrypted"):
+                    if uname()[0].lower().startswith("win"):
+                        tk_messagebox.showinfo(message="Wrong password !")
+                    else:
                         print("Wrong password.\n")
-                        password = getpass.getpass("Enter the key password:").encode()
-                        dec = AES_cryptography.decryptor(password,sha1(password).digest())
-                        passwd = dec.decrypt(key_ciphertext)
-                except KeyboardInterrupt:
-                    return
+                    password = askpass().encode()
+                    dec = AES_cryptography.decryptor(password,sha1(password).digest())
+                    passwd = dec.decrypt(key_ciphertext)
+            except KeyboardInterrupt:
+                return
+            except AttributeError:
+                return
 
-                passwd = passwd[:len(b"unencrypted")*(-1)]
-                
-                if len(passwd)!=48:
-                    print("This key is no longer supported.\nPlease generate a new one.")
-                    return
+            passwd = passwd[:len(b"unencrypted")*(-1)]
+            
+            if len(passwd)!=48:
+                print("This key is no longer supported.\nPlease generate a new one.")
+                return
 
-                IV = passwd[32:48]
-                passwd = passwd[:32]
-                f.close()
+            IV = passwd[32:48]
+            passwd = passwd[:32]
+            f.close()
 
             password = "A"*len(password)*2
             del password
             del dec
             print("Key decrypted.")
     except FileNotFoundError:
-        print("Key file did not found.\nYou can load it using the key_loader or generate it using the key_generator.")
         return
 
     #Helper to stop the threads
@@ -123,11 +130,8 @@ def main():
     global spamm
     spamm = time.time()
 
-    chat_plain_keyword = "1bn&jbsdo(F"
-
-    if path!="private":
-
-        chat_room_key = sha512(sha512(passwd).digest()).digest()
+    #chat_plain_keyword = "1bn&jbsdo(F"
+    chat_room_key = sha512(passwd).digest()
 
 
     #Helper to run the start method of the threads once !
@@ -154,47 +158,34 @@ def main():
 
     if link=="":return
 
-    print(f"Trying to connect to {link}")
+    print(f"Connecting to {link}")
     #Checks if the server is online.
     while True:
         try:
             testsock = torSocks(link,port)
-            testsock.connect()
+            try:
+                testsock.connect()
+            except OSError:
+                print("Server closed.")
+                return
             testsock.setTimeout(3)
             testsock.send("online".encode())
             if testsock.recv(5) == b"True":
+                print("Connected !")
                 testsock.close()
                 break
-            print("Failed to connect or the server is full. Trying again.")
+            testsock.close()
+            print("Failed to connect or the server is full. Trying again in 10 seconds.")
         except KeyboardInterrupt:
             return
         except:
-            print("Failed to connect or the server is full. Trying again.")
+            print("Failed to connect or the server is full. Trying again in 10 seconds.")
         try:
-            time.sleep(3)
+            time.sleep(10)
         except KeyboardInterrupt:
             return
 
-    if path=="private":
-        print("receiving key")
-        try:
-            keysock = torSocks(link,port)
-            keysock.connect()
-            keysock.setTimeout(3)
-            keysock.send("private".encode())
-            passwd = keysock.recv(32)
-            keysock.close()
-            if passwd==b"0":
-                print("This server is not private.")
-                return
-            print("Key received !")
-        except:
-            print("Failed to receiv key")
-            return
-        
-        IV = sha256(sha256(passwd).digest()).digest()
-        chat_room_key = sha512(sha512(passwd).digest()).digest()
-
+    
 
 
 
@@ -213,8 +204,12 @@ def main():
             global client_socket
             client_socket = torSocks(link,port)
             client_socket.connect()
+            client_socket.setTimeout(3)
             client_socket.send(b"lg%s%s%s" % (username.encode(),password, chat_room_key))
-            ans = client_socket.recv(6).decode().strip()
+            ans = client_socket.recv(10).decode().strip()
+            if len(ans.encode()) >=6:
+                tk_messagebox.showerror(title="Error", message="Invalid answer from server.")
+                return
             if "True" in ans:
                 login_screen.destroy()
                 return
@@ -222,7 +217,7 @@ def main():
         except UnicodeEncodeError:
             tk_messagebox.showerror(title="Error",message="Try ascii chars")
         except UnicodeDecodeError:
-            tk_messagebox.showerror(title="Error",message="received suspicious bytes. Failed to decode.")
+            tk_messagebox.showerror(title="Error",message="Failed to decode the bytes from server.")
         except:
             tk_messagebox.showerror(title="Error",message="Server did not respond, try again.")
 
@@ -267,7 +262,7 @@ def main():
     def send_msg(*event):
         global spamm
 
-        if round(time.time()-spamm, 2) < 2:
+        if round(time.time()-spamm, 2) < 2.3:
             show_message("#Wait 2 seconds before you send another message")
             return
 
@@ -344,12 +339,12 @@ def main():
         except:
             print("Connection lost")
         root.destroy()
-        print("You have disconnected. Please wait !")
+        print("you have been disconnected from the server. Please wait !")
 
     def donate():
-        ans = tk_messagebox.askquestion(title="donates.spcchat.com", message="Your default browser is going to open on https://donates.spcchat.com/ \nThat means that it can run outsite of the tor network.\nClick 'Yes' to continue or 'No' to exit")
+        ans = tk_messagebox.askquestion(title="warning !", message="You are going to\nwww.spcchat.com/donates\nDo you want to continue ?")
         if ans == "yes":
-            webbrowser.open("https://donates.spcchat.com")
+            webbrowser.open("https://www.spcchat.com/donates")
 
     def show_message(ms):
         msg_show.config(state="normal")
@@ -359,7 +354,7 @@ def main():
 
     def show_participants(event):
         global spamm
-        if round(time.time()-spamm, 2) < 2:
+        if round(time.time()-spamm, 2) < 2.3:
             show_message("#Wait 2 seconds before you send another message\n")
             return
         else:
@@ -395,7 +390,7 @@ def main():
     #chat_frame
 
     msg_show = tk_Text(chat_frame, state = "disabled", width = 49, height = 20, cursor="arrow")
-    text = tk_Label(chat_frame,text="Your messages are encrypted with your key.\nOnly people who have this key can read\nyour messages")
+    text = tk_Label(chat_frame,text="\nYour messages are encrypted !\n")
     input_box = tk_Entry(chat_frame,width=40)
     send_button = tk_Button(chat_frame, text="Send", cursor="hand2", command=send_msg)
     donate_label = tk_Label(chat_frame,text="Small amounts can bring bigger impacts.")

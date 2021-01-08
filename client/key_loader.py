@@ -2,6 +2,11 @@ from getpass import getpass
 from hashlib import sha1
 from data.libraries.AES_cryptography import encryptor
 from platform import uname
+from string import whitespace
+
+
+
+print("You can load keys that end to .unsafe or .key\nA .unsafe file is going to be encrypted and a .key file is going to be loaded as it is.")
 
 
 if uname()[0].lower().startswith("win"):
@@ -31,12 +36,12 @@ if keypath.endswith(".key"):
         f.close()
     del keypath,key
 else:
-    password1 = getpass("Setup a password: ") or "sodqkwi2"
-    password2 = getpass("Repeat password: ") or "mgh82fl"
-    while password1!=password2:
+    password1 = getpass("Setup a password: ")
+    password2 = getpass("Repeat password: ")
+    while password1!=password2 or password1 in whitespace or password2 in whitespace:
         print("passwords do not match\n")
-        password1 = getpass("Setup a password: ") or "sodqkwi2"
-        password2 = getpass("Repeat password: ") or "mgh82fl"
+        password1 = getpass("Setup a password: ")
+        password2 = getpass("Repeat password: ")
 
     
     password1 = password1.encode()

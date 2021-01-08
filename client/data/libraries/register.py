@@ -1,11 +1,7 @@
 import tkinter as tk
 from tkinter import Label as tk_Label , Entry as tk_Entry , Button as tk_Button , messagebox as tk_messagebox, PhotoImage
 import socks
-try:
-    from data.libraries.torSocks import torSocks
-except:
-    from torSocks import torSocks
-from hashlib import sha256
+from data.libraries.torSocks import torSocks
 
 def center_window(window,width_of_window,height_of_window):
     screen_width = window.winfo_screenwidth()
@@ -20,6 +16,7 @@ def register(link):
         try:
             socket = torSocks(link,4488)
             socket.connect()
+            socket.setTimeout(3)
             passwd =  sha256((link+passwd).encode()).digest()
             socket.send(b"rg%s%s" % (uname.encode(),passwd))
             try:

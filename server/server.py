@@ -8,10 +8,13 @@ from random import randint, choice
 from string import ascii_letters, digits
 from conf import register_users,auth_users
 from hashlib import sha512, sha256
+from tkinter import messagebox
 import time
 from platform import uname as sysname
+from sys import argv
 
-def main():
+def main(cnsm):
+
     global sl
     if sysname()[0].lower().startswith("win"):
         sl = "\\"
@@ -23,7 +26,7 @@ def main():
     #Checks for updates
 
 
-    version = "version 1.6"
+    version = "version 1.7"
 
     def update(version):
         prox = {
@@ -47,10 +50,15 @@ def main():
     utemp = update(version)
 
     if utemp == "Failed":
-        print("Failed to connect to Tor\n")
+        if sysname()[0].lower().startswith("win"):
+            messagebox.showerror(title="Error", message="Connection to Tor failed.")
+        else:
+            print("Connection to Tor failed.\n")
+
         return
     else:
-        print(utemp)
+        if cnsm:
+            print(utemp)
 
     del utemp
 
@@ -68,7 +76,7 @@ def main():
             break
         except FileNotFoundError:
             with open("server.config","w") as f:
-                f.write("message=Wealcome To the server\nmax_clients=-1\nprivate=false\nwhite_list=false\n")
+                f.write("message=Wealcome To the server\nmax_clients=-1\nwhite_list=false\n")
                 f.close()
 
 
@@ -92,26 +100,19 @@ def main():
     server_ip = "127.0.0.1" #Do not change !!! (Unless you know what you are doing)
     server_port = 4488
     max_clients = int(config["max_clients"].strip())
-    private_server = config["private"].strip().lower()
     try:
         whitelist = config["white_list"].strip().lower()
     except KeyError:
         whitelist = "false"
-        print("Please delete the config file and restart the server to load the new option.")
+        if cnsm:
+            print("Please delete the config file and restart the server to load the new option.")
 
-
-    if private_server == "true":
-        private_server = True
-    else:
-        private_server = False
 
     if whitelist == "true":
         whitelist = True
     else:
         whitelist = False
 
-    if private_server:
-        private_key = sha256("".join([choice(ascii_letters+digits) for _ in range(randint(50,100))]).encode()).digest()
     #Buff size of client is 100 
     server_message = config["message"].strip()[:93]
 
@@ -123,7 +124,7 @@ def main():
         except KeyboardInterrupt:
             return
         except OSError:
-            print("The port 4488 is already in use\nTry to close the programm that is using this port.")
+            print("The port 4488 is already in use\n")
             return
 
     server_socket.settimeout(0.2)
@@ -164,17 +165,7 @@ def main():
                         client.send("True".encode())
                         client.close()
                         data = ""
-                        
-                    if private_server and data == b"private":
-                        time.sleep(0.2)
-                        client.send(private_key)
-                        client.close()
-                        data = ""
-                    elif data == b"private":
-                        client.send("0".encode())
-                        client.close()
                 
-
                     if 36<=len(data)<=44:
                         temp = data
                         data = []
@@ -199,14 +190,16 @@ def main():
                             resp = register_users.reg_user(data[1],data[2],members,whitelist)
                             if resp: 
                                 client.send("True".encode())
-                                print(data[1].decode(),"Registered !")
+                                if cnsm:
+                                    print(data[1].decode(),"Registered !")
                             else:
                                 client.send("False".encode())
                         elif data[0] == b"lg":
                             resp = auth_users.auth(data[1],data[2],members,whitelist)
                             if resp:
                                 client.send("True".encode())
-                                print(data[1].decode(),"Logged in")
+                                if cnsm:
+                                    print(data[1].decode(),"Logged in")
                                 spamm.update({data[1]:time.time()})
                                 keyword = data[-1]
 
@@ -266,7 +259,8 @@ def main():
 
         def close(key,client):
             rooms[key][client].close()
-            print(client, "logged off")
+            if cnsm:
+                print(client, "logged off")
             remove_clients.append((key,client,True))
         
         def partici(key,client):
@@ -291,11 +285,13 @@ def main():
                                 rooms[key][client].settimeout(0.1)
                                 message = rooms[key][client].recv(160)
                                 if len(message)>80:
-                                    print(client,"Send message over 80 bytes.")
+                                    if cnsm:
+                                        print(client,"Send message over 80 bytes.")
                                     remove_clients.append((key,client,False))
                                 elif round(time.time()-spamm[client.encode()], 2) < 1.8:
                                     remove_clients.append((key,client,False))
-                                    print(client,"got kicked for spamming")
+                                    if cnsm:
+                                        print(client,"got kicked for spamming. (this can be false alarm !)")
                                 else:
                                     spamm[client.encode()] = time.time()
                                 try:
@@ -314,8 +310,10 @@ def main():
                             broadcast(name="Server",message=f"{pair[1]}, logged off",key=pair[0])
                         else:
                             broadcast(name="Server",message=f"{pair[1]}, lost connection",key=pair[0])
-                            print(pair[1], "lost connection")
-                        print(pair[1],"logged off")
+                            if cnsm:
+                                print(pair[1], "lost connection")
+                        if cnsm:
+                            print(pair[1],"logged off")
                     except:
                         pass
             except RuntimeError:
@@ -407,30 +405,38 @@ def main():
                 print(f"{name} not in whitelist.")
 
 
+    if cnsm:
+        print("Server is running ! Type help for a list of help menu.")
 
-    print("Server is running ! Type help for a list of help menu.")
-
-    commands = {"kick":kick,"help":helpme,"ban":ban,"whiteadd":whiteadd,"whiterm":whiterm}
-    try:
-        command = input("")
-        while command.lower() != "stop":
-            command = command.split()
-            command.append("_")
-            if(command[0] in commands):
-                commands[command[0]](command[1])
-            else:
-                print("CONSOLE: Command did not found!")
+    if cnsm:
+        commands = {"kick":kick,"help":helpme,"ban":ban,"whiteadd":whiteadd,"whiterm":whiterm}
+        try:
             command = input("")
-    except KeyboardInterrupt:
-        pass
+            while command.lower() != "stop":
+                command = command.split()
+                command.append("_")
+                if(command[0] in commands):
+                    commands[command[0]](command[1])
+                else:
+                    print("CONSOLE: Command did not found!")
+                command = input("")
+        except KeyboardInterrupt:
+            pass
 
 
-    broadcast("Server","Server closed !")
-    print("Closing open connections.")
-    dead = True
-    time.sleep(2)
-    kill_all_connections()
-    server_socket.close()
-    print("Server closed.")
+        broadcast("Server","Server closed !")
+        print("Closing open connections.")
+        dead = True
+        time.sleep(2)
+        kill_all_connections()
+        server_socket.close()
+        print("Server closed.")
 
-main()
+
+
+if "--bgh" in argv: #this will result on 0 output and input. this will help to run the server in the bacground. | $ python3 server.py --bgh &
+    cn = False
+else:
+    cn = True
+
+main(cn)

@@ -10,6 +10,8 @@ def auth(uname,passwd,members,whitelist):
     else:
         sl = "/"
 
+    alist = []
+
     try:
         if whitelist:
             with open(f"conf{sl}whitelist","r") as f:
@@ -18,7 +20,7 @@ def auth(uname,passwd,members,whitelist):
             if uname.decode() not in alist:
                 return False
     except FileNotFoundError:
-        alist = []
+        return False
     except UnicodeDecodeError:
         return False
 
