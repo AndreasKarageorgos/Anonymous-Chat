@@ -31,7 +31,7 @@
 
         $ sudo pacman -Sy       
         $ wget https://github.com/AndreasKarageorgos/SPC-Chat/releases/download/v1.11.c.1.7.s/Manjaro.tar.xz        
-        $ tar -xf Manjaro.tar
+        $ tar -xf Manjaro.tar.xz
         $ cd SPC-Chat/install       
         $ chmod +x manjaro.sh
         $ sudo ./manjaro.sh
@@ -39,7 +39,7 @@
 * Tails Os
 
         $ wget https://github.com/AndreasKarageorgos/SPC-Chat/releases/download/v1.11.c.1.7.s/TAILS.tar.xz
-        $ tar -xf Manjaro.tar
+        $ tar -xf TAILS.tar.xz
         $ cd SPC-Chat/client
 
 # Windows
