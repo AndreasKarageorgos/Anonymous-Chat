@@ -34,7 +34,7 @@
 * Manjaro
 
         $ sudo pacman -Sy       
-        $ wget https://github.com/AndreasKarageorgos/SPC-Chat/releases/download/v1.11.c.1.7.s/Manjaro.tar.xz        
+        $ wget https://github.com/AndreasKarageorgos/SPC-Chat/releases/download/v1.11.1.c.1.7.s/Manjaro.tar.xz        
         $ tar -xf Manjaro.tar.xz
         $ cd SPC-Chat/install       
         $ chmod +x manjaro.sh
