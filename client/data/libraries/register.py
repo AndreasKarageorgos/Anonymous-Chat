@@ -16,6 +16,7 @@ def register(link):
     def send(uname,passwd):
         try:
             socket = torSocks(link,4488)
+            socket.connect()
             passwd =  sha256((link+passwd).encode()).digest()
             socket.send(b"rg%s%s" % (uname.encode(),passwd))
             try:
