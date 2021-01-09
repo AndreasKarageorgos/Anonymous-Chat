@@ -1,3 +1,7 @@
+<h1 align="center">
+<a href="https://spcchat.com"><img src="https://raw.githubusercontent.com/AndreasKarageorgos/SPC-Chat/master/client/data/logo/logo.png" title="SPC-Chat"></a>
+</h1>
+
 [![Discord](https://discord.com/api/guilds/758523764735606795/widget.png)](https://discord.gg/wSsr73z)
 
 # Secure Private Connections - Chat
@@ -41,6 +45,8 @@
         $ wget https://github.com/AndreasKarageorgos/SPC-Chat/releases/download/v1.11.c.1.7.s/TAILS.tar.xz
         $ tar -xf TAILS.tar.xz
         $ cd SPC-Chat/client
+        $ chmod +x chat
+        $ ./chat
 
 # Windows
 
