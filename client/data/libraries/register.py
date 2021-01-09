@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import Label as tk_Label , Entry as tk_Entry , Button as tk_Button , messagebox as tk_messagebox, PhotoImage
 import socks
+from hashlib import sha256
 from data.libraries.torSocks import torSocks
 
 def center_window(window,width_of_window,height_of_window):
@@ -15,8 +16,6 @@ def register(link):
     def send(uname,passwd):
         try:
             socket = torSocks(link,4488)
-            socket.connect()
-            socket.setTimeout(3)
             passwd =  sha256((link+passwd).encode()).digest()
             socket.send(b"rg%s%s" % (uname.encode(),passwd))
             try:
