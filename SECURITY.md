@@ -19,7 +19,7 @@ In the body you must describe analytically the Vulnerability.
 
 #### The body must be encrypted to a "readable" form with my public key.
 
-* See the key [here](https://github.com/AndreasKarageorgos/SPC-Chat/blob/master/public.asc)
+* See the key [here](https://github.com/AndreasKarageorgos/SPC-Chat/blob/master/SPC-Chat.asc)
 
 * If you are using GnuPG to encrypt your message I recomend this command:
 
